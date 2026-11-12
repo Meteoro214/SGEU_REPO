@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gestión de usuarios y permisos del Sistema de Gestión de Espacios Universitarios">
+
+    <title>Usuarios y permisos | SGEU</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components/app-layout.css">
+    <link rel="stylesheet" href="../css/components/tables.css">
+    <link rel="stylesheet" href="../css/pages/usuarios.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- Scripts comunes -->
+    <script type="module" src="../js/common/navigation.js" defer></script>
+    <script src="../js/common/icons.js" defer></script>
+    <script src="../js/common/modal.js" defer></script>
+
+    <!-- Internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Lógica de usuarios -->
+    <script type="module" src="../js/modules/usuarios.js" defer></script>
+</head>
+
+<body data-page="usuarios">
+
+    <div class="app-layout">
+
+        <aside class="app-sidebar" id="app-sidebar"></aside>
+
+        <div class="app-main">
+
+            <header class="app-topbar"></header>
+
+            <main class="app-content users-page">
+
+                <!-- CABECERA -->
+                <section class="users-header">
+
+                    <!-- INFORMACIÓN DE LA PÁGINA -->
+                    <div class="page-header-info">
+
+                        <nav class="breadcrumb" aria-label="Ruta de navegación">
+
+                            <ol>
+                                <li>
+                                    <a href="bienvenida.html">SGEU</a>
+                                </li>
+
+                                <li>
+                                    <span data-icon="chevron" aria-hidden="true"></span>
+                                    <span aria-current="page" data-i18n="usuarios.title">
+                                        Usuarios y permisos
+                                    </span>
+                                </li>
+                            </ol>
+
+                        </nav>
+
+                    </div>
+                </section>
+
+                <section class="users-content">
+
+                    <!-- PESTAÑAS -->
+                    <div class="users-tabs" role="tablist" aria-label="Listado de usuarios">
+
+                        <button
+                            type="button"
+                            id="users-tab-active"
+                            class="users-tab active"
+                            role="tab"
+                            aria-selected="true"
+                            aria-controls="users-tab-panel"
+                            data-users-tab="active"
+                        >
+                            <span data-i18n="usuarios.table.users">Usuarios</span>
+                            <span id="users-active-count" class="users-tab-count">0</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            id="users-tab-requests"
+                            class="users-tab"
+                            role="tab"
+                            aria-selected="false"
+                            aria-controls="users-tab-panel"
+                            data-users-tab="requests"
+                        >
+                            <span data-i18n="usuarios.table.requests">Solicitudes</span>
+                            <span id="users-requests-count" class="users-tab-count">0</span>
+                        </button>
+
+                    </div>
+
+                    <div id="users-tab-panel" role="tabpanel" aria-labelledby="users-tab-active">
+
+                        <!-- BÚSQUEDA Y FILTROS -->
+                        <div class="users-toolbar">
+
+                            <div class="users-search">
+                                <label for="users-search" data-i18n="usuarios.searchLabel">
+                                    Buscar usuarios
+                                </label>
+
+                                <div class="input-wrap">
+                                    <span data-icon="search" aria-hidden="true"></span>
+
+                                    <input
+                                        type="search"
+                                        id="users-search"
+                                        class="field-input"
+                                        placeholder="Buscar por nombre, correo o perfil..."
+                                        data-i18n-ph="usuarios.searchPlaceholder"
+                                        autocomplete="off"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="users-toolbar-actions">
+
+                                <button
+                                    type="button"
+                                    id="users-filter-toggle"
+                                    class="users-filter-button"
+                                    aria-expanded="false"
+                                    aria-controls="users-filter-panel"
+                                >
+                                    <span data-icon="filter" aria-hidden="true"></span>
+                                    <span data-i18n="usuarios.filter">Filtrar</span>
+                                </button>
+
+                                <p id="users-count" aria-live="polite">0 usuarios</p>
+
+                            </div>
+                        </div>
+
+                        <!-- PANEL DE FILTROS -->
+                        <div id="users-filter-panel" class="users-filter-panel" hidden>
+
+                            <div class="users-filter-field">
+                                <label for="users-filter-role" data-i18n="usuarios.roleLabel">
+                                    Perfil o rol
+                                </label>
+
+                                <select id="users-filter-role" class="field-input">
+                                    <option value="" data-i18n="usuarios.allRoles">Todos los perfiles</option>
+                                    <option value="1" data-i18n="usuarios.roles.administration">Administración</option>
+                                    <option value="2" data-i18n="usuarios.roles.manager">Gestor</option>
+                                    <option value="3" data-i18n="usuarios.roles.consultation">Lector</option>
+                                </select>
+                            </div>
+
+                            <div class="users-filter-actions">
+                                <button
+                                    type="button"
+                                    id="users-filter-reset"
+                                    class="btn"
+                                    data-i18n="usuarios.clearFilters"
+                                >
+                                    Limpiar filtros
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="users-filter-apply"
+                                    class="btn btn-primary"
+                                    data-i18n="usuarios.applyFilters"
+                                >
+                                    Aplicar filtros
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <!-- MENSAJES -->
+                        <p id="users-message" class="users-message" role="status" aria-live="polite" hidden></p>
+
+                        <!-- ACCIONES DE SELECCIÓN MÚLTIPLE -->
+                        <div id="users-bulk-actions" class="users-bulk-actions" hidden>
+                            <div class="users-bulk-info">
+                                <span id="users-selected-count"></span>
+                            </div>
+
+                            <button
+                                type="button"
+                                id="users-bulk-delete"
+                                class="btn btn-danger"
+                            >
+                                <span data-icon="trash" aria-hidden="true"></span>
+                                <span data-i18n="usuarios.deleteSelected">Eliminar seleccionadas</span>
+                            </button>
+                        </div>
+
+                        <!-- TABLA -->
+                        <div class="users-table-container table-container">
+
+                            <table class="users-table data-table align-custom">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" id="users-select-column" hidden>
+                                            <input
+                                                type="checkbox"
+                                                id="users-select-page"
+                                                aria-label="Seleccionar todas las solicitudes de esta página"
+                                            >
+                                        </th>
+                                        <th scope="col" data-i18n="usuarios.table.user">Usuario</th>
+                                        <th scope="col" data-i18n="usuarios.table.role">Perfil o rol</th>
+                                        <th scope="col" data-i18n="usuarios.table.status">Estado de acceso</th>
+                                        <th scope="col" data-i18n="usuarios.table.actions">Acciones</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="users-table-body"></tbody>
+                            </table>
+
+                        </div>
+
+                        <nav
+                            id="users-pagination"
+                            class="users-pagination"
+                            aria-label="Paginación de usuarios"
+                        ></nav>
+
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL DE VISUALIZACIÓN / EDICIÓN DE USUARIO -->
+    <div
+        id="users-modal"
+        class="users-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="users-modal-title"
+        hidden
+    >
+
+        <div class="users-modal-overlay" data-modal-close></div>
+
+        <div class="users-modal-content">
+
+            <div class="users-modal-header">
+
+                <div>
+                    <h2 id="users-modal-title">Datos del usuario</h2>
+                    <p id="users-modal-description">
+                        Información del usuario registrado.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="users-modal-close"
+                    data-modal-close
+                    aria-label="Cerrar"
+                >
+                     <span data-icon="close" aria-hidden="true"></span>
+                </button>
+
+            </div>
+
+            <form id="users-form">
+
+                <input type="hidden" id="user-id" name="id_usuario">
+
+                <div class="users-modal-body">
+                    <div class="users-form-grid">
+
+                        <div class="users-form-group">
+                            <label for="user-id-display" data-i18n="usuarios.idUser">ID de usuario</label>
+                            <input type="text" id="user-id-display" class="field-input" disabled>
+                        </div>
+
+                        <div class="users-form-group">
+                            <label for="user-name" data-i18n="login.name">Nombre</label>
+                            <input
+                                type="text"
+                                id="user-name"
+                                name="nom_usuario"
+                                class="field-input"
+                                required
+                            >
+                        </div>
+
+                        <div class="users-form-group">
+                            <label for="user-surname" data-i18n="login.lastName">Apellidos</label>
+                            <input
+                                type="text"
+                                id="user-surname"
+                                name="apell_usuario"
+                                class="field-input"
+                                disabled
+                            >
+                        </div>
+
+                        <div class="users-form-group">
+                            <label for="user-email" data-i18n="login.email">Email</label>
+                            <input
+                                type="email"
+                                id="user-email"
+                                name="email"
+                                class="field-input"
+                                disabled
+                            >
+                        </div>
+
+                        <div class="users-form-group">
+                            <label for="user-phone" data-i18n="login.phone">Teléfono</label>
+                            <input
+                                type="tel"
+                                id="user-phone"
+                                name="telefono"
+                                class="field-input"
+                            >
+                        </div>
+
+                        <div class="users-form-group">
+                            <label for="user-dni" data-i18n="login.dni">DNI</label>
+                            <input
+                                type="text"
+                                id="user-dni"
+                                name="dni"
+                                class="field-input"
+                                required
+                            >
+                        </div>
+
+                        <div class="users-form-group">
+                            <label for="user-birthdate" data-i18n="login.birthDate">Fecha de nacimiento</label>
+                            <input
+                                type="date"
+                                id="user-birthdate"
+                                name="fech_nacimiento"
+                                class="field-input"
+                            >
+                        </div>
+
+                        <script>
+                            document.getElementById('user-birthdate').max = new Date().toISOString().split('T')[0];
+                        </script>
+
+                        <div class="users-form-group">
+                            <label for="user-role" data-i18n="usuarios.roleLabel">Perfil o rol</label>
+                            <select
+                                id="user-role"
+                                name="id_grupo"
+                                class="field-input"
+                                required
+                            >
+                                <option value="1" data-i18n="usuarios.roles.administration">Administración</option>
+                                <option value="2" data-i18n="usuarios.roles.manager">Gestor</option>
+                                <option value="3" data-i18n="usuarios.roles.consultation">Lector</option>
+                            </select>
+                        </div>
+
+                        <div class="users-form-group">
+                            <label for="user-building" data-i18n="edificios.idBuilding">ID del edificio asignado</label>
+                            <input
+                                type="number"
+                                id="user-building"
+                                name="id_edificio"
+                                class="field-input"
+                                min="1"
+                                disabled
+                            >
+                        </div>
+
+                        <div class="users-form-group">
+                            <label for="user-status" data-i18n="usuarios.accessStatus">Estado de acceso</label>
+                            <input
+                                type="text"
+                                id="user-status"
+                                class="field-input"
+                                disabled
+                            >
+                        </div>
+
+                    </div>
+
+                    <p
+                        id="users-modal-message"
+                        class="users-message"
+                        role="alert"
+                        hidden
+                    ></p>
+                </div>
+
+                <div class="users-modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn"
+                        data-modal-close
+                    >
+                    <span data-i18n="login.closeRequest">Cerrar</span>
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="users-save-button"
+                        hidden
+                    >
+                    <span data-i18n="login.saveChanges">Guardar cambios</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+    
+    <!-- MODAL DE CONFIRMACIÓN Y MENSAJES -->
+    <div id="users-feedback-modal" class="users-feedback-modal" hidden>
+
+        <div class="users-feedback-overlay"></div>
+
+        <section
+            class="users-feedback-content"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="users-feedback-title"
+            aria-describedby="users-feedback-text"
+        >
+
+            <div class="users-feedback-icon" id="users-feedback-icon">
+                <span data-icon="warning" aria-hidden="true"></span>
+            </div>
+
+            <div class="users-feedback-header">
+                <h2 id="users-feedback-title">Confirmar acción</h2>
+                <p id="users-feedback-text">
+                    ¿Estás seguro de que deseas continuar?
+                </p>
+            </div>
+
+            <div class="users-feedback-actions">
+
+                <button
+                    type="button"
+                    class="btn"
+                    id="users-feedback-cancel"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="users-feedback-confirm"
+                >
+                    Confirmar
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+</body>
+
+</html>

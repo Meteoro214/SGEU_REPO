@@ -1,0 +1,219 @@
+<!--
+  Archivo: bienvenida.html
+  Descripción: Página principal de la zona privada de SGEU.
+  Muestra la bienvenida al usuario autenticado y los accesos
+  a los diferentes módulos de gestión.
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Área privada del Sistema de Gestión de Espacios Universitarios">
+
+    <title>Bienvenida | SGEU</title>
+
+    <!-- Estilos globales, estructura común y específicos de la página -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components/app-layout.css">
+    <link rel="stylesheet" href="../css/pages/bienvenida.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- Barra lateral y superior comunes -->
+    <script type="module" src="../js/common/navigation.js" defer></script>
+
+    <!-- Sistema de internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Iconos centralizados del proyecto -->
+    <script src="../js/common/icons.js" defer></script>
+  </head>
+
+  <body data-page="bienvenida">
+    <div class="app-layout">
+
+      <!-- Barra lateral (la genera navigation.js) -->
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+
+      <!-- Zona principal -->
+      <div class="app-main">
+
+        <!-- Barra superior (la genera navigation.js) -->
+        <header class="app-topbar"></header>
+
+        <!-- Contenido de la página -->
+        <main class="app-content home-page">
+
+          <!-- Ruta de navegación -->
+          <nav class="breadcrumb" aria-label="Ruta de navegación">
+            <ol>
+              <li>
+                <a href="bienvenida.html">SGEU</a>
+              </li>
+
+              <li>
+                <span data-icon="chevron" aria-hidden="true"></span>
+                <span aria-current="page" data-i18n="navigation.welcome">Bienvenida</span>
+              </li>
+            </ol>
+          </nav>
+
+          <!-- Cabecera de la página -->
+          <div class="page-header">
+            <h1 data-i18n="welcome.pageTitle">Bienvenido a SGEU</h1>
+            <p data-i18n="welcome.subtitle">Sistema de Gestión de Espacios Universitarios</p>
+          </div>
+
+          <!-- Bloque de bienvenida -->
+          <section class="home-banner" aria-labelledby="banner-title">
+
+            <div class="home-banner-content">
+              <span class="eyebrow" data-i18n="welcome.privateArea">Área privada · Universidade de Vigo</span>
+
+              <h2 id="banner-title" data-i18n="welcome.bannerTitle">
+                La gestión de los espacios universitarios, en un único lugar.
+              </h2>
+
+              <p data-i18n="welcome.bannerDescription">
+                Desde aquí puedes acceder a los módulos de gestión disponibles
+                para tu perfil y consultar la información de los espacios universitarios.
+              </p>
+            </div>
+
+            <!-- Jerarquía decorativa: Facultad → Edificio → Planta → Espacio -->
+            <div class="banner-hierarchy" aria-hidden="true">
+              <span class="banner-node" data-icon="faculty"></span>
+              <span class="banner-node" data-icon="building"></span>
+              <span class="banner-node" data-icon="layers"></span>
+              <span class="banner-node" data-icon="space"></span>
+            </div>
+
+          </section>
+
+          <!-- Accesos rápidos -->
+          <section class="quick-access" aria-labelledby="quick-access-title">
+
+            <div class="section-header">
+              <div>
+                <h2 id="quick-access-title" data-i18n="welcome.quickAccess">Accesos rápidos</h2>
+                <p data-i18n="welcome.quickAccessDescription">Módulos disponibles para tu perfil de administración.</p>
+              </div>
+
+            </div>
+
+            <!-- Tarjetas de acceso a los módulos -->
+            <ul class="access-list">
+              <li data-require="ADMIN">
+                <a class="access-card" href="usuarios.html">
+                  <span class="access-icon" data-icon="users" aria-hidden="true"></span>
+
+                  <div class="access-text">
+                    <h3 data-i18n="navigation.users">Usuarios</h3>
+                    <p data-i18n="welcome.usersDescription">Gestiona perfiles y permisos disponibles.</p>
+                  </div>
+
+                  <span class="access-arrow" data-icon="arrow" aria-hidden="true"></span>
+                </a>
+              </li>
+
+              <li>
+                <a class="access-card" href="facultades.html">
+                  <span class="access-icon" data-icon="faculty" aria-hidden="true"></span>
+
+                  <div class="access-text">
+                    <h3 data-i18n="navigation.faculties">Facultades</h3>
+                    <p data-i18n="welcome.facultiesDescription">Consulta los centros universitarios.</p>
+                  </div>
+
+                  <span class="access-arrow" data-icon="arrow" aria-hidden="true"></span>
+                </a>
+              </li>
+
+              <li>
+                <a class="access-card" href="edificios.html">
+                  <span class="access-icon" data-icon="building" aria-hidden="true"></span>
+
+                  <div class="access-text">
+                    <h3 data-i18n="navigation.buildings">Edificios</h3>
+                    <p data-i18n="welcome.buildingsDescription">Accede a edificios y ubicaciones.</p>
+                  </div>
+
+                  <span class="access-arrow" data-icon="arrow" aria-hidden="true"></span>
+                </a>
+              </li>
+
+              <li>
+                <a class="access-card" href="plantas.html">
+                  <span class="access-icon" data-icon="layers" aria-hidden="true"></span>
+
+                  <div class="access-text">
+                    <h3 data-i18n="navigation.floors">Plantas</h3>
+                    <p data-i18n="welcome.floorsDescription">Navega por la estructura de cada edificio.</p>
+                  </div>
+
+                  <span class="access-arrow" data-icon="arrow" aria-hidden="true"></span>
+                </a>
+              </li>
+
+              <li>
+                <a class="access-card" href="espacios.html">
+                  <span class="access-icon" data-icon="space" aria-hidden="true"></span>
+
+                  <div class="access-text">
+                    <h3 data-i18n="navigation.spaces">Espacios</h3>
+                    <p data-i18n="welcome.spacesDescription">Consulta aulas, despachos y laboratorios.</p>
+                  </div>
+
+                  <span class="access-arrow" data-icon="arrow" aria-hidden="true"></span>
+                </a>
+              </li>
+            </ul>
+
+          </section>
+
+          <!-- Información del proyecto y del equipo -->
+          <div class="home-info">
+
+            <section class="info-card" aria-labelledby="info-project-title">
+              <span class="eyebrow" data-i18n="common.aboutProject">Sobre el proyecto</span>
+
+              <h2 id="info-project-title" data-i18n="welcome.projectTitle">
+                Información organizada para una gestión más clara
+              </h2>
+
+              <p data-i18n="welcome.projectDescription">
+                SGEU centraliza la consulta y gestión de facultades, edificios, plantas
+                y espacios, relacionando cada elemento con su ubicación dentro de la
+                estructura universitaria.
+              </p>
+            </section>
+
+            <section class="info-card" aria-labelledby="info-team-title">
+              <span class="eyebrow" id="info-team-title" data-i18n="welcome.developedBy">Desarrollado por</span>
+
+              <!-- Logo de M2D2 Solutions -->
+              <div class="team-mini">
+                <img class="team-mini-logo" src="../assets/images/logo-m2d2-solutions.png" alt="" width="64" height="64">
+
+                <div>
+                  <strong>M2D2 Solutions</strong>
+                </div>
+              </div>
+
+              <p data-i18n="welcome.teamDescription">
+                Una solución diseñada por M2D2 Solutions para el contexto académico
+                de la Universidade de Vigo.
+              </p>
+            </section>
+
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </body>
+
+</html>

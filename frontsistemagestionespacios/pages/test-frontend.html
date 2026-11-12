@@ -1,0 +1,134 @@
+<!--
+  Archivo: test-frontend.html
+  Descripción: Página destinada a las pruebas de los elementos
+  y funcionalidades implementados en el frontend.
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pruebas del frontend del Sistema de Gestión de Espacios Universitarios">
+
+    <title>Test Frontend | SGEU</title>
+
+    <!-- Estilos globales, estructura común y específicos de la página -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components/app-layout.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/components/tables.css">
+    <link rel="stylesheet" href="../css/pages/tests.css">
+
+
+    <!-- Barra lateral y superior comunes -->
+    <script type="module" src="../js/common/navigation.js" defer></script>
+
+    <!-- Iconos centralizados del proyecto -->
+    <script src="../js/common/icons.js" defer></script>
+
+    <!-- Sistema de internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Reglas y funciones de validación del proyecto para las pruebas -->
+    <script type="module">
+      import * as Validadores from '../js/common/validation.js';
+      window.REGLAS_CAMPOS = Validadores.REGLAS_CAMPOS;
+      window.Validadores = Validadores;
+    </script>
+
+    <!-- Validaciones, clase base y tabla de resultados -->
+    <script src="../js/tests/frontend/validaciones.js" defer></script>
+    <script src="../js/tests/frontend/Entidad_Abstracta.js" defer></script>
+    <script src="../js/tests/DOM_class.js" defer></script>
+
+    <!-- Clases de entidad -->
+    <script src="../js/tests/frontend/entidades/usuarios.js" defer></script>
+
+    <!-- Datos de prueba y motor de pruebas -->
+    <script src="../js/tests/frontend/test-frontend.js" defer></script>
+    <script src="../js/tests/frontend/data.js" defer></script>
+
+  </head>
+
+  <body data-page="test-frontend">
+    <div class="app-layout">
+
+      <!-- Barra lateral (la genera navigation.js) -->
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+
+      <!-- Zona principal -->
+      <div class="app-main">
+
+        <!-- Barra superior (la genera navigation.js) -->
+        <header class="app-topbar"></header>
+
+        <!-- Contenido de la página -->
+        <main class="app-content test-page">
+
+          <!-- Ruta de navegación -->
+          <nav class="breadcrumb" aria-label="Ruta de navegación">
+            <ol>
+              <li>
+                <a href="bienvenida.html">SGEU</a>
+              </li>
+
+              <li>
+                <span data-icon="chevron" aria-hidden="true"></span>
+                <span aria-current="page">Test Frontend</span>
+              </li>
+            </ol>
+          </nav>
+
+          <!-- Cabecera de la página -->
+          <div class="page-header">
+            <h1 data-i18n="tests.frontendTitle">Frontend Test Runner</h1>
+            <p data-i18n="tests.frontendDescription">Ejecuta la batería de tests de las entidades del frontend</p>
+          </div>
+
+          <!-- Panel de ejecución de pruebas -->
+          <section class="test-execution-panel">
+
+              <div class="test-controls">
+
+                  <div class="test-entity-field">
+                      <label for="entidad_select" data-i18n="tests.entityToTest">
+                          Entidad a probar
+                      </label>
+
+                      <select id="entidad_select" name="entidad_select">
+                          <!-- Mantener aquí las opciones propias de cada página -->
+                          <option value="usuarios" data-i18n="tests.entities.usuario">
+                              usuarios
+                          </option>
+                      </select>
+                  </div>
+
+                  <button type="button" class="btn-primary" id="run-tests">
+                      <span data-icon="code" aria-hidden="true"></span>
+                      <span data-i18n="tests.runTests">Ejecutar Tests</span>
+                  </button>
+
+              </div>
+
+              <!-- Estado de la ejecución -->
+              <p class="test-status-message" id="runner_status" role="status" data-i18n="tests.selectEntity">
+                  Selecciona una entidad y pulsa "Ejecutar Tests".
+              </p>
+
+          </section>
+
+          <!-- Formulario interno que usa data.js para hacer las pruebas (oculto) -->
+          <div id="contenedor_IU_form" hidden></div>
+
+          <!-- Resultados (los genera DOM_class.js) -->
+          <section class="test-results" id="IU_Test_result_nofile" aria-live="polite"></section>
+
+        </main>
+      </div>
+    </div>
+  </body>
+
+</html>

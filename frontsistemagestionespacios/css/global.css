@@ -1,0 +1,254 @@
+/****************************************************************/
+/* Archivo: global.css                                          */
+/* Descripción: Define los estilos generales compartidos        */
+/* por las diferentes páginas de la aplicación.                 */
+/* Incluye reglas de presentación comunes y estilos base.       */
+/****************************************************************/
+
+
+/* =========================================================
+   SGEU - ESTILOS GLOBALES
+   Configuración y componentes compartidos
+   ========================================================= */
+
+/* ---------- Configuración general ---------- */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    min-width: 320px;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-family);
+    font-size: 14px;
+    color: var(--ink);
+    background-color: var(--bg);
+    line-height: 1.5;
+}
+
+/* Bloquear el scroll de fondo mientras está abierto el perfil */
+body.profile-modal-open {
+    overflow: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+    margin-top: 0;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* ---------- Selector de idioma ---------- */
+
+.lang-switch {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+}
+
+.lang-switch button {
+    min-width: 35px;
+    height: 29px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.lang-switch button:hover {
+    background: var(--surface-alt);
+    color: var(--primary);
+}
+
+.lang-switch button.active,
+.lang-switch button[aria-pressed="true"] {
+    color: var(--primary);
+    background: var(--primary-soft);
+}
+
+/* ---------- Accesibilidad ---------- */
+
+:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
+    min-height: 44px;
+    padding: 0 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.btn-primary {
+    color: var(--surface);
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+/* ---------- Campos de formulario ---------- */
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.field-label {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.field-input {
+    width: 100%;
+    min-width: 0;
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background-color: var(--surface);
+    color: var(--ink);
+    font-size: 13px;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.field-input::placeholder {
+    color: var(--subtle);
+}
+
+.field-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* ---------- Botón dentro de un campo ---------- */
+
+.input-action {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+}
+
+.input-action:hover {
+    color: var(--primary);
+}
+
+.input-action svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Espacio para el botón de mostrar contraseña */
+.input-wrap-password .field-input {
+    padding-right: 48px;
+}
+
+/* ---------- Iconos ---------- */
+
+[data-icon] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+[data-icon] svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* =========================================================
+   UTILIDADES FLEXBOX
+   ========================================================= */
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

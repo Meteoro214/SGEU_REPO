@@ -1,0 +1,5 @@
+# Variables de Entorno
+.env
+
+# Datos que genera el instalador
+sgeu_install.env

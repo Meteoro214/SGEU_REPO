@@ -1,0 +1,112 @@
+/****************************************************************/
+/* Archivo: variables.css                                       */
+/* Descripción: Centraliza las variables CSS utilizadas         */
+/* en la aplicación, como colores, tipografías, espaciados,     */
+/* bordes y otros valores de diseño.                            */
+/****************************************************************/
+
+
+/* ========================================
+   SGEU - TIPOGRAFÍA LOCAL
+   ======================================== */
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../assets/fonts/Inter-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../assets/fonts/Inter-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../assets/fonts/Inter-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../assets/fonts/Inter-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* ========================================
+   SGEU - VARIABLES GLOBALES
+   Basadas en el diseño de Figma Make
+   ======================================== */
+
+:root {
+    /* ------------------------------------
+       TIPOGRAFÍA
+       ------------------------------------ */
+    --font-family: 'Inter', sans-serif;
+
+    /* ------------------------------------
+       COLORES DE FONDO
+       ------------------------------------ */
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface-alt: #f1f4f7;
+
+    /* ------------------------------------
+       COLORES DE TEXTO
+       ------------------------------------ */
+    --ink: #182230;
+    --muted: #647184;
+    --subtle: #8b96a7;
+
+    /* ------------------------------------
+       COLORES DE BORDES
+       ------------------------------------ */
+    --line: #dfe4ea;
+    --line-strong: #c9d1da;
+
+    /* ------------------------------------
+       COLOR PRINCIPAL
+       ------------------------------------ */
+    --primary: #123f73;
+    --primary-hover: #0c315c;
+    --primary-soft: #eaf1f8;
+
+    /* ------------------------------------
+       COLOR SECUNDARIO / ACENTO
+       ------------------------------------ */
+    --accent: #1489a7;
+    --accent-soft: #e7f6f8;
+
+    /* ------------------------------------
+       COLORES DE ESTADO
+       ------------------------------------ */
+    --success: #18794e;
+    --success-soft: #eaf7f0;
+
+    --warning: #a15c07;
+    --warning-soft: #fff6e5;
+
+    --danger: #c43235;
+    --danger-soft: #fff0f0;
+
+    /* ------------------------------------
+       SOMBRAS
+       ------------------------------------ */
+    --shadow: 0 2px 8px rgba(18, 35, 52, 0.06);
+    --shadow-lg: 0 12px 30px rgba(18, 35, 52, 0.12);
+
+    /* ------------------------------------
+       BORDES REDONDEADOS
+       ------------------------------------ */
+    --radius: 10px;
+}

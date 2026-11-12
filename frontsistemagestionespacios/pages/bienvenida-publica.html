@@ -1,0 +1,275 @@
+<!--
+  Archivo: bienvenida-publica.html
+  Descripción: Página de bienvenida pública de SGEU.
+  Presenta el sistema a los usuarios antes de autenticarse
+  y permite acceder al inicio de sesión.
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página de Bienvenida del Sistema Gestor de Espacios Universitarios">
+
+    <title data-i18n="publicWelcome.title">Bienvenida | SGEU</title>
+
+    <!-- Estilos globales y específicos de la página -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/pages/bienvenida-publica.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- Sistema de internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Iconos centralizados del proyecto -->
+    <script src="../js/common/icons.js" defer></script>
+  </head>
+
+  <body>
+
+    <!-- Cabecera -->
+    <header class="site-header">
+      <div class="container site-header-inner">
+        
+        <a class="brand-mark" href="../index.html" aria-label="SGEU, Universidade de Vigo">
+          <span>SGEU</span>
+          <small>Universidade de Vigo</small>
+        </a>
+
+        <nav class="site-nav" aria-label="Navegación principal">
+          <a href="#about-project" data-i18n="common.aboutProject">Sobre el proyecto</a>
+          <a href="#about-us" data-i18n="common.aboutUs">Sobre nosotros</a>
+        </nav>
+
+        <div class="site-header-actions">
+          <nav class="lang-switch" aria-label="Seleccionar idioma">
+            <button type="button" class="active" aria-pressed="true" lang="es" title="Español">ES</button>
+            <button type="button" aria-pressed="false" lang="gl" title="Galego">GL</button>
+            <button type="button" aria-pressed="false" lang="en" title="English">EN</button>
+          </nav>
+
+          <a class="btn btn-primary" href="login.html" data-i18n="common.signIn">Iniciar sesión</a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Página principal -->
+    <main class="welcome-page">
+
+      <!-- Presentación -->
+      <section class="intro" aria-labelledby="intro-title">
+        <div class="container intro-inner">
+
+          <div class="intro-content">
+            <span class="eyebrow" data-i18n="publicWelcome.eyebrow">Gestión universitaria · SGEU</span>
+
+            <h1 id="intro-title" data-i18n="publicWelcome.welcomeTitle">
+              Bienvenido a SGEU
+            </h1>
+
+            <p class="intro-subtitle" data-i18n="publicWelcome.subtitle">
+              Sistema de Gestión de Espacios Universitarios 
+            </p>
+
+            <p data-i18n="publicWelcome.description">
+              Una plataforma para centralizar y facilitar la gestión de los espacios
+              universitarios, su ubicación, sus características y sus asignaciones.
+            </p>
+
+            <a class="btn btn-primary intro-action" href="login.html">
+              <span data-icon="arrow" aria-hidden="true"></span>
+              <span data-i18n="common.signIn">Iniciar sesión</span>
+            </a>
+            
+            <p class="intro-help">
+              <span data-icon="lock" aria-hidden="true"></span>
+              <span data-i18n="publicWelcome.restrictedAccess">Acceso reservado a personal autorizado</span>
+            </p>
+
+          </div>
+
+          <!-- Ilustración de Bienvenida -->
+          <div class="intro-visual" aria-hidden="true">
+
+            <!-- Ventana simulada de la aplicación -->
+            <div class="mockup">
+
+              <!-- Barra superior de la ventana -->
+              <div class="mockup-bar">
+                <span class="mockup-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+
+                <small data-i18n="publicWelcome.mockupDescription">SGEU · Estructura universitaria</small>
+              </div>
+
+              <!-- Cuerpo de la ventana -->
+              <div class="mockup-body">
+
+                <!-- Menú lateral -->
+                <div class="mockup-sidebar">
+                  <span class="mockup-line"></span>
+                  <span class="mockup-line"></span>
+                  <span class="mockup-line"></span>
+                  <span class="mockup-line"></span>
+                  <span class="mockup-line"></span>
+                </div>
+
+                <!-- Zona de contenido -->
+                <div class="mockup-main">
+
+                  <!-- Barra superior del contenido -->
+                  <span class="mockup-heading"></span>
+
+                  <!-- Jerarquía central -->
+                  <div class="mockup-hierarchy">
+                    <span class="mockup-node" data-icon="faculty"></span>
+                    <span class="mockup-node" data-icon="building"></span>
+                    <span class="mockup-node" data-icon="layers"></span>
+                    <span class="mockup-node" data-icon="space"></span>
+                  </div>
+
+                  <span class="mockup-line mockup-line-long"></span>
+                  <span class="mockup-line mockup-line-medium"></span>
+                  <span class="mockup-line mockup-line-long"></span>
+                  <span class="mockup-line mockup-line-short"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tarjetas flotantes de la ilustración -->
+            <div class="floating-card floating-card-top">
+              <span data-icon="check"></span>
+              <div>
+                <small data-i18n="publicWelcome.information">Información</small>
+                <strong data-i18n="publicWelcome.centralized">Centralizada</strong>
+              </div>
+            </div>
+
+            <div class="floating-card floating-card-bottom">
+              <span data-icon="building"></span>
+              <div>
+                <small data-i18n="publicWelcome.hierarchy">Jerarquía</small>
+                <strong data-i18n="publicWelcome.centresAndBuildings">Centros y edificios</strong>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Sobre el proyecto -->
+      <section class="about-project" id="about-project" aria-labelledby="about-project-title">
+        <div class="container about-project-inner">
+
+          <div class="about-project-header">
+            <span class="section-number" aria-hidden="true">01</span>
+
+            <div class="about-project-heading">
+              <span class="eyebrow" data-i18n="publicWelcome.aboutProject">Sobre el proyecto</span>
+
+              <h2 id="about-project-title" data-i18n="publicWelcome.projectTitle">
+                Una estructura clara para la información universitaria
+              </h2>
+            </div>
+
+            <p data-i18n="publicWelcome.projectDescription">
+              SGEU facilita la consulta y gestión de facultades, edificios, plantas y
+              espacios universitarios. La plataforma organiza la información por niveles
+              relacionados y reúne los datos en un entorno único, accesible y coherente.
+            </p>
+          </div>
+
+          <!-- Cards de información -->
+          <ul class="feature-list">
+            <li class="feature-card">
+              <span class="feature-icon" data-icon="layers" aria-hidden="true"></span>
+              <h3 data-i18n="publicWelcome.organizedInformation">Información organizada</h3>
+              <p data-i18n="publicWelcome.organizedInformationDescription">
+                Una jerarquía comprensible que conecta cada espacio con su planta,
+                edificio y facultad.
+              </p>
+            </li>
+
+            <li class="feature-card">
+              <span class="feature-icon" data-icon="search" aria-hidden="true"></span>
+              <h3 data-i18n="publicWelcome.simpleQuery">Consulta sencilla</h3>
+              <p data-i18n="publicWelcome.simpleQueryDescription">
+                Búsqueda y filtros pensados para localizar información de forma directa.
+              </p>
+            </li>
+
+            <li class="feature-card">
+              <span class="feature-icon" data-icon="building" aria-hidden="true"></span>
+              <h3 data-i18n="publicWelcome.centralizedData">Datos centralizados</h3>
+              <p data-i18n="publicWelcome.centralizedDataDescription">
+                Un mismo sistema para mantener una visión consistente de los
+                espacios universitarios.
+              </p>
+            </li>
+          </ul>
+
+        </div>
+      </section>
+
+      <!-- Sobre nosotros -->
+      <section class="about-us" id="about-us" aria-labelledby="about-us-title">
+        <div class="container about-us-inner">
+
+          <div class="about-us-content">
+            <span class="eyebrow" data-i18n="common.aboutUs">Sobre nosotros</span>
+
+            <h2 id="about-us-title" data-i18n="publicWelcome.aboutUsTitle">
+              Desarrollado por M2D2 Solutions
+            </h2>
+
+            <p data-i18n="publicWelcome.aboutUsDescription">
+              M2D2 Solutions es el equipo responsable del diseño y desarrollo de SGEU,
+              una solución orientada a facilitar la gestión de los espacios universitarios
+              mediante una interfaz clara, organizada y accesible.
+            </p>
+          </div>
+
+          <!-- Logo de M2D2 Solutions -->
+          <div class="team-card">
+            <img class="team-card-logo" src="../assets/images/logo-m2d2-solutions.png" alt="" width="140" height="140">
+
+            <div>
+              <strong>M2D2 Solutions</strong>
+              <small data-i18n="common.designAndDevelopment">Diseño y desarrollo de SGEU</small>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="site-footer">
+      <div class="container site-footer-inner">
+
+        <a class="brand-mark brand-mark-light" href="../index.html" aria-label="SGEU, Sistema de Gestión de Espacios Universitarios">
+          <span>SGEU</span>
+          <small>Sistema de Gestión de Espacios Universitarios</small>
+        </a>
+          
+        <p data-i18n="publicWelcome.footerDescription">
+          Proyecto desarrollado por M2D2 Solutions en el contexto académico
+          de la Universidade de Vigo.
+        </p>
+
+        <p> SGEU · M2D2 Solutions</p>
+        
+      </div>
+    </footer>
+
+  </body>
+
+</html>

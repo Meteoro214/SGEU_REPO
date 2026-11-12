@@ -1,0 +1,407 @@
+<!--
+  Archivo: login.html
+  Descripción: Página de autenticación de SGEU.
+  Contiene la interfaz para que los usuarios introduzcan
+  sus credenciales y accedan al sistema.
+-->
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+    <meta charset="UTF-8">
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+      name="description"
+      content="Acceso institucional al Sistema de Gestión de Espacios Universitarios de la Universidade de Vigo."
+    >
+
+    <title>Iniciar sesión | SGEU</title>
+
+    <!-- Estilos globales y específicos de la página -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/pages/login.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- Iconos centralizados del proyecto -->
+    <script src="../js/common/icons.js" defer></script>
+
+    <!-- Sistema de internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Funcionalidades de autenticación -->
+    <script type="module" src="../js/auth/auth.js" defer></script>
+  
+  </head>
+
+  <body>
+    <main class="login-page">
+
+      <!-- Panel de identidad institucional -->
+       <section class="login-brand" aria-labelledby="brand-title">
+          <a class="brand-mark brand-mark-light" href="bienvenida-publica.html" aria-label="SGEU, Universidade de Vigo">
+            <span>SGEU</span>
+            <small>Universidade de Vigo</small>  
+          </a>
+
+          <div class="login-brand-content">
+            <span class="eyebrow" data-i18n="login.institutionalManagement">Gestión universitaria</span>
+            <h1 id="brand-title" data-i18n="login.brandTitle">
+              Espacios organizados.<br>
+              Decisiones más claras.
+            </h1>
+
+            <p data-i18n="login.brandDescription">
+              Una herramienta común para gestionar la estructura
+              física universitaria con rigor y perspectiva histórica.
+            </p>
+          </div>
+
+          <footer class="login-brand-foot" data-i18n="login.developedBy">
+            Sistema institucional · Creado por M2D2 Solutions
+          </footer>
+       </section>
+
+      <!-- Panel de acceso -->
+      <section class="login-panel" aria-labelledby="login-title">
+        <a class="back-public" href="bienvenida-publica.html">
+          <span data-icon="arrow" aria-hidden="true"></span>
+          <span data-i18n="common.backToWelcome" Volver a la bienvenida></span>
+        </a>
+
+        <!-- Selector de idioma -->
+        <nav class="lang-switch" aria-label="Seleccionar idioma">
+          <button type="button" class="active" aria-pressed="true" lang="es">
+            ES
+          </button>
+
+          <button type="button" aria-pressed="false" lang="gl">
+            GL
+          </button>
+
+          <button type="button" aria-pressed="false" lang="en">
+            EN
+          </button>
+        </nav>
+
+        <!-- Formulario de inicio de sesión -->
+        <div class="login-card">
+          <div class="login-mobile-brand" aria-hidden="true">
+            SGEU
+          </div>
+
+          <span class="login-kicker" data-i18n="login.institutionalAccess">
+            Acceso institucional
+          </span>
+
+          <h2 id="login-title" data-i18n="common.signIn">Iniciar sesión</h2>
+
+          <p id="login-description" data-i18n="login.credentialsDescription">
+            Introduce tus credenciales para acceder a SGEU.
+          </p>
+
+          <form id="login-form" action="#" method="POST">
+
+            <div class="login-fields">
+
+              <!-- Usuario o correo electrónico -->
+              <div class="field">
+                <label class="field-label" for="login-user" data-i18n="login.userOrEmail">
+                  Correo o usuario
+                </label>
+                  <input 
+                      class="field-input"
+                      type="text"
+                      id="login-user"
+                      name="user"
+                      placeholder="nombre.apellido@uvigo.gal"
+                      data-i18n-ph="login.userPlaceholder"
+                      autocomplete="username"
+                      required
+                  >
+              </div>
+
+              <!-- Contraseña -->
+              <div class="field">
+                <label class="field-label" for="login-password" data-i18n="login.password">
+                  Contraseña
+                </label>
+
+                <div class="input-wrap input-wrap-password">
+                  <input
+                      class="field-input"
+                      type="password"
+                      id="login-password"
+                      name="password"
+                      placeholder="Introduce tu contraseña"
+                      data-i18n-ph="login.passwordPlaceholder"
+                      autocomplete="current-password"
+                      required
+                  >
+
+                  <button
+                      type="button"
+                      class="input-action"
+                      id="toggle-password"
+                      aria-label="Mostrar contraseña"
+                      aria-controls="login-password"
+                      aria-pressed="false"
+                  >
+                      <span
+                          data-icon="eye"
+                          aria-hidden="true"
+                      ></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Zona reservada para mensajes de estado -->
+            <div
+                id="login-message"
+                class="login-message"
+                role="status"
+                aria-live="polite"
+                hidden
+            ></div>
+
+            <button class="btn btn-primary login-submit" type="submit" data-i18n="common.signIn">
+              Iniciar sesión
+            </button>
+
+            <p class="login-help">
+              <span data-icon="lock" aria-hidden="true"></span>
+              <span data-i18n="login.restrictedAccess">Acceso restringido a personal autorizado.</span>
+            </p>
+          </form>
+
+          <!-- Acceso a la solicitud de autorización -->
+          <div class="login-request">
+              <p data-i18n="login.noAuthorization">¿Todavía no tienes autorización?</p>
+
+              <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="show-request-form"
+                  aria-controls="request-form-section"
+                  aria-expanded="false"
+              >
+                  <span data-i18n="login.requestAuthorization">Solicitar autorización</span>
+              </button>
+          </div>
+
+          <!-- Formulario de solicitud de autorización -->
+          <section
+              class="request-form-section"
+              id="request-form-section"
+              aria-labelledby="request-title"
+              hidden
+          >
+              <h3 id="request-title" data-i18n="login.requestAuthorization">Solicitar autorización</h3>
+
+              <p data-i18n="login.requestDescription">
+                  Introduce tus datos para solicitar acceso al sistema.
+                  El administrador revisará tu solicitud.
+              </p>
+
+              <form id="request-form" action="#" method="POST">
+
+                  <div class="login-fields">
+
+                      <!-- Nombre de usuario / Nombre -->
+                      <div class="field">
+                          <label class="field-label" for="request-name" data-i18n="login.name">
+                              Nombre
+                          </label>
+                          <input
+                              class="field-input"
+                              type="text"
+                              id="request-name"
+                              name="name"
+                              placeholder="Tu nombre"
+                              data-i18n-ph="login.namePlaceholder"
+                              autocomplete="given-name"
+                              required
+                          >
+                      </div>
+
+                      <!-- Apellidos -->
+                      <div class="field">
+                          <label class="field-label" for="request-lastname" data-i18n="login.lastName">
+                              Apellidos
+                          </label>
+                          <input
+                              class="field-input"
+                              type="text"
+                              id="request-lastname"
+                              name="lastname"
+                              placeholder="Tus apellidos"
+                              data-i18n-ph="login.lastNamePlaceholder"
+                              autocomplete="family-name"
+                              required
+                          >
+                      </div>
+
+                      <!-- Correo electrónico -->
+                      <div class="field">
+                          <label class="field-label" for="request-email" data-i18n="login.email">
+                              Correo electrónico
+                          </label>
+                          <input
+                              class="field-input"
+                              type="email"
+                              id="request-email"
+                              data-i18n-ph="login.userPlaceholder"
+                              name="email"
+                              placeholder="nombre.apellido@uvigo.gal"
+                              autocomplete="email"
+                              required
+                          >
+                      </div>
+
+                      <!-- DNI / NIE -->
+                      <div class="field">
+                          <label class="field-label" for="request-dni" data-i18n="login.dni">
+                              DNI / NIE
+                          </label>
+                          <input
+                              class="field-input"
+                              type="text"
+                              id="request-dni"
+                              name="dni"
+                              placeholder="12345678X"
+                              pattern="[0-9]{8}[A-Za-z]|^[XYZxyz][0-9]{7}[A-Za-z]"
+                              required
+                          >
+                      </div>
+
+                      <!-- Teléfono -->
+                      <div class="field">
+                          <label class="field-label" for="request-phone" data-i18n="login.phone">
+                              Teléfono
+                          </label>
+                          <input
+                              class="field-input"
+                              type="tel"
+                              id="request-phone"
+                              name="phone"
+                              placeholder="600000000"
+                              autocomplete="tel"
+                              required
+                          >
+                      </div>
+
+                      <!-- Fecha de nacimiento -->
+                      <div class="field">
+                          <label class="field-label" for="request-birthdate" data-i18n="login.birthDate">
+                              Fecha de nacimiento
+                          </label>
+                          <input
+                              class="field-input"
+                              type="date"
+                              id="request-birthdate"
+                              name="birthdate"
+                              autocomplete="bday"
+                              required
+                          >
+                      </div>
+                     <script>
+                        document.getElementById('request-birthdate').max = new Date().toISOString().split('T')[0];
+                    </script>
+                      <!-- Contraseña -->
+                      <div class="field">
+                          <label class="field-label" for="request-password" data-i18n="login.password">
+                              Contraseña
+                          </label>
+
+                          <div class="input-wrap">
+                              <input
+                                  class="field-input"
+                                  type="password"
+                                  id="request-password"
+                                  name="password"
+                                  placeholder="Introduce una contraseña"
+                                  data-i18n-ph="login.newPasswordPlaceholder"
+                                  autocomplete="new-password"
+                                  required
+                              >
+
+                              <button
+                                  type="button"
+                                  class="input-action"
+                                  id="toggle-request-password"
+                                  aria-label="Mostrar contraseña"
+                                  aria-controls="request-password"
+                                  aria-pressed="false"
+                              >
+                                  <span data-icon="eye" aria-hidden="true"></span>
+                              </button>
+                          </div>
+                      </div>
+
+                      <!-- Repetir contraseña -->
+                      <div class="field">
+                          <label class="field-label" for="request-password-repeat" data-i18n="login.repeatPassword">
+                              Repetir contraseña
+                          </label>
+
+                          <div class="input-wrap">
+                              <input
+                                  class="field-input"
+                                  type="password"
+                                  id="request-password-repeat"
+                                  name="password-repeat"
+                                  placeholder="Repite tu contraseña"
+                                  data-i18n-ph="login.repeatPasswordPlaceholder"
+                                  autocomplete="new-password"
+                                  required
+                              >
+
+                              <button
+                                  type="button"
+                                  class="input-action"
+                                  id="toggle-request-password-repeat"
+                                  aria-label="Mostrar contraseña"
+                                  aria-controls="request-password-repeat"
+                                  aria-pressed="false"
+                              >
+                                  <span data-icon="eye" aria-hidden="true"></span>
+                              </button>
+                          </div>
+                      </div>
+
+                  </div>
+
+                  <div
+                      class="request-message"
+                      id="request-message"
+                      role="status"
+                      aria-live="polite"
+                      hidden
+                      data-i18n="login.requestSent"
+                  >
+                      Solicitud enviada correctamente. Cuando el administrador
+                      apruebe tu solicitud, podrás acceder al sistema.
+                  </div>
+
+                  <button
+                      type="submit"
+                      class="btn btn-primary login-submit"
+                      data-i18n="login.sendRequest"
+                  >
+                      Enviar solicitud
+                  </button>
+
+              </form>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+
+</html>

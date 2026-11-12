@@ -1,0 +1,395 @@
+
+/* =========================================================
+   SGEU - PÁGINA DE INICIO DE SESIÓN
+   Diseño basado en la propuesta original de Figma
+   ========================================================= */
+
+/* ---------- Distribución principal ---------- */
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(440px, 44%) 1fr;
+    background: var(--surface);
+}
+
+/* ---------- Panel institucional ---------- */
+
+.login-brand {
+    padding: 46px 56px;
+    background: var(--primary);
+    color: var(--surface);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-brand::before {
+    content: '';
+    position: absolute;
+    width: 560px;
+    height: 560px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    right: -290px;
+    top: 130px;
+    box-shadow:
+        0 0 0 70px rgba(255, 255, 255, 0.025),
+        0 0 0 140px rgba(255, 255, 255, 0.02);
+}
+
+/* ---------- Identidad SGEU ---------- */
+
+.brand-mark {
+    height: 72px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    border-bottom: 1px solid #e8ecf0;
+}
+
+.brand-mark span {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+}
+
+.brand-mark small {
+    color: var(--muted);
+    border-left: 1px solid var(--line);
+    padding-left: 11px;
+    font-size: 10px;
+    line-height: 1.25;
+    max-width: 72px;
+}
+
+.brand-mark-light {
+    padding: 0;
+    height: auto;
+    border: 0;
+    position: relative;
+    z-index: 1;
+    align-self: flex-start;
+}
+
+.brand-mark-light span {
+    color: var(--surface);
+    font-size: 25px;
+}
+
+.brand-mark-light small {
+    color: rgba(255, 255, 255, 0.7);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ---------- Contenido del panel azul ---------- */
+
+.login-brand-content {
+    margin: auto 0;
+    max-width: 560px;
+    position: relative;
+    z-index: 1;
+}
+
+.eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #72d2e5;
+    margin-bottom: 22px;
+}
+
+.login-brand-content h1 {
+    font-size: clamp(34px, 3.3vw, 54px);
+    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    margin-bottom: 0;
+}
+
+.login-brand-content p {
+    max-width: 470px;
+    margin-top: 24px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.login-brand-foot {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0;
+}
+
+/* ---------- Panel de acceso ---------- */
+
+.login-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 48px 48px;
+    position: relative;
+    background: var(--surface);
+}
+
+/* ---------- Volver a bienvenida ---------- */
+
+.back-public {
+    position: absolute;
+    top: 32px;
+    left: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.back-public:hover {
+    color: var(--primary);
+}
+
+/* ---------- Selector de idioma ---------- */
+
+.login-panel > .lang-switch {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+}
+
+/* ---------- Tarjeta de inicio de sesión ---------- */
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-mobile-brand {
+    display: none;
+}
+
+.login-kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+}
+
+.login-card h2 {
+    font-size: 30px;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.login-card > p:not(.login-help) {
+    color: var(--muted);
+    line-height: 1.6;
+    margin-top: 12px;
+}
+
+/* ---------- Formulario ---------- */
+
+.login-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+    margin: 32px 0 18px;
+}
+
+.login-submit {
+    width: 100%;
+    margin-top: 24px;
+    height: 46px;
+}
+
+/* ---------- Mensajes de estado ---------- */
+
+.login-message {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.login-message:empty {
+    display: none;
+}
+
+/* ---------- Alertas ---------- */
+
+.alert {
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.alert-danger {
+    background: var(--danger-soft);
+    color: var(--danger);
+    border: 1px solid #f2c7c8;
+}
+
+.alert div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.alert strong {
+    font-size: 13px;
+}
+
+.alert span {
+    font-size: 12px;
+    color: #7b3436;
+}
+
+
+/* ---------- Campos de contraseña y validación ---------- */
+
+.input-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+}
+
+.input-wrap > .field-input {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+}
+
+.input-wrap > .input-action {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+/* Campo con error */
+.field-input.is-invalid {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px var(--danger-soft);
+}
+
+/* Mensaje de error debajo del campo */
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 6px;
+    color: var(--danger);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* Evita que el mensaje quede pegado al campo */
+.field .invalid-feedback {
+    box-sizing: border-box;
+}
+
+
+/* ---------- Ayuda y acceso restringido ---------- */
+
+.login-help {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 0;
+}
+
+.login-help [data-icon] svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/* ---------- Solicitud de autorización ---------- */
+
+.login-request {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.login-request p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.btn-secondary {
+    min-height: 42px;
+    padding: 0 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn-secondary:hover {
+    background: var(--primary-soft);
+    border-color: var(--primary);
+}
+
+/* ---------- Formulario de solicitud ---------- */
+
+.request-form-section {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+}
+
+.request-form-section h3 {
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.request-form-section > p {
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ---------- Confirmación de solicitud ---------- */
+
+.request-message {
+    margin-top: 18px;
+    padding: 12px;
+    border: 1px solid var(--warning);
+    border-radius: 8px;
+    background: var(--warning-soft);
+    color: var(--warning);
+    font-size: 12px;
+    line-height: 1.5;
+}

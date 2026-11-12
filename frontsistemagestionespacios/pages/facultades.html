@@ -1,0 +1,249 @@
+<!--
+  Archivo: facultades.html
+  Descripción: Página de gestión de facultades.
+  Muestra la información de las facultades y permite
+  gestionar sus datos y relaciones.
+-->
+
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title data-i18n="facultades.title">Facultades | SGEU</title>
+
+    <!-- Estilos generales -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+
+    <!-- Estructura de la aplicación -->
+    <link rel="stylesheet" href="../css/components/app-layout.css">
+    <link rel="stylesheet" href="../css/components/tables.css">
+
+    <!-- Estilos del módulo -->
+    <link rel="stylesheet" href="../css/pages/entidades.css">
+
+    <!-- Adaptación responsive -->
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- Scripts comunes -->
+    <script type="module" src="../js/common/navigation.js" defer></script>
+    <script src="../js/common/icons.js" defer></script>
+
+    <!-- Internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Lógica compartida de entidades -->
+    <script type="module" src="../js/modules/entidades.js"></script>
+</head>
+
+<body data-page="facultades" data-entity-type="facultades">
+
+  <div class="app-layout">
+    <!-- Navegación lateral -->
+    <aside class="app-sidebar" id="app-sidebar"></aside>
+
+    <!-- Zona principal -->
+    <div class="app-main">
+
+        <!-- Barra superior -->
+        <header class="app-topbar"></header>
+
+        <!-- Contenido -->
+        <main class="app-content entities-page">
+
+            <!-- Cabecera de página -->
+            <section class="page-header entities-header">
+
+                <div class="page-header-info">
+
+                    <nav class="breadcrumb" aria-label="Ruta de navegación">
+
+                        <ol>
+                            <li>
+                                <a href="bienvenida.html">SGEU</a>
+                            </li>
+
+                            <li>
+                                <span data-icon="chevron" aria-hidden="true"></span>
+                                <span aria-current="page" data-i18n="facultades.title">
+                                    Facultades
+                                </span>
+                            </li>
+                        </ol>
+
+                    </nav>
+
+                    <h1 data-i18n="facultades.title">
+                        Facultades
+                    </h1>
+
+                    <p data-i18n="facultades.description">
+                        Administra los centros y su relación con los edificios.
+                    </p>
+
+                </div>
+
+                <div class="page-header-actions">
+
+                    <button
+                        type="button"
+                        class="button button-primary"
+                        id="faculty-new-button"
+                        data-icon="plus"
+                        data-i18n="facultades.new"
+                    >
+                        Nueva facultad
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- Herramientas de búsqueda y filtrado -->
+            <section class="entities-toolbar">
+
+                <div class="entities-search">
+
+                    <label
+                        for="faculties-search"
+                        class="sr-only"
+                        data-i18n="facultades.searchLabel"
+                    >
+                        Buscar facultades
+                    </label>
+
+                    <input
+                        type="search"
+                        id="faculties-search"
+                        name="search"
+                        placeholder="Buscar facultad..."
+                        data-i18n-ph="facultades.searchPlaceholder"
+                    >
+
+                </div>
+
+                <div class="entities-filters">
+
+                    <label
+                        for="faculties-filter-campus"
+                        data-i18n="facultades.campusFilter"
+                    >
+                        Campus
+                    </label>
+
+                    <select
+                        id="faculties-filter-campus"
+                        name="campus"
+                    >
+                        <option
+                            value=""
+                            data-i18n="facultades.allCampuses"
+                        >
+                            Todos los campus
+                        </option>
+                    </select>
+
+                </div>
+
+            </section>
+
+
+            <!-- Tabla de facultades -->
+            <section class="entities-content">
+
+                <div class="entities-table-header">
+
+                    <h2 data-i18n="facultades.listTitle">
+                        Listado de facultades
+                    </h2>
+
+                    <span
+                        id="faculties-count"
+                        class="entities-count"
+                        aria-live="polite"
+                    >
+                        0 facultades
+                    </span>
+
+                </div>
+
+
+                <div class="table-container entities-table-container">
+
+                    <table class="data-table entities-table">
+
+                        <thead>
+                            <tr>
+
+                                <th scope="col" data-i18n="facultades.table.name">
+                                    Nombre
+                                </th>
+
+                                <th scope="col" data-i18n="facultades.table.code">
+                                    Código
+                                </th>
+
+                                <th scope="col" data-i18n="facultades.table.campus">
+                                    Campus
+                                </th>
+
+                                <th scope="col" data-i18n="facultades.table.buildings">
+                                    Edificios
+                                </th>
+
+                                <th
+                                    scope="col"
+                                    class="actions-col"
+                                    data-i18n="common.actions"
+                                >
+                                    Acciones
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody id="faculties-table-body">
+
+                            <!-- Las facultades se generan desde entidades.js -->
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- Mensaje cuando no hay resultados -->
+                <div
+                    id="faculties-empty"
+                    class="entities-empty"
+                    hidden
+                >
+                    <p data-i18n="facultades.empty">
+                        No se han encontrado facultades.
+                    </p>
+                </div>
+
+
+                <!-- Paginación -->
+                <nav
+                    id="faculties-pagination"
+                    class="table-pagination"
+                    aria-label="Paginación"
+                    data-i18n-aria-label="common.pagination"
+                >
+                </nav>
+
+            </section>
+
+        </main>
+
+    </div>
+  </div>
+</body>
+</html>
