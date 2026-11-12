@@ -31,11 +31,9 @@ apt install apache2 libapache2-mod-php php php-mysql mariadb-server curl
 
 ## Instalación
 
-Desde la raíz del repositorio (puede estar en cualquier carpeta, no hace falta que esté en el DocumentRoot):
+En el directorio donde deposito el script, ejecute el siguiente comando (no debe estar en la misma carpeta, esto es solo un ejemplo de uso):
 
 ```bash
-git clone https://github.com/Meteoro214/PDP.git
-cd PDP
 sudo bash setupsistemagestionespacios/install.sh
 ```
 
