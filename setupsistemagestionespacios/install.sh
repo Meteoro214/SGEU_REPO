@@ -231,8 +231,8 @@ TEMP_REPO_DIR="$(mktemp -d)"
 echo "Clonando repositorio..."
 git clone --depth 1 "$GITHUB_REPO" "$TEMP_REPO_DIR/repo" || error "No se ha podido clonar el repositorio de GitHub indicado."
 
-FRONT_SRC="$TEMP_REPO_DIR/frontsistemagestionespacios"
-BACK_SRC="$TEMP_REPO_DIR/backsistemagestionespacios"
+FRONT_SRC="$TEMP_REPO_DIR/repo/frontsistemagestionespacios"
+BACK_SRC="$TEMP_REPO_DIR/repo/backsistemagestionespacios"
 SQL_DB="$BACK_SRC/db/db_sgeu.sql"
 SQL_DB_TESTS="$BACK_SRC/db/db_sgeu_tests.sql"
 
@@ -386,7 +386,7 @@ if command -v curl > /dev/null 2>&1; then
     RESPUESTA="$(curl -s -X POST -d "controlador=usuario&action=LOGIN&email=admin@uvigo.es&pass=admin" \
         "http://localhost/$BACK_REL/index.php")"
 
-    if [[ "$RESPUESTA" == *'"ok":"LOGIN_OK"'* ]]; then
+    if [[ "$RESPUESTA" == *'"code":"LOGIN_OK"'* ]]; then
         echo "La API responde correctamente y se conecta a la base de datos."
     else
         aviso "La API no ha respondido como se esperaba. Respuesta: ${RESPUESTA:0:200}"
