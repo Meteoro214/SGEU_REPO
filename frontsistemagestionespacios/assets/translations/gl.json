@@ -148,7 +148,6 @@
     "passNotEq": "Os contrasinais non coinciden",
     "USUARIO_YA_EXISTE_KO": "Existe un usuario rexistrado con ese dni ou email",
     "USUARIO_REG_DEF_KO": "Non se poido rexistrar. Intentao de novo."
-
   },
   "usuarios": {
     "title": "Usuarios e permisos",
@@ -211,6 +210,15 @@
       "cancel": "Cancelar",
       "create": "Crear usuario"
     },
+    "bulkDelete": {
+      "title": "Eliminar solicitudes",
+      "confirmMessage": "Tes a certeza de que queres eliminar definitivamente as {count} solicitudes seleccionadas? Esta acción non se pode desfacer.",
+      "confirm": "Eliminar",
+      "selectedOne": "1 solicitude seleccionada",
+      "selectedMany": "{count} solicitudes seleccionadas",
+      "success": "Elimináronse correctamente {count} solicitudes.",
+      "partialError": "Elimináronse {deleted} solicitudes. Non se puideron eliminar {failed}."
+    },
     "userCountOne": "{count} usuario",
     "userCountMany": "{count} usuarios",
     "deleteSelected": "Eliminar seleccionadas",
@@ -224,6 +232,12 @@
       "deleteTitle": "Eliminar usuario",
       "deleteMessage": "Tes a certeza de que queres eliminar definitivamente o rexistro de {name}?",
       "deleteConfirm": "Eliminar",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "feedback": {
+      "title": "Confirmar acción",
+      "message": "Tes a certeza de que queres continuar?",
       "cancel": "Cancelar",
       "confirm": "Confirmar"
     },
@@ -242,20 +256,9 @@
       "deleteError": "Non se puido eliminar o usuario. {error}",
       "noActiveUsers": "Non hai usuarios activos que coincidan coa busca.",
       "noRequests": "Non hai solicitudes que coincidan coa busca.",
-      "noRole": "Sen perfil asignado."
-    },
-    "feedback": {
-      "title": "Confirmar acción",
-      "message": "Tes a certeza de que queres continuar?"
-    },
-    "bulkDelete": {
-      "title": "Eliminar solicitudes",
-      "confirmMessage": "Tes a certeza de que queres eliminar definitivamente as {count} solicitudes seleccionadas? Esta acción non se pode desfacer.",
-      "confirm": "Eliminar",
-      "selectedOne": "1 solicitude seleccionada",
-      "selectedMany": "{count} solicitudes seleccionadas",
-      "success": "Elimináronse correctamente {count} solicitudes.",
-      "partialError": "Elimináronse {deleted} solicitudes. Non se puideron eliminar {failed}."
+      "noRole": "Sen perfil asignado.",
+      "editSuccess": "Os datos do usuario actualizáronse correctamente.",
+      "editError": "Non se puideron gardar os cambios. {error}"
     }
   },
   "facultades": {

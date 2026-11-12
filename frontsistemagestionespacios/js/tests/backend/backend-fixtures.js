@@ -22,7 +22,7 @@ function sufijo(digitos) {
  * @returns {Promise<*>} Identificador o recurso creado; null si falla.
  */
 async function crear(entidad, payload) {
-    const res = await apiPost(entidad, 'ADD', { ...payload, token: tokenAdmin });
+    const res = await apiPost(entidad, 'ADD', { ...payload, token: tokenAdmin, db_mode: "TEST" });
     return res.ok ? res.resource : null;
 }
 
@@ -34,7 +34,8 @@ async function crear(entidad, payload) {
 async function prepararFixtures() {
     const login = await apiPost('usuario', 'LOGIN', {
         email: 'admin@uvigo.es',
-        pass: 'admin'
+        pass: 'admin',
+        db_mode: "TEST"
     });
     if (!login.ok || !login.resource || !login.resource.token) {
         throw new Error(login.code || 'No se pudo obtener el token para las pruebas backend');
@@ -169,11 +170,13 @@ function claveFilaCreada(entidad, payload, idBackend) {
         case 'accion': return { tabla: entidad, valores: { id_accion: idBackend } };
         case 'funcionalidad': return { tabla: entidad, valores: { id_func: idBackend } };
         case 'tiene_permiso':
-            return { tabla: entidad, valores: {
-                id_grupo: payload.id_grupo,
-                id_accion: payload.id_accion,
-                id_func: payload.id_func
-            } };
+            return {
+                tabla: entidad, valores: {
+                    id_grupo: payload.id_grupo,
+                    id_accion: payload.id_accion,
+                    id_func: payload.id_func
+                }
+            };
         default: return null;
     }
 }
@@ -231,7 +234,11 @@ async function compararConBackend(nombreEntidad, accion, fixtures, overrides, re
         }
         Object.assign(payload, overridesResueltos);
 
-        const res = await apiPost(nombreEntidad, accion, { ...payload, token: tokenAdmin });
+        const res = await apiPost(nombreEntidad, accion, {
+            ...payload,
+            token: tokenAdmin,
+            db_mode: "TEST"
+        });
         const backendOk = res.ok === true;
         const backendCode = res.code || '';
         // Comprobamos que la petición sea correcta.
@@ -302,7 +309,8 @@ async function limpiarFixtures(filasExtra, fixtures) {
     try {
         const res = await apiPost('qa_cleanup', 'LIMPIAR', {
             filas: JSON.stringify(filas),
-            token: tokenAdmin
+            token: tokenAdmin,
+            db_mode: "TEST"
         });
         if (!res.ok) {
             console.error('Limpieza de fixtures QA falló:', res.code);

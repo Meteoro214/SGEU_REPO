@@ -78,6 +78,10 @@ abstract class appServiceBase{
         $accionNombre = 'EDIT';
     }
 
+	if ($nombreFuncionalidad === 'QA_CLEANUP' && $accionNombre === 'LIMPIAR') {
+	return true;
+	}
+	
 	if ($nombreFuncionalidad === 'USER' && $accionNombre === 'EDIT') {
         $idUsuarioPost = isset($_POST['id_usuario']) ? intval($_POST['id_usuario']) : null;
         

@@ -420,7 +420,7 @@ function iniciarUsuarios() {
 
         if (!modal || !formulario) {
             mostrarMensaje(
-                'No se ha encontrado el modal de usuarios.',
+                traducir("usuarios.messages.notFound"),
                 'error'
             );
             return;
@@ -517,7 +517,7 @@ function iniciarUsuarios() {
 
         if (!controladorModal) {
             mostrarMensaje(
-                'No se ha podido inicializar el modal.',
+                traducir("usuarios.messages.modalInitError"),
                 'error'
             );
             return;
@@ -582,7 +582,7 @@ function iniciarUsuarios() {
             controladorModal?.cerrar();
 
             mostrarMensaje(
-                'Los datos del usuario se han actualizado correctamente.',
+                traducir("usuarios.messages.updateSuccess"),
                 'success'
             );
 
@@ -594,7 +594,9 @@ function iniciarUsuarios() {
 
             if (mensajeModal) {
                 mensajeModal.textContent =
-                    `No se han podido guardar los cambios. ${error.message}`;
+                traducir('usuarios.modal.editError')
+                .replace('{error}', error.message),
+
 
                 mensajeModal.hidden = false;
             }
@@ -1208,7 +1210,7 @@ function iniciarUsuarios() {
                     id_usuario: String(usuario.id)
                 });
 
-                mmostrarMensaje(
+                mostrarMensaje(
                     traducir('usuarios.messages.deleteSuccess'),
                     'success'
                 );

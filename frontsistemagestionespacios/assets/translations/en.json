@@ -28,7 +28,6 @@
     "userGuide": "Consult the system user guide.",
     "documentation": "View documentation",
     "academicYear": "Academic year",
-    "demoData": "Demo data",
     "notifications": "Notifications",
     "administration": "Administration",
     "myProf": "My Profile",
@@ -211,22 +210,36 @@
       "cancel": "Cancel",
       "create": "Create user"
     },
-    "feedback": {
-    "title": "Confirm action",
-    "message": "Are you sure you want to continue?",
-    "confirm": "Confirm",
-    "cancel": "Cancel"
+    "bulkDelete": {
+      "title": "Delete requests",
+      "confirmMessage": "Are you sure you want to permanently delete the {count} selected requests? This action cannot be undone.",
+      "confirm": "Delete",
+      "selectedOne": "1 request selected",
+      "selectedMany": "{count} requests selected",
+      "success": "{count} requests deleted successfully.",
+      "partialError": "{deleted} requests deleted. {failed} could not be deleted."
     },
+    "userCountOne": "{count} user",
+    "userCountMany": "{count} users",
+    "deleteSelected": "Delete selected",
     "confirmations": {
-      "cancel": "Cancel", 
-      "deleteConfirm": "Delete",
-      "acceptConfirm": "Accept",
       "acceptTitle": "Accept request",
       "acceptMessage": "Are you sure you want to accept the access request from {name}?",
+      "acceptConfirm": "Accept",
       "rejectTitle": "Reject request",
       "rejectMessage": "Are you sure you want to reject and permanently delete the registration of {name}?",
+      "rejectConfirm": "Reject",
       "deleteTitle": "Delete user",
-      "deleteMessage": "Are you sure you want to permanently delete the record of {name}?"
+      "deleteMessage": "Are you sure you want to permanently delete the record of {name}?",
+      "deleteConfirm": "Delete",
+      "cancel": "Cancel", 
+      "confirm": "Confirm"
+    },
+    "feedback": {
+      "title": "Confirm action",
+      "message": "Are you sure you want to continue?",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
     },
     "messages": {
       "loading": "Loading users...",
@@ -243,19 +256,10 @@
       "deleteError": "The user could not be deleted. {error}",
       "noActiveUsers": "No active users match your search.",
       "noRequests": "No requests match your search.",
-      "noRole": "No role assigned."
-    },
-    "bulkDelete": {
-      "title": "Delete requests",
-      "confirmMessage": "Are you sure you want to permanently delete the {count} selected requests? This action cannot be undone.",
-      "confirm": "Delete",
-      "selectedOne": "1 request selected",
-      "selectedMany": "{count} requests selected",
-      "success": "{count} requests deleted successfully.",
-      "partialError": "{deleted} requests deleted. {failed} could not be deleted."
-    },
-    "userCountOne": "{count} user",
-    "userCountMany": "{count} users"
+      "noRole": "No role assigned.",
+      "editSuccess": "User details have been updated successfully.",
+      "editError": "Changes could not be saved. {error}"
+    }
   },
   "facultades": {
 

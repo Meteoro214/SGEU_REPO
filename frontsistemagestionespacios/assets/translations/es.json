@@ -235,23 +235,31 @@
       "cancel": "Cancelar",
       "confirm": "Confirmar"
     },
+    "feedback": {
+      "title": "Confirmar acción",
+      "message": "¿Estás seguro de que deseas continuar?",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
     "messages": {
+      "loading": "Cargando usuarios...",
+      "loadError": "No se han podido cargar los usuarios. {error}",
+      "notFound": "No se ha encontrado el modal de usuarios.",
+      "modalInitError": "No se ha podido iniciar el modal.",
+      "updateSuccess": "Los datos de usuario se han actualizado correctamente.",
+      "updateError": "No se pudieron guardar los cambios. {error}",
       "acceptSuccess": "La solicitud de {name} se ha aceptado correctamente.",
       "acceptError": "No se ha podido aceptar la solicitud. {error}",
       "rejectSuccess": "La solicitud se ha rechazado y eliminado correctamente.",
       "rejectError": "No se ha podido rechazar la solicitud. {error}",
       "deleteSuccess": "El usuario se ha eliminado correctamente.",
       "deleteError": "No se ha podido eliminar el usuario. {error}",
+      "noActiveUsers": "No hay usuarios activos que coincidan con la búsqueda.",
+      "noRequests": "No hay solicitudes que coincidan con la búsqueda.",
+      "noRole": "Sin rol asignado",
       "editSuccess": "Los datos del usuario se han actualizado correctamente.",
-      "editError": "No se han podido guardar los cambios. {error}",
-      "loadError": "No se han podido cargar los usuarios. {error}",
-      "loading": "Cargando usuarios..."
-    },
-    "feedback": {
-      "title": "Confirmar acción",
-      "message": "¿Estás seguro de que deseas continuar?"
+      "editError": "No se han podido guardar los cambios. {error}"
     }
-
   },
   "facultades": {
 
