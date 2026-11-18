@@ -107,6 +107,20 @@ class Backend_Test {
                 ...facultadesFixture
             };
             
+            // Sustituye los marcadores individuales.
+            Object.keys(overridesVisibles).forEach((clave) => {
+                const valor = overridesVisibles[clave];
+
+                if (
+                    typeof valor === 'string' &&
+                    Object.prototype.hasOwnProperty.call(marcadoresFixture, valor) &&
+                    marcadoresFixture[valor] !== null
+                ) {
+                    overridesVisibles[clave] = marcadoresFixture[valor];
+                }
+            });
+
+            // Sustituye los marcadores que estén dentro de arrays.
             if (Array.isArray(overridesVisibles.facultades)) {
                 overridesVisibles.facultades = overridesVisibles.facultades.map((id) => {
                     return Object.prototype.hasOwnProperty.call(marcadoresFixture, id)
