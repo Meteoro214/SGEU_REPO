@@ -63,3 +63,47 @@ let usuario_backend_tests = Array(
     { accion: 'DELETE', descripcion: 'DELETE de un usuario existente', overrides: {}, esperado: 'QUERY_OK' },
     { accion: 'DELETE', descripcion: 'DELETE sin identificador', overrides: { id_usuario: '' }, esperado: 'id_usuario_ES_NULO_KO' }
 );
+
+// =====================================================================================
+// facultades
+// =====================================================================================
+let facultad_backend_tests = Array(
+    
+    // Añadir facultad
+    { accion: 'ADD', descripcion: 'ADD con todos los campos obligatorios', overrides: {}, esperado: 'QUERY_OK' },
+    { accion: 'ADD', descripcion: 'ADD sin nombre de facultad', overrides: { nom_facultad: ''}, esperado: 'nom_facultad_ES_NULO_KO' },
+    { accion: 'ADD', descripcion: 'ADD sin año académico', overrides: { anho_acad_facultad: '' }, esperado: 'anho_acad_facultad_ES_NULO_KO' },
+    { accion: 'ADD', descripcion: 'ADD de facultad duplicada', overrides: { nom_facultad: '__FIXTURE_NOM_FACULTAD__', anho_acad_facultad: '__FIXTURE_ANHO_FACULTAD__' }, esperado: 'QUERY_OK' },
+
+
+    // Buscar facultades
+    { accion: 'SEARCH', descripcion: 'SEARCH sin filtros devuelve listado', overrides: {}, esperado: 'RECORDSET_DATOS' },
+    { accion: 'SEARCH', descripcion: 'SEARCH por nombre de facultad', overrides: { nom_facultad: 'QA Facultad' }, esperado: 'RECORDSET_DATOS' },
+    { accion: 'SEARCH', descripcion: 'SEARCH por año académico', overrides: { anho_acad_facultad: '2026-2027' }, esperado: 'RECORDSET_DATOS' },
+
+
+    // Editar facultades
+    { accion: 'EDIT', descripcion: 'EDIT de una facultad existente', overrides: {}, esperado: 'QUERY_OK' },
+    { accion: 'EDIT', descripcion: 'EDIT sin nombre de facultad', overrides: { nom_facultad: '' }, esperado: 'nom_facultad_ES_NULO_KO' },
+    { accion: 'EDIT', descripcion: 'EDIT sin año académico', overrides: { anho_acad_facultad: '' }, esperado: 'anho_acad_facultad_ES_NULO_KO' },
+
+
+    // Duplicar facultades
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR una facultad', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_1__'], anho_acad_facultad: '2027-2028' }, esperado: 'FACULTADES_DUPLICADAS_OK' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR varias facultades', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_1__', '__FIXTURE_ID_FACULTAD_2__'], anho_acad_facultad: '2028-2029' }, esperado: 'FACULTADES_DUPLICADAS_OK' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con identificadores repetidos', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_1__', '__FIXTURE_ID_FACULTAD_1__'], anho_acad_facultad: '2027-2028' }, esperado: 'FACULTADES_DUPLICADAS_OK' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con identificador no válido', overrides: { facultades: ['abc'], anho_acad_facultad: '2027-2028' }, esperado: 'FACULTAD_ID_INVALIDO_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con formato de año incorrecto', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_1__'], anho_acad_facultad: '2027/2028' }, esperado: 'ANHO_ACADEMICO_FORMATO_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con año anterior a 2026', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_1__'], anho_acad_facultad: '2025-2026' }, esperado: 'ANHO_ACADEMICO_INVALIDO_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con año no consecutivo', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_1__'], anho_acad_facultad: '2027-2029' }, esperado: 'ANHO_ACADEMICO_INVALIDO_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con año igual al de origen', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_1__'], anho_acad_facultad: '2026-2027' }, esperado: 'ANHO_DESTINO_NO_POSTERIOR_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con año anterior al de origen', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_2__'], anho_acad_facultad: '2026-2027' }, esperado: 'ANHO_DESTINO_NO_POSTERIOR_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR una facultad con año de origen inválido', overrides: { facultades: ['__FIXTURE_ID_FACULTAD_3__'], anho_acad_facultad: '2027-2028' }, esperado: 'ANHO_ORIGEN_INVALIDO_KO' },
+
+
+    // Borrar facultades
+    { accion: 'DELETE', descripcion: 'DELETE de una facultad existente', overrides: {}, esperado: 'QUERY_OK' },
+    { accion: 'DELETE', descripcion: 'DELETE con identificador inexistente', overrides: { id_facultad: 4294967295 }, esperado: 'QUERY_OK' },
+    { accion: 'DELETE', descripcion: 'DELETE sin identificador', overrides: { id_facultad: '' }, esperado: 'id_facultad_ES_NULO_KO' }
+
+);

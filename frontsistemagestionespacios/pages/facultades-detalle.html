@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detalle de una facultad del Sistema de Gestión de Espacios Universitarios">
+
+    <title data-i18n="facultades.detail.title">Detalle de facultad | SGEU</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components/app-layout.css">
+    <link rel="stylesheet" href="../css/components/tables.css">
+    <link rel="stylesheet" href="../css/pages/facultades-detalle.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- Scripts comunes -->
+    <script type="module" src="../js/common/navigation.js" defer></script>
+    <script src="../js/common/icons.js" defer></script>
+
+    <!-- Internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Lógica del detalle -->
+    <script type="module" src="../js/modules/facultades-detalle.js" defer></script>
+</head>
+
+<body data-page="facultades">
+
+    <div class="app-layout">
+
+        <aside class="app-sidebar" id="app-sidebar"></aside>
+
+        <div class="app-main">
+
+            <header class="app-topbar"></header>
+
+            <main class="app-content faculty-detail-page">
+
+                <!-- CABECERA -->
+                <section class="faculty-detail-header">
+
+                    <div class="faculty-detail-header-info">
+
+                        <nav class="breadcrumb" aria-label="Ruta de navegación">
+                            <ol>
+                                <li>
+                                    <a href="bienvenida.html">SGEU</a>
+                                </li>
+
+                                <li>
+                                    <span data-icon="chevron" aria-hidden="true"></span>
+                                    <a href="facultades.html"
+                                       data-i18n="facultades.title">
+                                        Facultades
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <span data-icon="chevron" aria-hidden="true"></span>
+                                    <span
+                                        id="faculty-detail-breadcrumb"
+                                        aria-current="page">
+                                        Cargando...
+                                    </span>
+                                </li>
+                            </ol>
+                        </nav>
+
+                        <h1 id="faculty-detail-name">
+                            Cargando facultad...
+                        </h1>
+
+                        <p data-i18n="facultades.detail.description">
+                            Información y espacios asociados a esta facultad.
+                        </p>
+
+                    </div>
+
+                    <div class="faculty-detail-header-actions">
+
+                        <a
+                            href="facultades.html"
+                            class="btn"
+                            id="faculty-detail-back"
+                        >
+                            <span data-icon="arrow" aria-hidden="true"></span>
+                            <span data-i18n="common.back">Volver</span>
+                        </a>
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="faculty-detail-edit"
+                            data-require="ADMIN"
+                        >
+                            <span data-icon="edit" aria-hidden="true"></span>
+                            <span data-i18n="facultades.actions.edit">Editar</span>
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- MENSAJES -->
+                <p
+                    id="faculty-detail-message"
+                    class="faculty-detail-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></p>
+
+                <!-- FORMULARIO DE EDICIÓN -->
+                <section id="faculty-detail-edit-section" class="faculty-detail-edit-section" hidden>
+
+                    <article class="faculty-detail-card">
+
+                        <div class="faculty-detail-card-header">
+                            <div>
+                                <h2 data-i18n="facultades.modal.editTitle">Editar facultad</h2>
+                                <p data-i18n="facultades.modal.editDescription">
+                                    Modifica los datos de esta facultad.
+                                </p>
+                            </div>
+                        </div>
+
+                        <form id="faculty-detail-edit-form" class="faculty-detail-form">
+
+                            <input type="hidden" id="faculty-detail-edit-id">
+
+                            <div class="faculty-detail-form-grid">
+
+                                <div class="faculty-detail-form-group">
+                                    <label for="faculty-detail-edit-id-display" data-i18n="facultades.form.id">
+                                        ID de facultad
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="faculty-detail-edit-id-display"
+                                        disabled
+                                    >
+                                </div>
+
+                                <div class="faculty-detail-form-group">
+                                    <label for="faculty-detail-edit-name" data-i18n="facultades.form.name">
+                                        Nombre de la facultad
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="faculty-detail-edit-name"
+                                        maxlength="100"
+                                    >
+                                </div>
+
+                                <div class="faculty-detail-form-group">
+                                    <label for="faculty-detail-edit-year" data-i18n="facultades.form.academicYear">
+                                        Año académico
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="faculty-detail-edit-year"
+                                        maxlength="9"
+                                        placeholder="2025-2026"
+                                    >
+                                    <small data-i18n="facultades.form.formatHelp">Formato: AAAA-AAAA</small>
+                                </div>
+
+                            </div>
+
+                            <p
+                                id="faculty-detail-edit-message"
+                                class="faculty-detail-message"
+                                role="alert"
+                                hidden
+                            ></p>
+
+                            <div class="faculty-detail-form-actions">
+
+                                <button
+                                    type="button"
+                                    class="btn"
+                                    id="faculty-detail-edit-cancel"
+                                    data-i18n="common.cancel"
+                                >
+                                    Cancelar
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                    id="faculty-detail-edit-save"
+                                    data-i18n="common.saveChanges"
+                                    data-require="ADMIN"
+                                    data-i18n="common.saveChanges"
+                                >
+                                    Guardar cambios
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </article>
+
+                </section>
+
+
+                <!-- CONTENIDO -->
+                <div id="faculty-detail-content" hidden>
+
+                    <!-- INFORMACIÓN GENERAL -->
+                    <section class="faculty-detail-information">
+
+                        <article class="faculty-detail-card">
+
+                            <div class="faculty-detail-card-header">
+
+                                <div>
+                                    <h2 data-i18n="facultades.detail.generalTitle">
+                                        Información general
+                                    </h2>
+
+                                    <p data-i18n="facultades.detail.generalDescription">
+                                        Datos principales del registro.
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div class="faculty-detail-card-body">
+
+                                <div class="faculty-detail-row">
+
+                                    <span data-i18n="facultades.form.id">
+                                        ID de facultad
+                                    </span>
+
+                                    <strong id="faculty-detail-id">—</strong>
+
+                                </div>
+
+
+                                <div class="faculty-detail-row">
+
+                                    <span data-i18n="facultades.form.name">
+                                        Nombre
+                                    </span>
+
+                                    <strong id="faculty-detail-name-value">—</strong>
+
+                                </div>
+
+
+                                <div class="faculty-detail-row">
+
+                                    <span data-i18n="facultades.form.academicYear">
+                                        Año académico
+                                    </span>
+
+                                    <strong id="faculty-detail-academic-year">—</strong>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    </section>
+
+
+                    <!-- ESPACIOS ASOCIADOS -->
+                    <section class="faculty-detail-spaces">
+
+                        <article class="faculty-detail-card">
+
+                            <div class="faculty-detail-card-header">
+
+                                <div>
+                                    <h2 data-i18n="facultades.detail.spacesTitle">
+                                        Espacios asociados
+                                    </h2>
+
+                                    <p data-i18n="facultades.detail.spacesDescription">
+                                        Espacios vinculados a esta facultad.
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <!-- ESTADO VACÍO -->
+                            <div id="faculty-detail-spaces-empty" class="faculty-detail-empty">
+                                <span data-icon="space" aria-hidden="true"></span>
+                                <h3 data-i18n="facultades.detail.noSpacesTitle">No hay espacios asociados</h3>
+                                <p data-i18n="facultades.detail.noSpacesDescription">
+                                    Actualmente esta facultad no tiene espacios registrados.
+                                </p>
+                            </div>
+
+                        </article>
+
+                    </section>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -41,7 +41,7 @@ class Backend_Test {
      */
     async ejecutar() {
         try {
-            this.fixtures = await prepararFixtures();
+            this.fixtures = await prepararFixtures(this.nombreEntidad);
         } catch (e) {
             console.error('No se pudieron preparar las fixtures de backend:', e);
             this.fixtures = null;
@@ -86,13 +86,34 @@ class Backend_Test {
                 '__FIXTURE_ID_RECHAZAR__': this.fixtures.idUsuarioRechazar,
                 '__FIXTURE_EMAIL_RECHAZAR__': this.fixtures.emailUsuarioRechazar
             } : {};
-            const marcadoresFixture = { ...gruposFixture, ...usuariosReactivarFixture, ...rechazar };
-            Object.keys(overridesVisibles).forEach((clave) => {
-                const valor = overridesVisibles[clave];
-                if (Object.prototype.hasOwnProperty.call(marcadoresFixture, valor) && marcadoresFixture[valor] !== null) {
-                    overridesVisibles[clave] = marcadoresFixture[valor];
-                }
-            });
+            const facultades = this.fixtures ? this.fixtures.facultades : null;
+            const facultad = this.fixtures ? this.fixtures.facultad : null;
+
+            const facultadesFixture = {
+                '__FIXTURE_ID_FACULTAD_1__': facultades ? facultades.primera.id : null,
+                '__FIXTURE_ID_FACULTAD_2__': facultades ? facultades.segunda.id : null,
+                '__FIXTURE_ID_FACULTAD_3__': facultades ? facultades.tercera.id : null
+            };
+
+            const facultadFixture = {
+                '__FIXTURE_NOM_FACULTAD__': facultad ? facultad.nombre : null,
+                '__FIXTURE_ANHO_FACULTAD__': facultad ? facultad.anho : null
+            };
+            const marcadoresFixture = {
+                ...gruposFixture,
+                ...usuariosReactivarFixture,
+                ...rechazar,
+                ...facultadFixture,
+                ...facultadesFixture
+            };
+            
+            if (Array.isArray(overridesVisibles.facultades)) {
+                overridesVisibles.facultades = overridesVisibles.facultades.map((id) => {
+                    return Object.prototype.hasOwnProperty.call(marcadoresFixture, id)
+                        ? marcadoresFixture[id]
+                        : id;
+                });
+            }
             const valorprueba = Object.keys(overridesVisibles)
                 .map((clave) => clave + '=' + JSON.stringify(overridesVisibles[clave]))
                 .join(' ');
@@ -101,10 +122,18 @@ class Backend_Test {
                 ? await compararConBackend(this.nombreEntidad, accion, this.fixtures, overrides, esperado)
                 : {
                     backend_code: this.errorFixtures?.message || 'no se pudieron preparar las fixtures',
-                    backend_status: 'SIN_CONEXION'
+                    backend_status: 'ERROR_FIXTURES'
                 };
 
-            if (resultado.filaCreada) this.filasCreadas.push(resultado.filaCreada);
+            // Almacena las filas creadas mediante ADD.
+            if (resultado.filaCreada) {
+                this.filasCreadas.push(resultado.filaCreada);
+            }
+
+            // Almacena todas las facultades creadas mediante DUPLICAR.
+            if (resultado.filasCreadas && resultado.filasCreadas.length > 0) {
+                this.filasCreadas.push(...resultado.filasCreadas);
+            }
 
             salida.push({
                 entidad: this.nombreEntidad, accion, descripcion,
@@ -156,7 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function obtenerNombreEntidadTraducido(entidad) {
         if (!entidad) return '';
-        const clave = 'tests.entities.' + entidad.toLowerCase();
+        // Si se pasa facultad como entidad la transforma plurar por la clave del json d eidioma
+        const claveEntidad = entidad.toLowerCase() === 'facultad' ? 'facultades' : entidad.toLowerCase();
+        const clave = 'tests.entities.' + claveEntidad;
         if (typeof window.traducir === 'function') {
             const trad = window.traducir(clave);
             if (trad && trad !== clave) return trad;
@@ -166,9 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function actualizarMensajeEstado() {
         if (!estado) return;
-
         const entidadVisible = obtenerNombreEntidadTraducido(ultimoEstado.entidad);
-
         if (ultimoEstado.tipo === 'inicial') {
             estado.textContent = typeof window.traducir === 'function'
                 ? window.traducir('tests.selectEntity')

@@ -745,6 +745,14 @@ body.modal-open {
         gap: 12px;
     }
 
+    .users-filter-actions {
+        flex-direction: column;
+    }
+
+    .users-filter-actions button {
+        width: 100%;
+    }
+
     .users-filter-field {
         width: 100%;
         min-width: 0;

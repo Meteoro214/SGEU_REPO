@@ -49,4 +49,19 @@ class Validaciones {
         return this._resultado(campo, Validadores.validarFechaOpcional(this._valorCampo(campo)));
     }
 
+    // Comprueba que los años académicos sean consecutivos
+    _validarAnhoAcademico(valor) {
+        const regex = /^(\d{4})-(\d{4})$/;
+        const coincidencia = valor.match(regex);
+
+        if (!coincidencia) return 'format';
+
+        const anhoInicio = Number(coincidencia[1]);
+        const anhoFin = Number(coincidencia[2]);
+
+        if (anhoFin !== anhoInicio + 1) return 'format';
+
+        return null;
+    }
+
 }

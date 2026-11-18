@@ -1,0 +1,392 @@
+
+/* ============================================================
+   DETALLE DE FACULTAD
+   Archivo: facultades-detalle.css
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   CONTENEDOR PRINCIPAL
+   ------------------------------------------------------------ */
+
+.faculty-detail-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ------------------------------------------------------------
+   CABECERA
+   ------------------------------------------------------------ */
+
+.faculty-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.faculty-detail-header-info {
+    flex: 1;
+    min-width: 250px;
+}
+
+.faculty-detail-header-info h1 {
+    margin: 18px 0 8px;
+    color: var(--text-primary);
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.faculty-detail-header-info > p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.faculty-detail-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 28px;
+}
+
+.faculty-detail-header-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.faculty-detail-header-actions .icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* ------------------------------------------------------------
+   TARJETAS
+   ------------------------------------------------------------ */
+
+.faculty-detail-information,
+.faculty-detail-spaces,
+.faculty-detail-edit-section {
+    width: 100%;
+}
+
+.faculty-detail-card {
+    width: 100%;
+    overflow: hidden;
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.035);
+    margin-top: 3%;
+}
+
+/* ------------------------------------------------------------
+   CABECERA DE LAS TARJETAS
+   ------------------------------------------------------------ */
+
+.faculty-detail-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.faculty-detail-card-header h2 {
+    margin: 0 0 6px;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 650;
+}
+
+.faculty-detail-card-header p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ------------------------------------------------------------
+   INFORMACIÓN GENERAL
+   ------------------------------------------------------------ */
+
+.faculty-detail-card-body {
+    padding: 6px 24px;
+}
+
+.faculty-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    min-height: 64px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.faculty-detail-row:last-child {
+    border-bottom: none;
+}
+
+.faculty-detail-row span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.faculty-detail-row strong {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------
+   ESPACIOS ASOCIADOS - ESTADO VACÍO
+   ------------------------------------------------------------ */
+
+.faculty-detail-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 190px;
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.faculty-detail-empty > .icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 4px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.faculty-detail-empty h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.faculty-detail-empty p {
+    max-width: 420px;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* ------------------------------------------------------------
+   FORMULARIO DE EDICIÓN
+   ------------------------------------------------------------ */
+
+.faculty-detail-form {
+    padding: 24px;
+}
+
+.faculty-detail-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.faculty-detail-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.faculty-detail-form-group label {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.faculty-detail-form-group input {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    color: var(--text-primary);
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    font: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faculty-detail-form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+.faculty-detail-form-group input:disabled {
+    background: var(--surface-secondary, #f3f4f6);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.faculty-detail-form-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.faculty-detail-form-group small {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+/* ------------------------------------------------------------
+   BOTONES DEL FORMULARIO
+   ------------------------------------------------------------ */
+
+.faculty-detail-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+.faculty-detail-form-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.faculty-detail-form-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------
+   MENSAJES
+   ------------------------------------------------------------ */
+
+.faculty-detail-message {
+    padding: 14px 18px;
+    color: var(--text-primary);
+    background: var(--surface-secondary, #f3f4f6);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.faculty-detail-message.is-error {
+    color: var(--danger-color, #b42318);
+    background: #fef3f2;
+    border-color: #fecdca;
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE - TABLETS
+   ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+    .faculty-detail-page {
+        gap: 20px;
+    }
+
+    .faculty-detail-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .faculty-detail-header-info {
+        width: 100%;
+    }
+
+    .faculty-detail-header-info h1 {
+        font-size: 1.5rem;
+    }
+
+    .faculty-detail-header-actions {
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .faculty-detail-header-actions .btn {
+        flex: 1;
+    }
+
+    .faculty-detail-card-header {
+        padding: 18px 20px;
+    }
+
+    .faculty-detail-card-body {
+        padding: 4px 20px;
+    }
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE - MÓVILES
+   ------------------------------------------------------------ */
+
+@media (max-width: 480px) {
+    .faculty-detail-header-info h1 {
+        font-size: 1.3rem;
+    }
+
+    .faculty-detail-header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .faculty-detail-header-actions .btn {
+        width: 100%;
+    }
+
+    .faculty-detail-card-header {
+        padding: 16px;
+    }
+
+    .faculty-detail-card-body {
+        padding: 4px 16px;
+    }
+
+    .faculty-detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+        padding: 15px 0;
+    }
+
+    .faculty-detail-row strong {
+        text-align: left;
+    }
+
+    .faculty-detail-empty {
+        padding: 28px 16px;
+    }
+
+    .faculty-detail-form {
+        padding: 18px;
+    }
+
+    .faculty-detail-form-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .faculty-detail-form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .faculty-detail-form-actions .btn {
+        width: 100%;
+    }
+}

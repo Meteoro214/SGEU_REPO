@@ -74,7 +74,7 @@ abstract class appServiceBase{
         $nombreFuncionalidad = 'USER';
     }
     $accionNombre = strtoupper($accion);
-	if ($accionNombre === 'REACTIVAR') { //lo pusimos distinto en la de permisos
+	if ($accionNombre === 'REACTIVAR') { //Cuenta como permiso de edit
         $accionNombre = 'EDIT';
     }
 
@@ -90,6 +90,40 @@ abstract class appServiceBase{
             return true;
         }
     }
+
+	// Permisos específicos para la gestión de edificios
+	if ($nombreFuncionalidad === 'EDIFICIO'
+		&& $idGrupoUsuario === 2
+		&& in_array($accionNombre, ['EDIT', 'DELETE'])) {
+
+		$idEdificioSolicitado = isset($_POST['id_edificio'])
+			? intval($_POST['id_edificio'])
+			: 0;
+
+		$idEdificioUsuario = isset($payload->data->id_edificio)
+			? intval($payload->data->id_edificio)
+			: null;
+
+		// Comprobar que el gestor tiene un edificio asignado
+		if ($idEdificioUsuario === null || $idEdificioUsuario <= 0) {
+			return array(
+				'ok' => false,
+				'code' => 'ACCESO_DENEGADO_KO',
+				'message' => 'No tienes ningún edificio asignado.'
+			);
+		}
+
+		// Comprobar que intenta gestionar su propio edificio
+		if ($idEdificioSolicitado !== $idEdificioUsuario) {
+			return array(
+				'ok' => false,
+				'code' => 'ACCESO_DENEGADO_KO',
+				'message' => 'Solo puedes gestionar el edificio que tienes asignado.'
+			);
+		}
+
+		$accionNombre="MANAGE";
+	}
 	
     include_once './base/mapping.php';
     $mapPermiso = new mapping('tiene_permiso');

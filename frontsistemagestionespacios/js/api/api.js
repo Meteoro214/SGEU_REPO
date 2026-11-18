@@ -19,12 +19,24 @@ import { API_URL } from '../config.js';
 // FUNCIÓN GENÉRICA PARA PETICIONES POST
 // ============================================================
 
+
 async function apiPost(controlador, action, params = {}) {
 
-    const body = new URLSearchParams({
-        controlador,
-        action,
-        ...params
+    const body = new URLSearchParams();
+
+    body.append('controlador', controlador);
+    body.append('action', action);
+
+    Object.entries(params).forEach(([clave, valor]) => {
+
+        if (Array.isArray(valor)) {
+            valor.forEach(elemento => {
+                body.append(`${clave}[]`, elemento);
+            });
+
+        } else if (valor !== null && valor !== undefined) {
+            body.append(clave, valor);
+        }
     });
 
     const response = await fetch(API_URL, {
@@ -48,6 +60,7 @@ async function apiPost(controlador, action, params = {}) {
             .replace(/\s+/g, ' ')
             .trim()
             .slice(0, 300);
+
         const description = detail || 'respuesta vacía';
 
         throw new Error(`HTTP ${response.status}: ${description}`);
