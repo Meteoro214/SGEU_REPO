@@ -9,18 +9,7 @@
     "backToWelcome": "Volver á benvida",
     "selectLanguage": "Seleccionar idioma",
     "showPassword": "Mostrar contrasinal",
-    "designAndDevelopment": "Deseño e desenvolvemento de SGEU",
-    "previous": "Anterior",
-    "next": "Seguinte",
-    "loading": "Cargando...",
-    "cancel": "Cancelar",
-    "confirm": "Confirmar",
-    "save": "Gardar",
-    "saveChanges": "Gardar cambios",
-    "add": "Engadir",
-    "edit": "Editar",
-    "back": "Volver",
-    "filter": "Filtrar"
+    "designAndDevelopment": "Deseño e desenvolvemento de SGEU"
   },
   "navigation": {
     "mainMenu": "Menú principal",
@@ -166,6 +155,7 @@
     "newUser": "Novo usuario",
     "searchLabel": "Buscar usuarios",
     "searchPlaceholder": "Buscar por nome, correo ou perfil...",
+    "filter": "Filtrar",
     "userCount": "3 usuarios",
     "editUser": "Editar usuario",
     "editUserDescription": "Modifica os datos do usuario.",
@@ -272,201 +262,10 @@
     }
   },
   "facultades": {
-    "pageTitle": "Facultades | SGEU",
-    "title": "Xestión de facultades",
-    "description": "Xestiona as facultades da universidade e os seus anos académicos.",
-    "newButton": "Nova facultade",
-    "duplicateButton": "Duplicar facultades",
-    "search": "Buscar facultades",
-    "searchPlaceholder": "Buscar polo nome da facultade...",
-    "countOne": "{count} facultade",
-    "countMany": "{count} facultades",
-    "filter": {
-      "academicYear": "Ano académico",
-      "allYears": "Todos os anos académicos",
-      "clearFilters": "Limpiar filtros",
-      "applyFilters": "Aplicar filtros"
-    },
-    "table": {
-      "id": "ID",
-      "name": "Facultade",
-      "academicYear": "Ano académico",
-      "actions": "Accións"
-    },
-    "emptyTitle": "Non hai facultades",
-    "empty": "Non se atoparon facultades.",
-    "actions": {
-      "view": "Ver facultade",
-      "edit": "Editar facultade",
-      "delete": "Eliminar facultade"
-    },
-    "modal": {
-      "newTitle": "Nova facultade",
-      "newDescription": "Introduce os datos da nova facultade.",
-      "editTitle": "Editar facultade",
-      "editDescription": "Modifica os datos da facultade."
-    },
-    "form": {
-      "id": "ID da facultade",
-      "name": "Nome da facultade",
-      "academicYear": "Ano académico",
-      "academicYearPlaceholder": "2026-2027",
-      "academicYearHelp": "Introduce o ano académico da facultade no formato AAAA-AAAA.",
-      "formatHelp": "Formato: AAAA-AAAA"
-    },
-    "confirmations": {
-      "title": "Confirmar acción",
-      "deleteMessage": "Estás seguro de que queres eliminar esta facultade?"
-    },
-    "messages": {
-      "created": "A facultade creouse correctamente.",
-      "updated": "A facultade actualizouse correctamente.",
-      "deleted": "A facultade eliminouse correctamente."
-    },
-    "errors": {
-      "load": "Non se puideron cargar os datos das facultades.",
-      "save": "Non se puideron gardar os cambios.",
-      "invalidData": "Revisa o nome e o formato do ano académico (AAAA-AAAA).",
-      "deleteRelatedSpaces": "Non se pode eliminar a facultade porque ten espazos asociados.",
-      "noPermissionView": "Non tes permiso para ver esta facultade.",
-      "noPermissionEdit": "Non tes permiso para editar esta facultade."
-    },
-    "detail": {
-      "title": "Detalles da facultade | SGEU",
-      "invalidId": "O identificador da facultade non é válido.",
-      "description": "Información e espazos asociados a esta facultade.",
-      "generalTitle": "Información xeral",
-      "generalDescription": "Datos principais do rexistro.",
-      "spacesTitle": "Espazos asociados",
-      "spacesDescription": "Espazos vinculados a esta facultade.",
-      "noSpacesTitle": "Non hai espazos asociados",
-      "noSpacesDescription": "Esta facultade non ten espazos rexistrados actualmente."
-    },
-    "duplicate": {
-      "title": "Duplicar facultades",
-      "description": "Crea facultades para un novo ano académico a partir das existentes.",
-      "mode": "Como queres cargar as facultades?",
-      "byFaculty": "Seleccionar facultades",
-      "byYear": "Seleccionar ano académico",
-      "faculties": "Facultades que queres duplicar",
-      "facultiesHelp": "Podes seleccionar varias facultades de distintos anos.",
-      "year": "Ano académico de orixe",
-      "selectYear": "Selecciona un ano académico",
-      "summary": "Facultades que se crearán: {count}",
-      "targetYear": "Novo ano académico",
-      "targetYearHelp": "Debe ser posterior ao ano académico de orixe.",
-      "confirm": "Duplicar",
-      "selectFaculties": "Selecciona polo menos unha facultade ou un ano académico.",
-      "targetYearMustBeLater": "O novo ano académico debe ser posterior aos anos académicos de orixe.",
-      "success": "As facultades duplicáronse correctamente.",
-      "error": "Non se puideron duplicar as facultades."
-    },
-    "validation": {
-      "nameMinSize": "O nome da facultade debe ter polo menos 2 caracteres.",
-      "nameMaxSize": "O nome da facultade non pode superar os 100 caracteres.",
-      "nameFormat": "O nome da facultade contén caracteres non permitidos.",
-      "academicYearFormat": "Introduce o ano académico no formato AAAA-AAAA.",
-      "academicYearMin": "O ano académico debe comezar en 2026 ou nun ano posterior.",
-      "academicYearConsecutive": "O segundo ano debe ser consecutivo ao primeiro."
-    }
+
   },
   "edificios": {
-    "title": "Edificios",
-    "pageTitle": "Edificios | SGEU",
-    "description": "Consulta e xestiona os edificios da universidade.",
-    "newButton": "Novo edificio",
-    "search": "Buscar edificios",
-    "searchLabel": "Buscar edificios",
-    "searchPlaceholder": "Buscar polo nome do edificio...",
-    "countOne": "{count} edificio",
-    "countMany": "{count} edificios",
-    "idBuilding": "ID do edificio asignado",
-    "filter": {
-      "academicYear": "Ano académico",
-      "allYears": "Todos os anos académicos",
-      "clearFilters": "Limpiar filtros",
-      "applyFilters": "Aplicar filtros"
-    },
-    "table": {
-      "id": "ID",
-      "name": "Edificio",
-      "managers": "Xestores",
-      "address": "Enderezo",
-      "phone": "Teléfono",
-      "academicYear": "Ano académico",
-      "actions": "Accións",
-      "noManagers": "Sen xestores"
-    },
-    "emptyTitle": "Non hai edificios",
-    "empty": "Non se atoparon edificios.",
-    "actions": {
-      "view": "Ver edificio",
-      "edit": "Editar edificio",
-      "delete": "Eliminar edificio"
-    },
-    "modal": {
-      "newTitle": "Novo edificio",
-      "newDescription": "Introduce os datos do edificio.",
-      "editTitle": "Editar edificio",
-      "editDescription": "Modifica os datos deste edificio."
-    },
-    "form": {
-      "id": "ID do edificio",
-      "name": "Nome do edificio",
-      "address": "Enderezo",
-      "phone": "Teléfono",
-      "academicYear": "Ano académico",
-      "academicYearPlaceholder": "2026-2027",
-      "academicYearHelp": "Introduce o ano académico no formato AAAA-AAAA.",
-      "formatHelp": "Formato: AAAA-AAAA",
-      "managers": "Xestores do edificio",
-      "managersHelp": "Podes seleccionar varios xestores. Mantén premida a tecla Ctrl ou Cmd para seleccionar varios.",
-      "managersAssigned": "Os xestores asignados a este edificio aparecen seleccionados.",
-      "noManagersAssigned": "Non hai xestores asignados a este edificio."
-    },
-    "confirmations": {
-      "title": "Confirmar acción",
-      "deleteMessage": "Estás seguro de que queres eliminar este edificio?"
-    },
-    "messages": {
-      "created": "O edificio creouse correctamente.",
-      "updated": "O edificio actualizouse correctamente.",
-      "deleted": "O edificio eliminouse correctamente.",
-      "loading": "Cargando edificios..."
-    },
-    "errors": {
-      "load": "Non se puideron cargar os edificios.",
-      "save": "Non se puideron gardar os cambios.",
-      "invalidData": "Revisa a información introducida.",
-      "deleteRelatedSpaces": "Non se pode eliminar este edificio porque ten espazos asociados."
-    },
-    "detail": {
-      "title": "Detalles do edificio | SGEU",
-      "invalidId": "O ID do edificio non é válido.",
-      "description": "Información e plantas asociadas a este edificio.",
-      "generalInformation": "Información xeral",
-      "generalDescription": "Datos principais do edificio.",
-      "floorsTitle": "Plantas asociadas",
-      "floorsDescription": "Plantas vinculadas a este edificio.",
-      "noFloorsTitle": "Non hai plantas asociadas",
-      "noFloorsDescription": "Este edificio non ten plantas rexistradas actualmente.",
-      "editTitle": "Editar edificio",
-      "editDescription": "Modifica os datos deste edificio."
-    },
-    "validation": {
-      "nameMinSize": "O nome do edificio debe ter polo menos 2 caracteres.",
-      "nameMaxSize": "O nome do edificio non pode superar os 100 caracteres.",
-      "nameFormat": "O nome do edificio contén caracteres non permitidos.",
-      "addressMinSize": "O enderezo debe ter polo menos 2 caracteres.",
-      "addressMaxSize": "O enderezo non pode superar os 255 caracteres.",
-      "addressFormat": "O enderezo contén caracteres non permitidos.",
-      "phoneMinSize": "O teléfono debe ter polo menos 9 caracteres.",
-      "phoneMaxSize": "O teléfono non pode superar os 15 caracteres.",
-      "phoneFormat": "Introduce un teléfono válido.",
-      "academicYearFormat": "Introduce o ano académico no formato AAAA-AAAA.",
-      "academicYearMin": "O ano académico debe comezar en 2026 ou nun ano posterior.",
-      "academicYearConsecutive": "O segundo ano debe ser consecutivo ao primeiro."
-    }
+    "idBuilding": "ID do edificio asignado"
   },
   "tests": {
     "backendTitle": "Executor de probas de Backend",
@@ -497,8 +296,7 @@
       "textoidiomaerror": "Texto idioma erro"
     },
     "entities": {
-      "usuario": "Usuario",
-      "facultades": "Facultade"
+      "usuario": "Usuario"
     }
   },
   "pages": {

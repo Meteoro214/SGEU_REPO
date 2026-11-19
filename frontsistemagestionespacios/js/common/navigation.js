@@ -179,6 +179,22 @@ function renderTopbar() {
 
             </button>
 
+            <div class="course-select">
+
+                <select id="course-select"
+                    name="course"
+                    aria-label="Curso académico">
+
+                    <option value="2026-2027" selected>
+                        Curso 2026/27
+                    </option>
+
+                </select>
+
+                <span data-icon="chevron" aria-hidden="true"></span>
+
+            </div>
+
         </div>
 
         <div class="topbar-right">
@@ -291,7 +307,7 @@ function renderTopbar() {
                                 name="nombre_usuario"
                                 type="text"
                                 readonly
-                                >
+                                required>
                         </div>
 
                         <div class="field">
@@ -304,7 +320,7 @@ function renderTopbar() {
                                 name="apellidos"
                                 type="text"
                                 readonly
-                                >
+                                required>
                         </div>
 
                         <div class="field">
@@ -317,7 +333,7 @@ function renderTopbar() {
                                 name="mail"
                                 type="email"
                                 readonly
-                                >
+                                required>
                         </div>
 
                         <div class="field">

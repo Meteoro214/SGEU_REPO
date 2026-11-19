@@ -133,7 +133,7 @@
                                     aria-controls="users-filter-panel"
                                 >
                                     <span data-icon="filter" aria-hidden="true"></span>
-                                    <span data-i18n="common.filter">Filtrar</span>
+                                    <span data-i18n="usuarios.filter">Filtrar</span>
                                 </button>
 
                                 <p id="users-count" aria-live="polite">0 usuarios</p>
@@ -289,6 +289,7 @@
                                 id="user-name"
                                 name="nom_usuario"
                                 class="field-input"
+                                required
                             >
                         </div>
 
@@ -331,6 +332,7 @@
                                 id="user-dni"
                                 name="dni"
                                 class="field-input"
+                                required
                             >
                         </div>
 
@@ -354,6 +356,7 @@
                                 id="user-role"
                                 name="id_grupo"
                                 class="field-input"
+                                required
                             >
                                 <option value="1" data-i18n="usuarios.roles.administration">Administración</option>
                                 <option value="2" data-i18n="usuarios.roles.manager">Gestor</option>

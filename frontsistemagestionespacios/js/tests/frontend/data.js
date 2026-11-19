@@ -198,8 +198,7 @@ class Data_Test {
 
 // Entidades disponibles en el desplegable de test-frontend.html
 const mapaEntidades = {
-    usuarios,
-    facultades
+    usuarios
 };
 
 // Traduce un texto con i18n y si no está cargado usa el texto en español

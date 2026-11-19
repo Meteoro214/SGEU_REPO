@@ -9,18 +9,7 @@
     "backToWelcome": "Back to welcome",
     "selectLanguage": "Select language",
     "showPassword": "Show password",
-    "designAndDevelopment": "SGEU design and development",
-    "previous": "Previous",
-    "next": "Next",
-    "loading": "Loading...",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "save": "Save",
-    "saveChanges": "Save changes",
-    "add": "Add",
-    "edit": "Edit",
-    "back": "Back",
-    "filter": "Filter"
+    "designAndDevelopment": "SGEU design and development"
   },
   "navigation": {
     "mainMenu": "Main menu",
@@ -166,6 +155,7 @@
     "newUser": "New user",
     "searchLabel": "Search users",
     "searchPlaceholder": "Search by name, email or role...",
+    "filter": "Filter",
     "userCount": "3 users",
     "editUser": "Edit user",
     "editUserDescription": "Edit the user's details.",
@@ -272,201 +262,10 @@
     }
   },
   "facultades": {
-    "pageTitle": "Faculties | SGEU",
-    "title": "Faculty management",
-    "description": "Manage university faculties and their academic years.",
-    "newButton": "New faculty",
-    "duplicateButton": "Duplicate faculties",
-    "search": "Search faculties",
-    "searchPlaceholder": "Search by faculty name...",
-    "countOne": "{count} faculty",
-    "countMany": "{count} faculties",
-    "filter": {
-      "academicYear": "Academic year",
-      "allYears": "All academic years",
-      "clearFilters": "Clear filters",
-      "applyFilters": "Apply filters"
-    },
-    "table": {
-      "id": "ID",
-      "name": "Faculty",
-      "academicYear": "Academic year",
-      "actions": "Actions"
-    },
-    "emptyTitle": "No faculties",
-    "empty": "No faculties were found.",
-    "actions": {
-      "view": "View faculty",
-      "edit": "Edit faculty",
-      "delete": "Delete faculty"
-    },
-    "modal": {
-      "newTitle": "New faculty",
-      "newDescription": "Enter the details of the new faculty.",
-      "editTitle": "Edit faculty",
-      "editDescription": "Modify the faculty details."
-    },
-    "form": {
-      "id": "Faculty ID",
-      "name": "Faculty name",
-      "academicYear": "Academic year",
-      "academicYearPlaceholder": "2026-2027",
-      "academicYearHelp": "Enter the academic year of the faculty in YYYY-YYYY format.",
-      "formatHelp": "Format: YYYY-YYYY"
-    },
-    "duplicate": {
-      "title": "Duplicate faculties",
-      "description": "Create faculties for a new academic year based on existing ones.",
-      "mode": "How would you like to load the faculties?",
-      "byFaculty": "Select faculties",
-      "byYear": "Select academic year",
-      "faculties": "Faculties you want to duplicate",
-      "facultiesHelp": "You can select multiple faculties from different academic years.",
-      "year": "Source academic year",
-      "selectYear": "Select an academic year",
-      "summary": "Faculties to be created: {count}",
-      "targetYear": "New academic year",
-      "targetYearHelp": "It must be later than the source academic year.",
-      "confirm": "Duplicate",
-      "selectFaculties": "Select at least one faculty or an academic year.",
-      "targetYearMustBeLater": "The new academic year must be later than the source academic years.",
-      "success": "The faculties were duplicated successfully.",
-      "error": "The faculties could not be duplicated."
-    },
-    "validation": {
-      "nameMinSize": "The faculty name must contain at least 2 characters.",
-      "nameMaxSize": "The faculty name cannot exceed 100 characters.",
-      "nameFormat": "The faculty name contains invalid characters.",
-      "academicYearFormat": "Enter the academic year in YYYY-YYYY format.",
-      "academicYearMin": "The academic year must start in 2026 or later.",
-      "academicYearConsecutive": "The second year must immediately follow the first."
-    },
-    "confirmations": {
-      "title": "Confirm action",
-      "deleteMessage": "Are you sure you want to delete this faculty?"
-    },
-    "messages": {
-      "created": "The faculty has been created successfully.",
-      "updated": "The faculty has been updated successfully.",
-      "deleted": "The faculty has been deleted successfully."
-    },
-    "errors": {
-      "load": "The faculty data could not be loaded.",
-      "save": "The changes could not be saved.",
-      "invalidData": "Check the name and the academic year format (YYYY-YYYY).",
-      "deleteRelatedSpaces": "The faculty cannot be deleted because it has associated spaces.",
-      "noPermissionView": "You do not have permission to view this faculty.",
-      "noPermissionEdit": "You do not have permission to edit this faculty."
-    },
-    "detail": {
-      "title": "Faculty details | SGEU",
-      "invalidId": "The faculty identifier is not valid.",
-      "description": "Information and spaces associated with this faculty.",
-      "generalTitle": "General information",
-      "generalDescription": "Main details of the record.",
-      "spacesTitle": "Associated spaces",
-      "spacesDescription": "Spaces linked to this faculty.",
-      "noSpacesTitle": "No associated spaces",
-      "noSpacesDescription": "This faculty currently has no registered spaces."
-    }
+
   },
   "edificios": {
-    "title": "Buildings",
-    "pageTitle": "Buildings | SGEU",
-    "description": "View and manage the university buildings.",
-    "newButton": "New building",
-    "search": "Search buildings",
-    "searchLabel": "Search buildings",
-    "searchPlaceholder": "Search by buildings name...",
-    "countOne": "{count} building",
-    "countMany": "{count} buildings",
-    "idBuilding": "Assigned building ID",
-    "filter": {
-      "academicYear": "Academic year",
-      "allYears": "All academic years",
-      "clearFilters": "Clear filters",
-      "applyFilters": "Apply filters"
-    },
-    "table": {
-      "id": "ID",
-      "name": "Building",
-      "managers": "Managers",
-      "address": "Address",
-      "phone": "Phone",
-      "academicYear": "Academic year",
-      "actions": "Actions",
-      "noManagers": "Without managers"
-    },
-    "emptyTitle": "No buildings",
-    "empty": "No buildings found.",
-    "actions": {
-      "view": "View building",
-      "edit": "Edit building",
-      "delete": "Delete building"
-    },
-    "modal": {
-      "newTitle": "New building",
-      "newDescription": "Enter the building details.",
-      "editTitle": "Edit building",
-      "editDescription": "Modify this building's details."
-    },
-    "form": {
-      "id": "Building ID",
-      "name": "Building name",
-      "address": "Address",
-      "phone": "Phone",
-      "academicYear": "Academic year",
-      "academicYearPlaceholder": "2026-2027",
-      "academicYearHelp": "Enter the academic year in YYYY-YYYY format.",
-      "formatHelp": "Format: YYYY-YYYY",
-      "managers": "Building managers",
-      "managersHelp": "You can select multiple managers. Hold down the Ctrl or Cmd key to select multiple.",
-      "managersAssigned": "Managers assigned to this building are selected.",
-      "noManagersAssigned": "No managers assigned to this building."
-    },
-    "confirmations": {
-      "title": "Confirm action",
-      "deleteMessage": "Are you sure you want to delete this building?"
-    },
-    "messages": {
-      "created": "The building was created successfully.",
-      "updated": "The building was updated successfully.",
-      "deleted": "The building was deleted successfully.",
-      "loading": "Loading buildings..."
-    },
-    "errors": {
-      "load": "Buildings could not be loaded.",
-      "save": "Changes could not be saved.",
-      "invalidData": "Please check the entered information.",
-      "deleteRelatedSpaces": "This building cannot be deleted because it has associated spaces."
-    },
-    "detail": {
-      "title": "Building details | SGEU",
-      "invalidId": "The building ID is invalid.",
-      "description": "Information and floors associated with this building.",
-      "generalInformation": "General information",
-      "generalDescription": "Main building details.",
-      "floorsTitle": "Associated floors",
-      "floorsDescription": "Floors linked to this building.",
-      "noFloorsTitle": "No associated floors",
-      "noFloorsDescription": "This building currently has no registered floors.",
-      "editTitle": "Edit building",
-      "editDescription": "Modify this building's details."
-    },
-    "validation": {
-      "nameMinSize": "The building name must contain at least 2 characters.",
-      "nameMaxSize": "The building name cannot exceed 100 characters.",
-      "nameFormat": "The building name contains invalid characters.",
-      "addressMinSize": "The address must contain at least 2 characters.",
-      "addressMaxSize": "The address cannot exceed 255 characters.",
-      "addressFormat": "The address contains invalid characters.",
-      "phoneMinSize": "The phone number must contain at least 9 characters.",
-      "phoneMaxSize": "The phone number cannot exceed 15 characters.",
-      "phoneFormat": "Please enter a valid phone number.",
-      "academicYearFormat": "Enter the academic year in YYYY-YYYY format.",
-      "academicYearMin": "The academic year must start in 2026 or later.",
-      "academicYearConsecutive": "The second year must immediately follow the first."
-    }
+    "idBuilding": "Assigned building ID"
   },
   "tests": {
     "backendTitle": "Backend Test Runner",
@@ -497,8 +296,7 @@
       "textoidiomaerror": "Error language text"
     },
     "entities": {
-      "usuario": "User",
-      "facultades": "Faculty"
+      "usuario": "User"
     }
   },
   "pages": {

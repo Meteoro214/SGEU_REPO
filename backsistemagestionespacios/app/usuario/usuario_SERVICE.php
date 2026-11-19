@@ -42,34 +42,25 @@ class usuario_SERVICE extends appServiceBase{
 	}
 
 	function EDIT(){
-
-		// Comprobar si se ha proporcionado una nueva contraseña.
+		// Verificar si se ha proporcionado un valor para cambiar la contraseña
 		if (isset($_POST['pass']) && $_POST['pass'] !== '') {
-
 			$oldPass = $_POST['oldPass'] ?? '';
 			$id_usuario = $this->modelo->valores['id_usuario'] ?? $_POST['id_usuario'] ?? null;
-
 			if ($id_usuario) {
 				include_once './base/mapping.php';
-
 				$map = new mapping('usuario');
 				$id_seguro = intval($id_usuario);
-
-				$resultado = $map->lanzarqueryconresults(
-					"SELECT pass FROM usuario WHERE id_usuario = {$id_seguro} LIMIT 1"
-				);
-
+				$resultado = $map->lanzarqueryconresults("SELECT pass FROM usuario WHERE id_usuario = {$id_seguro} LIMIT 1");
 				if ($resultado['ok'] && !empty($resultado['resource'])) {
-
 					$passAlmacenada = $resultado['resource'][0]['pass'];
 
+					// Comprobar si la contraseña actual (oldPass) coincide con la de la BD
 					if ($passAlmacenada !== md5($oldPass)) {
 						return array(
 							'ok' => false,
 							'code' => 'USUARIO_EDIT_PASS_KO'
 						);
 					}
-
 				} else {
 					return array(
 						'ok' => false,
@@ -78,57 +69,11 @@ class usuario_SERVICE extends appServiceBase{
 				}
 			}
 
+			// Si es correcta, se cifra la nueva contraseña
 			$this->modelo->valores['pass'] = md5($_POST['pass']);
-
 		} else {
+			// Si no se envía contraseña, se elimina del array para no sobrescribirla con vacío
 			unset($this->modelo->valores['pass']);
-		}
-
-		// Gestionar la asignación de edificio cuando cambia el rol.
-		if (isset($this->modelo->valores['id_grupo'])) {
-
-			$idUsuario = intval(
-				$this->modelo->valores['id_usuario'] ?? $_POST['id_usuario'] ?? 0
-			);
-
-			if ($idUsuario > 0) {
-
-				include_once './base/mapping.php';
-
-				$map = new mapping('usuario');
-
-				$resultado = $map->lanzarqueryconresults(
-					"SELECT id_grupo FROM usuario WHERE id_usuario = {$idUsuario} LIMIT 1"
-				);
-
-				if ($resultado['ok'] && !empty($resultado['resource'])) {
-
-					$grupoAnterior = intval(
-						$resultado['resource'][0]['id_grupo']
-					);
-
-					$grupoNuevo = intval(
-						$this->modelo->valores['id_grupo']
-					);
-
-					if ($grupoAnterior !== $grupoNuevo) {
-
-						$consulta = "
-							UPDATE usuario
-							SET id_edificio = NULL
-							WHERE id_usuario = {$idUsuario}
-						";
-
-						$resultadoLimpieza = $map->lanzarquery($consulta);
-
-						if (!$resultadoLimpieza['ok']) {
-							return $resultadoLimpieza;
-						}
-
-						unset($this->modelo->valores['id_edificio']);
-					}
-				}
-			}
 		}
 
 		return $this->modelo->EDIT();
@@ -164,7 +109,6 @@ class usuario_SERVICE extends appServiceBase{
 		}
 
 		$fila = $respuesta['resource'][0];
-		
 		if ($fila['pass'] != md5($password)) {
 			return array(
 				'ok' => false,
@@ -270,86 +214,5 @@ class usuario_SERVICE extends appServiceBase{
 
 		return $res;
 	}
-
-	function ejecutar($skip = false) {
-
-		if (
-			isset($_POST['action']) &&
-			$_POST['action'] === 'GESTORES_DISPONIBLES'
-		) {
-			return $this->GESTORES_DISPONIBLES();
-		}
-
-		return parent::ejecutar($skip);
-	}
-
-	function GESTORES_DISPONIBLES() {
-
-		// Comprobar que el usuario autenticado es ADMIN.
-		try {
-			include_once './base/JWT/token.php';
-
-			$token = isset($_POST['token']) ? $_POST['token'] : '';
-			if (empty($token)) {
-				return array(
-					'ok' => false,
-					'code' => 'TOKEN_KO'
-				);
-			}
-
-			$payload = MiToken::devuelveToken($token);
-
-			if (
-				!isset($payload->data->id_grupo) ||
-				intval($payload->data->id_grupo) !== 1
-			) {
-				return array(
-					'ok' => false,
-					'code' => 'ACCESO_DENEGADO_KO',
-					'message' => 'Solo ADMIN puede consultar los gestores disponibles.'
-				);
-			}
-
-		} catch (Exception $e) {
-			return array(
-				'ok' => false,
-				'code' => 'TOKEN_INVALIDO_KO'
-			);
-		}
-
-		include_once './base/mapping.php';
-
-		$map = new mapping('usuario');
-
-		$idEdificio = isset($_POST['id_edificio'])
-			? intval($_POST['id_edificio'])
-			: 0;
-
-		$consulta = "
-			SELECT
-				id_usuario,
-				nom_usuario,
-				apell_usuario
-			FROM usuario
-			WHERE id_grupo = 2
-			AND activo_usuario = 1
-		";
-
-		if ($idEdificio > 0) {
-			$consulta .= "
-				AND (
-					id_edificio IS NULL
-					OR id_edificio = ".$idEdificio."
-				)
-			";
-		} else {
-			$consulta .= " AND id_edificio IS NULL ";
-		}
-
-		$consulta .= " ORDER BY apell_usuario, nom_usuario";
-
-		return $map->lanzarqueryconresults($consulta);
-	}
-
 
 }

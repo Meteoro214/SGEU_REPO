@@ -9,18 +9,7 @@
     "backToWelcome": "Volver a la bienvenida",
     "selectLanguage": "Seleccionar idioma",
     "showPassword": "Mostrar contraseña",
-    "designAndDevelopment": "Diseño y desarrollo de SGEU",
-    "previous": "Anterior",
-    "next": "Siguiente",
-    "loading": "Cargando...",
-    "cancel": "Cancelar",
-    "confirm": "Confirmar",
-    "save": "Guardar",
-    "saveChanges": "Guardar cambios",
-    "add": "Añadir",
-    "edit": "Editar",
-    "back": "Volver",
-    "filter": "Filtrar"
+    "designAndDevelopment": "Diseño y desarrollo de SGEU"
   },
   "navigation": {
     "mainMenu": "Menú principal",
@@ -166,6 +155,7 @@
     "newUser": "Nuevo usuario",
     "searchLabel": "Buscar usuarios",
     "searchPlaceholder": "Buscar por nombre, correo o perfil...",
+    "filter": "Filtrar",
     "userCount": "3 usuarios",
     "editUser": "Editar usuario",
     "editUserDescription": "Modifica los datos del usuario.",
@@ -272,201 +262,10 @@
     }
   },
   "facultades": {
-    "pageTitle": "Facultades | SGEU",
-    "title": "Gestión de facultades",
-    "description": "Gestiona las facultades de la universidad y sus años académicos.",
-    "newButton": "Nueva facultad",
-    "duplicateButton": "Duplicar facultades",
-    "search": "Buscar facultades",
-    "searchPlaceholder": "Buscar por el nombre de la facultad...",
-    "countOne": "{count} facultad",
-    "countMany": "{count} facultades",
-    "filter": {
-      "academicYear": "Año académico",
-      "allYears": "Todos los años académicos",
-      "clearFilters": "Limpiar filtros",
-      "applyFilters": "Aplicar filtros"
-    },
-    "table": {
-      "id": "ID",
-      "name": "Facultad",
-      "academicYear": "Año académico",
-      "actions": "Acciones"
-    },
-    "emptyTitle": "No hay facultades",
-    "empty": "No se encontraron facultades.",
-    "actions": {
-      "view": "Ver facultad",
-      "edit": "Editar facultad",
-      "delete": "Eliminar facultad"
-    },
-    "modal": {
-      "newTitle": "Nueva facultad",
-      "newDescription": "Introduce los datos de la nueva facultad.",
-      "editTitle": "Editar facultad",
-      "editDescription": "Modifica los datos de la facultad."
-    },
-    "form": {
-      "id": "ID de la facultad",
-      "name": "Nombre de la facultad",
-      "academicYear": "Año académico",
-      "academicYearPlaceholder": "2026-2027",
-      "academicYearHelp": "Introduce el año académico de la facultad en formato AAAA-AAAA.",
-      "formatHelp": "Formato: AAAA-AAAA"
-    },
-    "confirmations": {
-      "title": "Confirmar acción",
-      "deleteMessage": "¿Estás seguro de que quieres eliminar esta facultad?"
-    },
-    "messages": {
-      "created": "La facultad se ha creado correctamente.",
-      "updated": "La facultad se ha actualizado correctamente.",
-      "deleted": "La facultad se ha eliminado correctamente."
-    },
-    "errors": {
-      "load": "No se pudieron cargar los datos de las facultades.",
-      "save": "No se pudieron guardar los cambios.",
-      "invalidData": "Revisa el nombre y el formato del año académico (AAAA-AAAA).",
-      "deleteRelatedSpaces": "No se puede eliminar la facultad porque tiene espacios asociados.",
-      "noPermissionView": "No tienes permiso para ver esta facultad.",
-      "noPermissionEdit": "No tienes permiso para editar esta facultad."
-    },
-    "detail": {
-      "title": "Detalles de la facultad | SGEU",
-      "invalidId": "El identificador de la facultad no es válido.",
-      "description": "Información y espacios asociados a esta facultad.",
-      "generalTitle": "Información general",
-      "generalDescription": "Datos principales del registro.",
-      "spacesTitle": "Espacios asociados",
-      "spacesDescription": "Espacios vinculados a esta facultad.",
-      "noSpacesTitle": "No hay espacios asociados",
-      "noSpacesDescription": "Esta facultad no tiene espacios registrados actualmente."
-    },
-    "duplicate": {
-      "title": "Duplicar facultades",
-      "description": "Crea facultades para un nuevo año académico a partir de las existentes.",
-      "mode": "¿Cómo quieres cargar las facultades?",
-      "byFaculty": "Seleccionar facultades",
-      "byYear": "Seleccionar año académico",
-      "faculties": "Facultades que quieres duplicar",
-      "facultiesHelp": "Puedes seleccionar varias facultades de distintos años.",
-      "year": "Año académico de origen",
-      "selectYear": "Selecciona un año académico",
-      "summary": "Facultades que se crearán: {count}",
-      "targetYear": "Nuevo año académico",
-      "targetYearHelp": "Debe ser posterior al año académico de origen.",
-      "confirm": "Duplicar",
-      "selectFaculties": "Selecciona al menos una facultad o un año académico.",
-      "targetYearMustBeLater": "El nuevo año académico debe ser posterior a los años académicos de origen.",
-      "success": "Las facultades se han duplicado correctamente.",
-      "error": "No se pudieron duplicar las facultades."
-    },
-    "validation": {
-      "nameMinSize": "El nombre de la facultad debe tener al menos 2 caracteres.",
-      "nameMaxSize": "El nombre de la facultad no puede superar los 100 caracteres.",
-      "nameFormat": "El nombre de la facultad contiene caracteres no permitidos.",
-      "academicYearFormat": "Introduce el año académico en formato AAAA-AAAA.",
-      "academicYearMin": "El año académico debe comenzar en 2026 o en un año posterior.",
-      "academicYearConsecutive": "El segundo año debe ser consecutivo al primero."
-    }
+
   },
   "edificios": {
-    "title": "Edificios",
-    "pageTitle": "Edificios | SGEU",
-    "description": "Consulta y gestiona los edificios de la universidad.",
-    "newButton": "Nuevo edificio",
-    "search": "Buscar edificios",
-    "searchLabel": "Buscar edificios",
-    "searchPlaceholder": "Buscar por el nombre del edificio...",
-    "countOne": "{count} edificio",
-    "countMany": "{count} edificios",
-    "idBuilding": "ID del edificio asignado",
-    "filter": {
-      "academicYear": "Año académico",
-      "allYears": "Todos los años académicos",
-      "clearFilters": "Limpiar filtros",
-      "applyFilters": "Aplicar filtros"
-    },
-    "table": {
-      "id": "ID",
-      "name": "Edificio",
-      "managers": "Gestores",
-      "address": "Dirección",
-      "phone": "Teléfono",
-      "academicYear": "Año académico",
-      "actions": "Acciones",
-      "noManagers": "Sin gestores"
-    },
-    "emptyTitle": "No hay edificios",
-    "empty": "No se encontraron edificios.",
-    "actions": {
-      "view": "Ver edificio",
-      "edit": "Editar edificio",
-      "delete": "Eliminar edificio"
-    },
-    "modal": {
-      "newTitle": "Nuevo edificio",
-      "newDescription": "Introduce los datos del edificio.",
-      "editTitle": "Editar edificio",
-      "editDescription": "Modifica los datos de este edificio."
-    },
-    "form": {
-      "id": "ID del edificio",
-      "name": "Nombre del edificio",
-      "address": "Dirección",
-      "phone": "Teléfono",
-      "academicYear": "Año académico",
-      "academicYearPlaceholder": "2026-2027",
-      "academicYearHelp": "Introduce el año académico en formato AAAA-AAAA.",
-      "formatHelp": "Formato: AAAA-AAAA",
-      "managers": "Gestores del edificio",
-      "managersHelp": "Puedes seleccionar varios gestores. Mantén pulsada la tecla Ctrl o Cmd para seleccionar varios.",
-      "managersAssigned": "Los gestores asignados a este edificio aparecen seleccionados.",
-      "noManagersAssigned": "No hay gestores asignados a este edificio."
-    },
-    "confirmations": {
-      "title": "Confirmar acción",
-      "deleteMessage": "¿Estás seguro de que quieres eliminar este edificio?"
-    },
-    "messages": {
-      "created": "El edificio se ha creado correctamente.",
-      "updated": "El edificio se ha actualizado correctamente.",
-      "deleted": "El edificio se ha eliminado correctamente.",
-      "loading": "Cargando edificios..."
-    },
-    "errors": {
-      "load": "No se pudieron cargar los edificios.",
-      "save": "No se pudieron guardar los cambios.",
-      "invalidData": "Revisa la información introducida.",
-      "deleteRelatedSpaces": "No se puede eliminar este edificio porque tiene espacios asociados."
-    },
-    "detail": {
-      "title": "Detalles del edificio | SGEU",
-      "invalidId": "El ID del edificio no es válido.",
-      "description": "Información y plantas asociadas a este edificio.",
-      "generalInformation": "Información general",
-      "generalDescription": "Datos principales del edificio.",
-      "floorsTitle": "Plantas asociadas",
-      "floorsDescription": "Plantas vinculadas a este edificio.",
-      "noFloorsTitle": "No hay plantas asociadas",
-      "noFloorsDescription": "Este edificio no tiene plantas registradas actualmente.",
-      "editTitle": "Editar edificio",
-      "editDescription": "Modifica los datos de este edificio."
-    },
-    "validation": {
-      "nameMinSize": "El nombre del edificio debe tener al menos 2 caracteres.",
-      "nameMaxSize": "El nombre del edificio no puede superar los 100 caracteres.",
-      "nameFormat": "El nombre del edificio contiene caracteres no permitidos.",
-      "addressMinSize": "La dirección debe tener al menos 2 caracteres.",
-      "addressMaxSize": "La dirección no puede superar los 255 caracteres.",
-      "addressFormat": "La dirección contiene caracteres no permitidos.",
-      "phoneMinSize": "El teléfono debe tener al menos 9 caracteres.",
-      "phoneMaxSize": "El teléfono no puede superar los 15 caracteres.",
-      "phoneFormat": "Introduce un teléfono válido.",
-      "academicYearFormat": "Introduce el año académico en formato AAAA-AAAA.",
-      "academicYearMin": "El año académico debe comenzar en 2026 o en un año posterior.",
-      "academicYearConsecutive": "El segundo año debe ser consecutivo al primero."
-    }
+    "idBuilding": "ID del edificio asignado"
   },
   "tests": {
     "backendTitle": "Ejecutor de Pruebas de Backend",
@@ -497,8 +296,7 @@
       "textoidiomaerror": "Texto idioma error"
     },
     "entities": {
-      "usuario": "Usuario",
-      "facultades": "Facultad"
+      "usuario": "Usuario"
     }
   },
   "pages": {

@@ -15,29 +15,20 @@ export function ocultarErrorFormulario(el) {
 
 
 /**
- * @param {HTMLElement} input           Campo a validar (puede ser null; en ese caso no hace nada y
- *                                      se considera válido, para poder usarse en formularios donde
- *                                      el campo es opcional según el contexto).
- * @param {Object} regla                { min, max, regex } de REGLAS_CAMPOS.<entidad>.<campo>.
- * @param {Object} mensajes             { min_size, max_size, format } con el texto ya traducido de
- *                                      cada motivo (ver t('register.dniMinSize') etc.).
- * @param {boolean} [opcional=false]    Campo para permitir valores nulos
+ * @param {HTMLElement} input   Campo a validar (puede ser null; en ese caso no hace nada y
+ *                              se considera válido, para poder usarse en formularios donde
+ *                              el campo es opcional según el contexto).
+ * @param {Object} regla        { min, max, regex } de REGLAS_CAMPOS.<entidad>.<campo>.
+ * @param {Object} mensajes     { min_size, max_size, format } con el texto ya traducido de
+ *                              cada motivo (ver t('register.dniMinSize') etc.).
  */
-export function validarCampoTexto(input, regla, mensajes, opcional = false) {
+export function validarCampoTexto(input, regla, mensajes) {
     if (!input) return true;
-
-    if (opcional && !input.value.trim()) {
-        ocultarErrorCampo(input);
-        return true;
-    }
-
     const motivo = validarTexto(input.value, regla);
-
-    if (motivo) {
+    if (motivo) { //null es bueno
         mostrarErrorCampo(input, mensajes[motivo] || mensajes.format || '');
         return false;
     }
-
     ocultarErrorCampo(input);
     return true;
 }

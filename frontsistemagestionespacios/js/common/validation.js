@@ -20,16 +20,6 @@ export const REGLAS_CAMPOS = {
         password: { min: 5, max: 20, regex: "^[A-Za-z0-9]{5,20}$", regexBusqueda: null },
         fecha: {}
     },
-    facultad: {
-        nombre_facultad: { min: 3, max: 100, regex: "^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]+$", regexBusqueda: "^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]*$" },
-        anho_academico_facultad: { min: 9, max: 9, regex: "^(\\d{4})-(\\d{4})$", regexBusqueda: "^\\d{0,4}(-\\d{0,4})?$" }
-    },
-    edificio: {
-        nombre_edificio: { min: 2, max: 100, regex: "^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .'-]+$", regexBusqueda: null },
-        direccion_edificio: { min: 2, max: 255, regex: "^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'ºª/#-]+$", regexBusqueda: null },
-        telefono_edificio: { min: 9, max: 15, regex: "^[0-9+() -]{9,15}$", regexBusqueda: "^[0-9+() -]{0,15}$" },
-        anho_academico_edificio: { min: 9, max: 9, regex: "^(\\d{4})-(\\d{4})$", regexBusqueda: "^\\d{0,4}(-\\d{0,4})?$" }
-    }
     //TODO COMPLETAR A FUTURO
 };
 
@@ -55,16 +45,12 @@ document.addEventListener('langChanged', () => {
     });
 });
 
-
 export function validarTexto(valor, { min = 0, max = Infinity, regex = null } = {}) {
-    valor = valor ?? '';
-
     if (valor.length < min) return 'min_size';
     if (valor.length > max) return 'max_size';
     if (regex && valor.length > 0 && !(new RegExp(regex).test(valor))) return 'format';
     return null;
 }
-
 
 export function validarTextoBusqueda(valor, { max = Infinity, regex = null } = {}) {
     if (valor.length > max) return 'max_size';

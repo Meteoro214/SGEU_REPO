@@ -29,17 +29,14 @@ async function crear(entidad, payload) {
 /**
  * Crea únicamente las filas QA que pueden modificarse o eliminarse.
  * Las entidades semilla se referencian por sus IDs definidos en db_sgeu.sql.
- * @param {string} nombreEntidad Nombre de la entidad para la que se preparan las fixtures.
  * @returns {Promise<object>} Identificadores de las fixtures creadas.
  */
-async function prepararFixtures(nombreEntidad) {
+async function prepararFixtures() {
     const login = await apiPost('usuario', 'LOGIN', {
         email: 'admin@uvigo.es',
         pass: 'admin',
         db_mode: "TEST"
     });
-
-
     if (!login.ok || !login.resource || !login.resource.token) {
         throw new Error(login.code || 'No se pudo obtener el token para las pruebas backend');
     }
@@ -94,58 +91,6 @@ async function prepararFixtures(nombreEntidad) {
         id_func: idFuncionalidad
     };
 
-    let facultad = null;
-    let facultades = null;
-
-    if (nombreEntidad === 'facultad') {
-        const sufijoFacultad = sufijo(6);
-
-        const facultad1 = {
-            nombre: `QA Facultad 1 ${sufijoFacultad}`,
-            anho: '2026-2027'
-        };
-
-        facultad1.id = await crear('facultad', {
-            nom_facultad: facultad1.nombre,
-            anho_acad_facultad: facultad1.anho
-        });
-
-        const facultad2 = {
-            nombre: `QA Facultad 2 ${sufijoFacultad}`,
-            anho: '2027-2028'
-        };
-
-        facultad2.id = await crear('facultad', {
-            nom_facultad: facultad2.nombre,
-            anho_acad_facultad: facultad2.anho
-        });
-
-        const facultad3 = {
-            nombre: `QA Facultad 3 ${sufijoFacultad}`,
-            anho: '2026/27'
-        };
-
-        facultad3.id = await crear('facultad', {
-            nom_facultad: facultad3.nombre,
-            anho_acad_facultad: facultad3.anho
-        });
-
-        if (!facultad1.id || !facultad2.id || !facultad3.id) {
-            throw new Error('No se pudieron crear todas las facultades QA');
-        }
-
-        // Se conserva la primera para las pruebas CRUD existentes.
-        facultad = facultad1;
-
-        // Se guardan las tres para las pruebas de DUPLICAR.
-        facultades = {
-            primera: facultad1,
-            segunda: facultad2,
-            tercera: facultad3
-        };
-    }
-
-
     return {
         idGrupo: grupos.gestor,
         grupos,
@@ -153,8 +98,6 @@ async function prepararFixtures(nombreEntidad) {
         idUsuarios,
         idUsuariosReactivar,
         idUsuarioRechazar,
-        facultad,
-        facultades,
         emailUsuarioRechazar,
         idAccion,
         idFuncionalidad,
@@ -191,11 +134,6 @@ function payloadValido(entidad, fx, accion) {
             return { nom_func: 'QA Funcionalidad ' + sufijo(4), desc_func: 'Funcionalidad temporal de pruebas QA' };
         case 'tiene_permiso':
             return { ...fx.idPermiso };
-        case 'facultad':
-            return {
-                nom_facultad: 'QA Facultad ' + sufijo(6),
-                anho_acad_facultad: '2026-2027'
-            };
         default:
             return {};
     }
@@ -214,7 +152,6 @@ function idPrincipalPayload(entidad, fx) {
         case 'accion': return { id_accion: fx.idAccion };
         case 'funcionalidad': return { id_func: fx.idFuncionalidad };
         case 'tiene_permiso': return { ...fx.idPermiso };
-        case 'facultad': return { id_facultad: fx.facultad.id };
         default: return {};
     }
 }
@@ -240,11 +177,6 @@ function claveFilaCreada(entidad, payload, idBackend) {
                     id_func: payload.id_func
                 }
             };
-        case 'facultad':
-            return {
-                tabla: entidad,
-                valores: { id_facultad: idBackend }
-            };
         default: return null;
     }
 }
@@ -259,13 +191,13 @@ function claveFilaCreada(entidad, payload, idBackend) {
  * @returns {Promise<object>} Estado de comparación y referencia creada.
  */
 async function compararConBackend(nombreEntidad, accion, fixtures, overrides, respuestaEsperadaLocal) {
-    if (!['ADD', 'EDIT', 'SEARCH', 'DELETE', 'REACTIVAR', 'LOGIN', 'DUPLICAR'].includes(accion)) {
+    if (!['ADD', 'EDIT', 'SEARCH', 'DELETE', 'REACTIVAR', 'LOGIN'].includes(accion)) {
         return { backend_status: 'N/A', backend_code: '' };
     }
 
     try {
         let payload;
-        if (accion === 'SEARCH' || accion === 'DUPLICAR') {
+        if (accion === 'SEARCH') {
             payload = { ...overrides };
         } else if (accion === 'DELETE') {
             payload = idPrincipalPayload(nombreEntidad, fixtures);
@@ -300,35 +232,11 @@ async function compararConBackend(nombreEntidad, accion, fixtures, overrides, re
         if (overridesResueltos.email === '__FIXTURE_EMAIL_RECHAZAR__') {
             overridesResueltos.email = fixtures.emailUsuarioRechazar;
         }
-        if (overridesResueltos.nom_facultad === '__FIXTURE_NOM_FACULTAD__') {
-            overridesResueltos.nom_facultad = fixtures.facultad.nombre;
-        }
-        if (overridesResueltos.anho_acad_facultad === '__FIXTURE_ANHO_FACULTAD__') {
-            overridesResueltos.anho_acad_facultad = fixtures.facultad.anho;
-        }
-        // Resolver los identificadores de las facultades QA.
-        if (Array.isArray(overridesResueltos.facultades)) {
-            overridesResueltos.facultades = overridesResueltos.facultades.map((id) => {
-                if (id === '__FIXTURE_ID_FACULTAD_1__') {
-                    return fixtures.facultades.primera.id;
-                }
-                if (id === '__FIXTURE_ID_FACULTAD_2__') {
-                    return fixtures.facultades.segunda.id;
-                }
-                if (id === '__FIXTURE_ID_FACULTAD_3__') {
-                    return fixtures.facultades.tercera.id;
-                }
-                return id;
-            });
-        }
         Object.assign(payload, overridesResueltos);
-
-        const tokenPeticion = payload.token || tokenAdmin;
-        delete payload.token;
 
         const res = await apiPost(nombreEntidad, accion, {
             ...payload,
-            token: tokenPeticion,
+            token: tokenAdmin,
             db_mode: "TEST"
         });
         const backendOk = res.ok === true;
@@ -341,26 +249,7 @@ async function compararConBackend(nombreEntidad, accion, fixtures, overrides, re
             ? claveFilaCreada(nombreEntidad, payload, res.resource)
             : null;
 
-        let filasCreadas = [];
-
-        if (accion === 'DUPLICAR') {
-            const filasDuplicadas = Array.isArray(res.resource)
-                ? res.resource
-                : (res.resource && Array.isArray(res.resource.creadas)
-                    ? res.resource.creadas
-                    : []);
-
-            filasCreadas = filasDuplicadas.map((fila) =>
-                claveFilaCreada(nombreEntidad, {}, fila.id_facultad)
-            ).filter(Boolean);
-}
-
-        return {
-            backend_status,
-            backend_code: backendCode,
-            filaCreada,
-            filasCreadas
-        };
+        return { backend_status, backend_code: backendCode, filaCreada };
     } catch (e) {
         const backendCode = e.message || 'ERROR_DESCONOCIDO';
         const backendStatus = backendCode === respuestaEsperadaLocal
@@ -408,21 +297,6 @@ async function limpiarFixtures(filasExtra, fixtures) {
         // Mantiene la limpieza compatible con fixtures antiguas de un solo usuario.
         if (!fixtures.idUsuarios && !fixtures.idUsuariosReactivar && fixtures.idUsuario) {
             filas.push({ tabla: 'usuario', valores: { id_usuario: fixtures.idUsuario } });
-        }
-        if (fixtures.facultades) {
-            Object.values(fixtures.facultades).forEach((facultad) => {
-                if (facultad && facultad.id) {
-                    filas.push({
-                        tabla: 'facultad',
-                        valores: { id_facultad: facultad.id }
-                    });
-                }
-            });
-        } else if (fixtures.facultad && fixtures.facultad.id) {
-            filas.push({
-                tabla: 'facultad',
-                valores: { id_facultad: fixtures.facultad.id }
-            });
         }
     }
 
