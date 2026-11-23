@@ -135,9 +135,9 @@ function renderSidebar(currentPage) {
 
                 <ul>
                     ${group.links
-                        .filter(link => link.require === undefined || link.require === rol)
-                        .map(link => renderLink(link, currentPage))
-                        .join('')}
+                .filter(link => link.require === undefined || link.require === rol)
+                .map(link => renderLink(link, currentPage))
+                .join('')}
                 </ul>
 
             </div>
@@ -181,6 +181,39 @@ function renderTopbar() {
 
         </div>
 
+        <!-- BUSCADOR GLOBAL -->
+
+        <div class="global-search" id="global-search">
+
+            <div class="global-search-input-wrap">
+
+                <span data-icon="search" aria-hidden="true"></span>
+
+                <input
+                    type="search"
+                    id="global-search-input"
+                    placeholder="${traducir('globalSearch.placeholder')}"
+                    autocomplete="off"
+                    aria-label="${traducir('globalSearch.ariaLabel')}"
+                    aria-controls="global-search-results"
+                    aria-expanded="false">
+
+                <span class="global-search-shortcut" aria-hidden="true">
+                    Ctrl + K / &#8984 + K
+                </span>
+
+            </div>
+
+            <div
+                class="global-search-results"
+                id="global-search-results"
+                role="listbox"
+                aria-label="Resultados de búsqueda"
+                hidden>
+            </div>
+
+        </div>
+
         <div class="topbar-right">
 
             <nav class="lang-switch" aria-label="Seleccionar idioma">
@@ -215,7 +248,7 @@ function renderTopbar() {
 
                     <span class="user-info">
                         <strong id="user-name"></strong>
-                        <small id="user-role">Usuario</small>
+                        <small id="user-role"></small>
                     </span>
 
                     <span class="user-menu-arrow"
@@ -341,6 +374,7 @@ function renderTopbar() {
                                 id="profile-phone"
                                 name="telefono"
                                 type="tel"
+                                autocomplete="tel"
                                 readonly>
                         </div>
 
@@ -508,6 +542,328 @@ function renderTopbar() {
     `;
 }
 
+// ============================================================
+// BUSCADOR GLOBAL
+// ============================================================
+
+let temporizadorBusquedaGlobal = null;
+let peticionBusquedaGlobal = 0;
+
+function configurarBuscadorGlobal() {
+
+    const input = document.getElementById('global-search-input');
+    const results = document.getElementById('global-search-results');
+
+    if (!input || !results) return;
+
+    // Evitar que el navegador envíe formularios al pulsar Enter.
+    input.addEventListener('keydown', (event) => {
+
+        if (event.key === 'Escape') {
+            results.hidden = true;
+            input.setAttribute('aria-expanded', 'false');
+            input.blur();
+        }
+
+    });
+
+    // Buscar mientras se escribe.
+    input.addEventListener('input', () => {
+
+        clearTimeout(temporizadorBusquedaGlobal);
+
+        const texto = input.value.trim();
+
+        if (texto.length < 2) {
+            results.hidden = true;
+            input.setAttribute('aria-expanded', 'false');
+            results.innerHTML = '';
+            return;
+        }
+
+        results.hidden = false;
+        input.setAttribute('aria-expanded', 'true');
+
+        results.innerHTML = `
+            <div class="global-search-message">
+                ${traducir('globalSearch.searching')}
+            </div>
+        `;
+
+        temporizadorBusquedaGlobal = setTimeout(() => {
+            buscarGlobalmente(texto, input, results);
+        }, 350);
+
+    });
+
+    // Cerrar resultados al pulsar fuera.
+    document.addEventListener('click', (event) => {
+
+        const search = document.getElementById('global-search');
+
+        if (search && !search.contains(event.target)) {
+            results.hidden = true;
+            input.setAttribute('aria-expanded', 'false');
+        }
+
+    });
+
+    // Atajo Ctrl + K.
+    document.addEventListener('keydown', (event) => {
+
+        if (
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase() === 'k'
+        ) {
+
+            event.preventDefault();
+
+            input.focus();
+            input.select();
+
+        }
+
+    });
+
+}
+
+
+// ============================================================
+// EJECUTAR BÚSQUEDA EN BACKEND
+// ============================================================
+
+async function buscarGlobalmente(texto, input, results) {
+
+    const numeroPeticion = ++peticionBusquedaGlobal;
+
+    try {
+
+        const respuesta = await consultarAPI(
+            'busqueda',
+            'GLOBAL_SEARCH',
+            { texto }
+        );
+
+        // Ignorar respuestas de búsquedas anteriores.
+        if (numeroPeticion !== peticionBusquedaGlobal) return;
+
+        // Comprobar que la respuesta es correcta.
+        if (!respuesta || !respuesta.ok) {
+
+            results.innerHTML = `
+                <div class="global-search-message">
+                    ${traducir('globalSearch.error')}
+                </div>
+            `;
+
+            return;
+        }
+
+        const datos = respuesta.resource || {};
+
+        pintarResultadosGlobales(datos, results);
+
+    } catch (error) {
+
+        console.error('Error en el buscador global:', error);
+
+        if (numeroPeticion !== peticionBusquedaGlobal) return;
+
+        results.innerHTML = `
+            <div class="global-search-message">
+                ${traducir('globalSearch.connectionError')}
+            </div>
+        `;
+
+    }
+
+}
+
+
+// ============================================================
+// MOSTRAR RESULTADOS
+// ============================================================
+
+function pintarResultadosGlobales(datos, results) {
+
+    const grupos = [
+        {
+            clave: 'usuarios',
+            titulo: traducir('globalSearch.groups.users'),
+            icono: 'users',
+            nombre: usuario =>
+                `${usuario.nom_usuario || ''} ${usuario.apell_usuario || ''}`.trim(),
+            detalle: usuario => usuario.email || ''
+        },
+        {
+            clave: 'facultades',
+            titulo: traducir('globalSearch.groups.faculties'),
+            icono: 'faculty',
+            nombre: facultad => facultad.nom_facultad,
+            detalle: () => traducir('globalSearch.types.faculty')
+        },
+        {
+            clave: 'edificios',
+            titulo: traducir('globalSearch.groups.buildings'),
+            icono: 'building',
+            nombre: edificio => edificio.nom_edificio,
+            detalle: () => traducir('globalSearch.types.building')
+        },
+    ];
+
+    let html = '';
+    let totalResultados = 0;
+
+    grupos.forEach(grupo => {
+
+        const elementos = Array.isArray(datos[grupo.clave])
+            ? datos[grupo.clave]
+            : [];
+
+        if (!elementos.length) return;
+
+        totalResultados += elementos.length;
+
+        html += `
+            <div class="global-search-group">
+
+                <div class="global-search-group-title">
+                    <span data-icon="${grupo.icono}" aria-hidden="true"></span>
+                    ${grupo.titulo}
+                </div>
+
+                ${elementos.map(elemento => `
+
+                    <button
+                        type="button"
+                        class="global-search-result"
+                        data-search-type="${grupo.clave}"
+                        data-search-id="${obtenerIdResultado(grupo.clave, elemento)}">
+
+                        <strong>
+                            ${escaparHTML(grupo.nombre(elemento) || 'Sin nombre')}
+                        </strong>
+
+                        <small>
+                            ${escaparHTML(grupo.detalle(elemento))}
+                        </small>
+
+                    </button>
+
+                `).join('')}
+
+            </div>
+        `;
+
+    });
+
+    if (totalResultados === 0) {
+
+        results.innerHTML = `
+            <div class="global-search-message">
+                ${traducir('globalSearch.noResults')}
+            </div>
+        `;
+
+        return;
+    }
+
+    results.innerHTML = html;
+
+    if (typeof window.renderIcons === 'function') {
+        window.renderIcons(results);
+    }
+
+    // Configurar selección de resultados.
+    results.querySelectorAll('.global-search-result')
+        .forEach(boton => {
+
+            boton.addEventListener('click', () => {
+
+                navegarResultadoGlobal(
+                    boton.dataset.searchType,
+                    boton.dataset.searchId
+                );
+
+            });
+
+        });
+
+}
+
+
+// ============================================================
+// OBTENER IDENTIFICADOR DEL RESULTADO
+// ============================================================
+
+function obtenerIdResultado(tipo, elemento) {
+
+    const identificadores = {
+        usuarios: 'id_usuario',
+        facultades: 'id_facultad',
+        edificios: 'id_edificio'
+    };
+
+    return elemento[identificadores[tipo]] ?? '';
+}
+
+
+// ============================================================
+// ESCAPAR TEXTO HTML
+// ============================================================
+
+function escaparHTML(valor) {
+
+    return String(valor ?? '').replace(/[&<>"']/g, caracter => {
+
+        const entidades = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        };
+
+        return entidades[caracter];
+
+    });
+
+}
+
+
+// ============================================================
+// NAVEGACIÓN DE RESULTADOS
+// ============================================================
+
+function navegarResultadoGlobal(tipo, id) {
+
+    if (!id) return;
+
+    const destinos = {
+        facultades: `facultades-detalle.html?id=${encodeURIComponent(id)}`,
+        edificios: `edificios-detalle.html?id=${encodeURIComponent(id)}`
+    };
+
+    if (destinos[tipo]) {
+        window.location.href = destinos[tipo];
+        return;
+    }
+
+    if (tipo === 'usuarios') {
+
+        window.location.href =
+            `usuarios.html?verUsuario=${encodeURIComponent(id)}`;
+
+        return;
+    }
+
+    // Plantas y espacios todavía no tienen vista de detalle.
+    console.info(
+        `La vista de detalle de ${tipo} todavía no está implementada.`
+    );
+
+}
+
 
 // ============================================================
 // OCULTAR OPCIONES SIN PERMISOS
@@ -521,14 +877,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('[data-require]');
 
     elementosRestringidos.forEach(elemento => {
+        const rolRequerido = elemento.getAttribute('data-require');
+        if (!rolRequerido) return;
 
-        const rolRequerido =
-            elemento.getAttribute('data-require');
+        const rolesPermitidos = rolRequerido
+            .split('|')
+            .map(rol => rol.trim())
+            .filter(Boolean);
 
-        if (rolRequerido && rolUsuario !== rolRequerido) {
+        if (!rolesPermitidos.includes(rolUsuario)) {
             elemento.hidden = true;
         }
-
     });
 
 });
@@ -580,16 +939,16 @@ function rellenarDatosPerfil() {
         }
 
         function obtenerRol(idGrupo) {
-        
-                const roles = {
-                    '1': traducir('usuarios.roles.administration'),
-                    '2': traducir('usuarios.roles.manager'),
-                    '3': traducir('usuarios.roles.consultation')
-                };
-        
-                return roles[String(idGrupo)] || 'Sin perfil';
-            }
-        
+
+            const roles = {
+                '1': traducir('usuarios.roles.administration'),
+                '2': traducir('usuarios.roles.manager'),
+                '3': traducir('usuarios.roles.consultation')
+            };
+
+            return roles[String(idGrupo)] || traducir("usuarios.messages.noRole");
+        }
+
 
         if (userRole) {
             const roles = {
@@ -940,7 +1299,6 @@ function configurarEdicionPerfil() {
                 telefono: phoneInput.value.trim(),
                 fech_nacimiento: user.fech_nacimiento,
                 id_grupo: user.id_grupo,
-                id_edificio: user.id_edificio,
                 activo_usuario: 1
             };
 
@@ -951,26 +1309,9 @@ function configurarEdicionPerfil() {
                 userData.oldPass = currentPasswordInput.value;
             }
 
-            
-            console.log("Usuario de sessionStorage:", user);
-            console.log("Datos enviados a EDIT:", userData);
-            console.table(
-                Object.entries(userData).map(([campo, valor]) => ({
-                    campo,
-                    valor,
-                    esUndefined: valor === undefined
-                }))
-            );
 
-            const response = await consultarAPI('usuario', 'EDIT',userData);
+            const response = await consultarAPI('usuario', 'EDIT', userData);
 
-            /*
-             * IMPORTANTE:
-             * Aquí se presupone que la respuesta del backend
-             * contiene response.ok y response.resource.usuario,
-             * tal como se había planteado en el código anterior.
-             * Comprueba esos nombres en la pestaña Network.
-             */
 
             if (!response.ok) {
 
@@ -994,7 +1335,7 @@ function configurarEdicionPerfil() {
             }
 
 
-            
+
             // Actualizar los datos de sesión con los valores guardados.
 
             const usuarioActualizado = {
@@ -1385,8 +1726,10 @@ document.addEventListener('langChanged', () => {
 
         configurarVisibilidadContrasenasPerfil();
 
+        configurarBuscadorGlobal();
+
     }
 
-     configurarSidebar();
+    configurarSidebar();
 
 });

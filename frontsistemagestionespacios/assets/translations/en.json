@@ -20,7 +20,8 @@
     "add": "Add",
     "edit": "Edit",
     "back": "Back",
-    "filter": "Filter"
+    "filter": "Filter",
+    "viewDetails": "View details"
   },
   "navigation": {
     "mainMenu": "Main menu",
@@ -46,6 +47,23 @@
     "closeSes":"Close Session",
     "USUARIO_EDIT_DEF_KO":"Could not edit. Try again.",
     "USUARIO_EDIT_PASS_KO":"Current password is not correct"
+  },
+  "globalSearch": {
+    "placeholder": "Search SGEU...",
+    "ariaLabel": "Search across the application",
+    "searching": "Searching...",
+    "noResults": "No results found.",
+    "error": "The search could not be completed.",
+    "connectionError": "Error connecting to the server.",
+    "groups": {
+        "users": "Users",
+        "faculties": "Faculties",
+        "buildings": "Buildings"
+    },
+    "types": {
+        "faculty": "Faculty",
+        "building": "Building"
+    }
   },
   "publicWelcome": {
     "title": "Welcome | SGEU",
@@ -161,6 +179,8 @@
     "USUARIO_REG_DEF_KO": "Could not register. Try again."
   },
   "usuarios": {
+    "pageTitle": "Users and permissions | SGEU",
+    "pageDescription":"Check and manage users, profiles and permissions.",
     "title": "Users and permissions",
     "description": "Manage system access and the scope of permissions.",
     "newUser": "New user",
@@ -172,6 +192,8 @@
     "roleLabel": "Profile or role",
     "idUser": "User ID",
     "allRoles": "All roles",
+    "emptyTitle": "No users",
+    "empty": "No users were found.",
     "roles": {
       "administration": "Administration",
       "manager": "Facility manager",
@@ -338,7 +360,7 @@
       "nameMaxSize": "The faculty name cannot exceed 100 characters.",
       "nameFormat": "The faculty name contains invalid characters.",
       "academicYearFormat": "Enter the academic year in YYYY-YYYY format.",
-      "academicYearMin": "The academic year must start in 2026 or later.",
+      "academicYearMin": "The academic year must start in current year or later.",
       "academicYearConsecutive": "The second year must immediately follow the first."
     },
     "confirmations": {
@@ -371,7 +393,7 @@
     }
   },
   "edificios": {
-    "title": "Buildings",
+    "title": "Building management",
     "pageTitle": "Buildings | SGEU",
     "description": "View and manage the university buildings.",
     "newButton": "New building",
@@ -422,7 +444,10 @@
       "managers": "Building managers",
       "managersHelp": "You can select multiple managers. Hold down the Ctrl or Cmd key to select multiple.",
       "managersAssigned": "Managers assigned to this building are selected.",
-      "noManagersAssigned": "No managers assigned to this building."
+      "noManagersAssigned": "No managers assigned to this building.",
+      "assignedBuildings": "Assigned buildings",
+      "noAssignedBuildings": "No assigned buildings.",
+      "noManagers": "No available managers"
     },
     "confirmations": {
       "title": "Confirm action",
@@ -435,10 +460,12 @@
       "loading": "Loading buildings..."
     },
     "errors": {
-      "load": "Buildings could not be loaded.",
-      "save": "Changes could not be saved.",
-      "invalidData": "Please check the entered information.",
-      "deleteRelatedSpaces": "This building cannot be deleted because it has associated spaces."
+      "load": "The building data could not be loaded.",
+      "save": "The changes could not be saved.",
+      "invalidData": "Check the building name and the academic year format (YYYY-YYYY).",
+      "deleteRelatedSpaces": "The building cannot be deleted because it has associated spaces.",
+      "noPermissionView": "You do not have permission to view this building.",
+      "noPermissionEdit": "You do not have permission to edit this building."
     },
     "detail": {
       "title": "Building details | SGEU",
@@ -451,7 +478,30 @@
       "noFloorsTitle": "No associated floors",
       "noFloorsDescription": "This building currently has no registered floors.",
       "editTitle": "Edit building",
-      "editDescription": "Modify this building's details."
+      "editDescription": "Modify this building's details.",
+      "floorsLoadError": "The floors of this building could not be loaded."
+    },
+    "duplicate": {
+      "title": "Duplicate buildings",
+      "description": "Create buildings for a new academic year from existing ones.",
+      "mode": "How do you want to load the buildings?",
+      "byFaculty": "Select buildings",
+      "byYear": "Select academic year",
+      "faculties": "Buildings you want to duplicate",
+      "facultiesHelp": "You can select multiple buildings from different years.",
+      "year": "Source academic year",
+      "selectYear": "Select an academic year",
+      "summary": "Buildings to be created: {count}",
+      "targetYear": "New academic year",
+      "targetYearHelp": "Must be later than the source academic year.",
+      "confirm": "Duplicate",
+      "selectBuildings": "Select at least one building or academic year.",
+      "targetYearMustBeLater": "The new academic year must be later than the source academic years.",
+      "success": "The buildings have been successfully duplicated.",
+      "error": "Could not duplicate the buildings.",
+      "yearInvalid": "One or more buildings have an invalid origin academic year.",
+      "noBuildings": "No buildings to duplicate",
+      "yearRecent": "Target year must be later to most recent origin year."
     },
     "validation": {
       "nameMinSize": "The building name must contain at least 2 characters.",
@@ -464,7 +514,7 @@
       "phoneMaxSize": "The phone number cannot exceed 15 characters.",
       "phoneFormat": "Please enter a valid phone number.",
       "academicYearFormat": "Enter the academic year in YYYY-YYYY format.",
-      "academicYearMin": "The academic year must start in 2026 or later.",
+      "academicYearMin": "The academic year must start in current year or later.",
       "academicYearConsecutive": "The second year must immediately follow the first."
     }
   },
@@ -498,7 +548,8 @@
     },
     "entities": {
       "usuario": "User",
-      "facultades": "Faculty"
+      "facultades": "Faculty",
+      "edificios": "Building"
     }
   },
   "pages": {

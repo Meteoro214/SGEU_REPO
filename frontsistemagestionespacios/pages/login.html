@@ -20,7 +20,7 @@
       content="Acceso institucional al Sistema de Gestión de Espacios Universitarios de la Universidade de Vigo."
     >
 
-    <title>Iniciar sesión | SGEU</title>
+    <title data-i18n="login.title">Iniciar sesión | SGEU</title>
 
     <!-- Estilos globales y específicos de la página -->
     <link rel="stylesheet" href="../css/variables.css">
@@ -71,7 +71,7 @@
       <section class="login-panel" aria-labelledby="login-title">
         <a class="back-public" href="bienvenida-publica.html">
           <span data-icon="arrow" aria-hidden="true"></span>
-          <span data-i18n="common.backToWelcome" Volver a la bienvenida></span>
+          <span data-i18n="common.backToWelcome"></span>
         </a>
 
         <!-- Selector de idioma -->
@@ -105,7 +105,7 @@
             Introduce tus credenciales para acceder a SGEU.
           </p>
 
-          <form id="login-form" action="#" method="POST">
+          <form id="login-form" action="#" method="POST" novalidate>
 
             <div class="login-fields">
 
@@ -207,7 +207,7 @@
                   El administrador revisará tu solicitud.
               </p>
 
-              <form id="request-form" action="#" method="POST">
+              <form id="request-form" action="#" method="POST" novalidate>
 
                   <div class="login-fields">
 

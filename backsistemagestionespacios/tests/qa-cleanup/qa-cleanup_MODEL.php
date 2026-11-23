@@ -15,6 +15,7 @@ class qa_cleanup_SERVICE extends appServiceBase {
         'funcionalidad'  => 'nom_func',
         'espacio'        => 'nom_espacio',
         'ocupante'       => 'tipo_ocupante',
+        'gestor_edificio' => null,
         'tiene_permiso'  => null,
         'ocupa'          => null
     );
@@ -29,6 +30,10 @@ class qa_cleanup_SERVICE extends appServiceBase {
         'ocupa' => array(
             array('camposFk' => array('tipo_ocupante'), 'clavesP' => array('tipo_ocupante'), 'tablaPadre' => 'ocupante', 'columnaP' => 'tipo_ocupante'),
             array('camposFk' => array('id_espacio'), 'clavesP' => array('id_espacio'), 'tablaPadre' => 'espacio', 'columnaP' => 'nom_espacio')
+        ),
+        'gestor_edificio' => array(
+            array('camposFk' => array('id_edificio', 'anho_acad_edificio'), 'clavesP' => array('id_edificio', 'anho_acad_edificio'), 'tablaPadre' => 'edificio', 'columnaP' => 'nom_edificio'),
+            array('camposFk' => array('id_usuario'), 'clavesP' => array('id_usuario'), 'tablaPadre' => 'usuario', 'columnaP' => 'nom_usuario')
         )
     );
 

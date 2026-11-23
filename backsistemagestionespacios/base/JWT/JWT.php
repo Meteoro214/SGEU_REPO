@@ -1,6 +1,5 @@
 <?php
 
-//TODO Alguien mas deberia revisar esto LOL 
 class JWT
 {
     const ASN1_INTEGER = 0x02;

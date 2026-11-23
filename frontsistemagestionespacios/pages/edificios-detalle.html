@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detalle de un edificio del Sistema de Gestión de Espacios Universitarios">
+
+    <title data-i18n="edificios.detail.title"></title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components/app-layout.css">
+    <link rel="stylesheet" href="../css/pages/edificios-detalle.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- Scripts comunes -->
+    <script type="module" src="../js/common/navigation.js" defer></script>
+    <script src="../js/common/icons.js" defer></script>
+
+    <!-- Internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Lógica del detalle -->
+    <script type="module" src="../js/modules/edificios-detalle.js" defer></script>
+</head>
+
+<body data-page="edificios">
+
+    <div class="app-layout">
+
+        <aside class="app-sidebar" id="app-sidebar"></aside>
+
+        <div class="app-main">
+
+            <header class="app-topbar"></header>
+
+            <main class="app-content building-detail-page">
+
+                <!-- CABECERA -->
+                
+                <section class="building-detail-header">
+
+                    <div class="building-detail-header-info">
+
+                        <nav class="breadcrumb" aria-label="Ruta de navegación">
+                            <ol>
+                                <li>
+                                    <a href="bienvenida.html">SGEU</a>
+                                </li>
+
+                                <li>
+                                    <a href="edificios.html" data-i18n="edificios.title">
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <span data-icon="chevron" aria-hidden="true"></span>
+                                    <span
+                                        id="building-detail-breadcrumb"
+                                        aria-current="page"
+                                    >
+                                        —
+                                    </span>
+                                </li>
+                            </ol>
+                        </nav>
+
+                        <div class="building-detail-title-wrapper">
+
+                            <div class="building-detail-title-icon">
+                                <span data-icon="building" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="building-detail-title-text">
+                                <h1 id="building-detail-name">
+                                </h1>
+
+                                <p data-i18n="edificios.detail.description">
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="building-detail-header-actions">
+
+                        <a
+                            href="edificios.html"
+                            id="building-detail-back"
+                            class="btn"
+                        >
+                            <span data-icon="arrow" aria-hidden="true"></span>
+                            <span data-i18n="common.back"></span>
+                        </a>
+
+                        <button
+                            type="button"
+                            id="building-detail-edit"
+                            class="btn btn-primary"
+                            hidden
+                        >
+                            <span data-icon="edit" aria-hidden="true"></span>
+                            <span data-i18n="common.edit"></span>
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- MENSAJES -->
+                <p
+                    id="building-detail-message"
+                    class="building-detail-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></p>
+
+
+                <!-- FORMULARIO DE EDICIÓN -->
+                <section
+                    id="building-detail-edit-section"
+                    class="building-detail-edit-section"
+                    hidden
+                >
+
+                    <article class="building-detail-card">
+
+                        <div class="building-detail-card-header">
+                            <div>
+                                <h2 data-i18n="edificios.detail.editTitle">
+                                    
+                                </h2>
+
+                                <p data-i18n="edificios.detail.editDescription">
+                                </p>
+                            </div>
+                        </div>
+
+                        <form id="building-detail-edit-form" class="building-detail-form" novalidate>
+
+                            <input
+                                type="hidden"
+                                id="building-detail-edit-id"
+                            >
+
+                            <div class="building-detail-form-grid">
+
+                                <!-- ID -->
+                                <div class="building-detail-form-group">
+                                    <label
+                                        for="building-detail-edit-id-display"
+                                        data-i18n="edificios.form.id"
+                                    >
+                                        ID de edificio
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="building-detail-edit-id-display"
+                                        disabled
+                                    >
+                                </div>
+
+                                <!-- NOMBRE -->
+                                <div class="building-detail-form-group">
+                                    <label
+                                        for="building-detail-edit-name"
+                                        data-i18n="edificios.form.name"
+                                    >
+                                        Nombre del edificio
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="building-detail-edit-name"
+                                        maxlength="100"
+                                        autocomplete="off"
+                                    >
+                                </div>
+
+                                <!-- AÑO ACADÉMICO -->
+                                <div class="building-detail-form-group">
+                                    <label
+                                        for="building-detail-edit-year"
+                                        data-i18n="edificios.form.academicYear"
+                                    >
+                                        Año académico
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="building-detail-edit-year"
+                                        maxlength="9"
+                                        placeholder="2026-2027"
+                                        data-i18n-ph="edificios.form.academicYearPlaceholder"
+                                        pattern="[0-9]{4}-[0-9]{4}"
+                                        disabled
+                                    >
+                                </div>
+
+                                <!-- DIRECCIÓN -->
+                                <div class="building-detail-form-group">
+                                    <label
+                                        for="building-detail-edit-address"
+                                        data-i18n="edificios.form.address"
+                                    >
+                                        Dirección
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="building-detail-edit-address"
+                                        maxlength="255"
+                                        autocomplete="off"
+                                    >
+                                </div>
+
+                                <!-- TELÉFONO -->
+                                <div class="building-detail-form-group">
+                                    <label
+                                        for="building-detail-edit-phone"
+                                        data-i18n="edificios.form.phone"
+                                    >
+                                        Teléfono
+                                    </label>
+
+                                    <input
+                                        type="tel"
+                                        id="building-detail-edit-phone"
+                                        maxlength="15"
+                                        autocomplete="off"
+                                    >
+                                </div>
+
+                                <!-- GESTORES -->
+                                <div
+                                    class="building-detail-form-group"
+                                    id="building-detail-managers-group"
+                                    data-require="ADMIN"
+                                    hidden
+                                >
+                                    <label
+                                        for="building-detail-edit-managers"
+                                        data-i18n="edificios.form.managers"
+                                    >
+                                        Gestores asignados
+                                    </label>
+
+                                    <select
+                                        id="building-detail-edit-managers"
+                                        name="gestores[]"
+                                        multiple
+                                        size="6"
+                                    ></select>
+
+                                    <small data-i18n="edificios.form.managersHelp">
+                                        Mantén pulsada la tecla Ctrl para seleccionar varios gestores.
+                                    </small>
+                                </div>
+
+                            </div>
+
+                            <p
+                                id="building-detail-edit-message"
+                                class="building-detail-message"
+                                role="alert"
+                                aria-live="assertive"
+                                hidden
+                            ></p>
+
+                            <div class="building-detail-form-actions">
+
+                                <button
+                                    type="button"
+                                    id="building-detail-edit-cancel"
+                                    class="btn"
+                                >
+                                    <span data-i18n="common.cancel">
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    id="building-detail-edit-save"
+                                    class="btn btn-primary"
+                                >
+                                    <span data-i18n="common.saveChanges">
+                                    </span>
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </article>
+
+                </section>
+
+
+                <!-- CONTENIDO DEL DETALLE -->
+                <section
+                    id="building-detail-content"
+                    hidden
+                >
+
+                    <!-- INFORMACIÓN GENERAL -->
+                    <section class="building-detail-information">
+
+                        <article class="building-detail-card">
+
+                            <div class="building-detail-card-header">
+                                <div>
+                                    <h2 data-i18n="edificios.detail.generalInformation">
+                                    </h2>
+
+                                    <p data-i18n="edificios.detail.generalDescription">
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="building-detail-card-body">
+
+                                <div class="building-detail-row">
+                                    <span data-i18n="edificios.form.id">
+                                        ID de edificio
+                                    </span>
+                                    <strong id="building-detail-id">—</strong>
+                                </div>
+
+                                <div class="building-detail-row">
+                                    <span data-i18n="edificios.form.name">
+                                        Nombre del edificio
+                                    </span>
+                                    <strong id="building-detail-name-value">—</strong>
+                                </div>
+
+                                <div class="building-detail-row">
+                                    <span data-i18n="edificios.form.address">
+                                        Dirección
+                                    </span>
+                                    <strong id="building-detail-address">—</strong>
+                                </div>
+
+                                <div class="building-detail-row">
+                                    <span data-i18n="edificios.form.phone">
+                                        Teléfono
+                                    </span>
+                                    <strong id="building-detail-phone">—</strong>
+                                </div>
+
+                                <div class="building-detail-row">
+                                    <span data-i18n="edificios.form.academicYear">
+                                        Año académico
+                                    </span>
+                                    <strong id="building-detail-academic-year">—</strong>
+                                </div>
+
+                                <div class="building-detail-row">
+                                    <span data-i18n="edificios.form.managers">
+                                        Gestores asignados
+                                    </span>
+                                    <strong id="building-detail-managers">—</strong>
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    </section>
+
+                </section>
+
+            </main>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

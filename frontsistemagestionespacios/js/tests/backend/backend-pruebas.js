@@ -107,3 +107,52 @@ let facultad_backend_tests = Array(
     { accion: 'DELETE', descripcion: 'DELETE sin identificador', overrides: { id_facultad: '' }, esperado: 'id_facultad_ES_NULO_KO' }
 
 );
+
+// =====================================================================================
+// edificios
+// =====================================================================================
+let edificio_backend_tests = Array(
+
+    // Añadir edificio
+    { accion: 'ADD', descripcion: 'ADD con todos los campos obligatorios', overrides: {}, esperado: 'QUERY_OK' },
+    { accion: 'ADD', descripcion: 'ADD sin nombre de edificio', overrides: { nom_edificio: ''}, esperado: 'nom_edificio_ES_NULO_KO' },
+    { accion: 'ADD', descripcion: 'ADD sin gestor de edificio', overrides: {}, esperado: 'QUERY_OK' },
+    { accion: 'ADD', descripcion: 'ADD sin direccion de edificio', overrides: { dir_edificio: '' }, esperado: 'dir_edificio_ES_NULO_KO' },
+    { accion: 'ADD', descripcion: 'ADD sin teléfono de edificio', overrides: { tel_edificio: '' }, esperado: 'QUERY_OK' },
+    { accion: 'ADD', descripcion: 'ADD sin año académico', overrides: { anho_acad_edificio: '' }, esperado: 'anho_acad_edificio_ES_NULO_KO' },
+    { accion: 'ADD', descripcion: 'ADD de edificio duplicado', overrides: { nom_edificio: '__FIXTURE_NOM_EDIFICIO__', dir_edificio: 'Dirección de prueba', tel_edificio: '986123456', anho_acad_edificio: '__FIXTURE_ANHO_EDIFICIO__' }, esperado: 'QUERY_OK' },
+
+
+    // Buscar edificio
+    { accion: 'SEARCH', descripcion: 'SEARCH sin filtros devuelve listado', overrides: {}, esperado: 'RECORDSET_DATOS' },
+    { accion: 'SEARCH', descripcion: 'SEARCH por nombre de edificio', overrides: { nom_edificio: 'QA Edificio' }, esperado: 'RECORDSET_DATOS' },
+    { accion: 'SEARCH', descripcion: 'SEARCH por año académico', overrides: { anho_acad_edificio: '2026-2027' }, esperado: 'RECORDSET_DATOS' },
+
+
+    // Editar edificio
+    { accion: 'EDIT', descripcion: 'EDIT de un edificio existente', overrides: {}, esperado: 'QUERY_OK' },
+    { accion: 'EDIT', descripcion: 'EDIT sin nombre de edificio', overrides: { nom_edificio: '' }, esperado: 'nom_edificio_ES_NULO_KO' },
+    { accion: 'EDIT', descripcion: 'EDIT sin gestor de edificio', overrides: {}, esperado: 'QUERY_OK' },
+    { accion: 'EDIT', descripcion: 'EDIT sin dirección de edificio', overrides: { dir_edificio: '' }, esperado: 'dir_edificio_ES_NULO_KO' },
+    { accion: 'EDIT', descripcion: 'EDIT sin teléfono de edificio', overrides: { tel_edificio: '' }, esperado: 'QUERY_OK' },
+    { accion: 'EDIT', descripcion: 'EDIT sin año académico', overrides: { anho_acad_edificio: '' }, esperado: 'anho_acad_edificio_ES_NULO_KO' },
+
+
+    // Duplicar edificios
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR un edificio', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_1__'], anho_acad_edificio: '2027-2028' }, esperado: 'EDIFICIOS_DUPLICADOS_OK' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR varios edificios', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_1__', '__FIXTURE_ID_EDIFICIO_2__'], anho_acad_edificio: '2028-2029' }, esperado: 'EDIFICIOS_DUPLICADOS_OK' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con identificadores repetidos', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_1__', '__FIXTURE_ID_EDIFICIO_1__'], anho_acad_edificio: '2027-2028' }, esperado: 'EDIFICIOS_DUPLICADOS_OK' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con identificador no válido', overrides: { edificios: ['abc'], anho_acad_edificio: '2027-2028' }, esperado: 'EDIFICIO_ID_INVALIDO_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con formato de año incorrecto', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_1__'], anho_acad_edificio: '2027/2028' }, esperado: 'ANHO_ACADEMICO_FORMATO_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con año anterior a 2026', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_1__'], anho_acad_edificio: '2025-2026' }, esperado: 'ANHO_ACADEMICO_INVALIDO_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con año no consecutivo', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_1__'], anho_acad_edificio: '2027-2029' }, esperado: 'ANHO_ACADEMICO_INVALIDO_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con año igual al de origen', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_1__'], anho_acad_edificio: '2026-2027' }, esperado: 'ANHO_DESTINO_NO_POSTERIOR_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR con año anterior al de origen', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_2__'], anho_acad_edificio: '2026-2027' }, esperado: 'ANHO_DESTINO_NO_POSTERIOR_KO' },
+    { accion: 'DUPLICAR', descripcion: 'DUPLICAR un edificio con año de origen inválido', overrides: { edificios: ['__FIXTURE_ID_EDIFICIO_3__'], anho_acad_edificio: '2027-2028' }, esperado: 'ANHO_ORIGEN_INVALIDO_KO' },
+
+
+    // Borrar edificio
+    { accion: 'DELETE', descripcion: 'DELETE de un edificio existente', overrides: {}, esperado: 'QUERY_OK' },
+    { accion: 'DELETE', descripcion: 'DELETE con identificador inexistente', overrides: { id_edificio: 4294967295 }, esperado: 'EDIFICIO_NO_ENCONTRADO_KO' },
+    { accion: 'DELETE', descripcion: 'DELETE sin identificador', overrides: { id_edificio: '' }, esperado: 'id_edificio_ES_NULO_KO' }
+);

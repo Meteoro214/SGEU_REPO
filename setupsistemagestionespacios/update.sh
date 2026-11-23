@@ -10,6 +10,7 @@
 #     existen en la versión nueva.
 #   - Conserva la configuración (backend/.env y frontend/js/config.js).
 #   - Guarda una copia de lo instalado y la restaura si algo falla.
+#   - Ejecuta la migracion de la base de datos.
 #
 # Uso:  sudo bash update.sh
 # ==========================================================================
@@ -22,10 +23,11 @@ fi
 set -u
 
 # Versión que instala este script
-VERSION_NUEVA=2
+VERSION_NUEVA=3
 
 GITHUB_REPO="https://github.com/Meteoro214/SGEU_REPO"
-GITHUB_RAMA="entregable_2"
+GITHUB_RAMA="entregable_3"
+RUTA_SQL_REL="backsistemagestionespacios/db/migraciones/migracion_19N"
 
 # Ficheros de configuración que genera install.sh: nunca se sobrescriben ni se borran
 PROTEGIDOS_BACK=".env"
@@ -39,7 +41,7 @@ TEMP_DIR=""
 BACKUP_DIR=""
 FICHEROS_TOCADOS=0
 TERMINADO=0
-
+MYSQL_CNF_TEMP=""
 
 # ==========================================================================
 # UTILIDADES
@@ -157,6 +159,54 @@ aplicar_cambios() {
     return 0
 }
 
+resolver_script_sql() {
+    local repo_dir="$1"
+    if [ -f "$repo_dir/${RUTA_SQL_REL}.sql" ]; then
+        echo "$repo_dir/${RUTA_SQL_REL}.sql"
+        return 0
+    elif [ -f "$repo_dir/$RUTA_SQL_REL" ]; then
+        echo "$repo_dir/$RUTA_SQL_REL"
+        return 0
+    fi
+    return 1
+}
+
+BDS_MIGRAR=()
+BD_TOCADA=0
+
+preparar_cnf_mysql() {
+    local env_file="$1" DB_HOST="" DB_USER="" DB_PASS="" DB_NAME="" DB_NAME_TEST=""
+    leer_claves "$env_file" DB_HOST DB_USER DB_PASS DB_NAME DB_NAME_TEST
+    [ -n "$DB_NAME" ] && [ -n "$DB_USER" ] || error "No se encuentran DB_NAME / DB_USER en $env_file."
+
+    MYSQL_CNF_TEMP="$(mktemp)"
+    chmod 600 "$MYSQL_CNF_TEMP"
+    printf '[client]\nhost="%s"\nuser="%s"\npassword="%s"\n' "${DB_HOST:-localhost}" "$DB_USER" "$DB_PASS" > "$MYSQL_CNF_TEMP"
+
+    BDS_MIGRAR=("$DB_NAME")
+    [ -n "$DB_NAME_TEST" ] && BDS_MIGRAR+=("$DB_NAME_TEST")
+}
+
+limpiar_cnf_mysql() {
+    [ -n "$MYSQL_CNF_TEMP" ] && rm -f "$MYSQL_CNF_TEMP"
+    MYSQL_CNF_TEMP=""
+}
+
+ejecutar_migracion_sql() {
+    local sql_file="$1" bd
+    for bd in "${BDS_MIGRAR[@]}"; do
+        mysqldump --defaults-extra-file="$MYSQL_CNF_TEMP" --single-transaction "$bd" > "$BACKUP_DIR/$bd.sql" \
+            || error "No se ha podido hacer la copia de $bd. No se ha migrado nada."
+    done
+    BD_TOCADA=1
+    for bd in "${BDS_MIGRAR[@]}"; do
+        echo "Migrando $bd..."
+        sed -E '/^[[:space:]]*USE[[:space:]]/Id' "$sql_file" \
+            | mysql --defaults-extra-file="$MYSQL_CNF_TEMP" "$bd" || return 1
+    done
+}
+
+
 # Si algo falla después de empezar a cambiar cosas, se deja todo como estaba
 restaurar() {
     [ "$TERMINADO" -eq 1 ] && return
@@ -170,11 +220,20 @@ restaurar() {
         cp -a "$BACKUP_DIR/frontend" "$FRONT_DIR"
         echo "Ficheros restaurados."
     fi
+
+    if [ "$BD_TOCADA" -eq 1 ]; then
+        echo "Restaurando las bases de datos..."
+        for bd in "${BDS_MIGRAR[@]}"; do
+            mysql --defaults-extra-file="$MYSQL_CNF_TEMP" "$bd" < "$BACKUP_DIR/$bd.sql" \
+                || echo "No se ha podido restaurar $bd: hazlo a mano con $BACKUP_DIR/$bd.sql"
+        done
+    fi
 }
 
 limpiar() {
     local estado=$?
     restaurar
+    limpiar_cnf_mysql
     [ -n "$TEMP_DIR" ] && rm -rf "$TEMP_DIR"
     exit "$estado"
 }
@@ -285,6 +344,14 @@ calcular_cambios "$FRONT_SRC" "$FRONT_DIR" "$TEMP_DIR/cambios-front" "$PROTEGIDO
 mostrar_cambios "Backend" "$TEMP_DIR/cambios-back"
 mostrar_cambios "Frontend" "$TEMP_DIR/cambios-front"
 
+SQL_SCRIPT=""
+if SQL_SCRIPT="$(resolver_script_sql "$TEMP_DIR/repo")"; then
+    echo
+    echo "Script SQL de migración: ${SQL_SCRIPT#"$TEMP_DIR/repo"/}"
+else
+    error "No se ha encontrado el script de migración en $RUTA_SQL_REL (ni con extensión .sql)."
+fi
+
 echo
 echo "Se conservan:  $BACK_DIR/$PROTEGIDOS_BACK y $FRONT_DIR/$PROTEGIDOS_FRONT"
 
@@ -293,7 +360,7 @@ TOTAL=$(( $(contar "$TEMP_DIR/cambios-back/nuevos.txt") + $(contar "$TEMP_DIR/ca
     + $(contar "$TEMP_DIR/cambios-front/modificados.txt") + $(contar "$TEMP_DIR/cambios-front/borrados.txt") ))
 
 echo
-if [ "$TOTAL" -eq 0 ]; then
+if [ "$TOTAL" -eq 0 ] && [ -z "$SQL_SCRIPT" ]; then
     echo "No hay nada que actualizar: los ficheros ya coinciden con la versión nueva."
 else
     confirmar "¿Aplicar la actualización?" || { echo "Actualización cancelada."; exit 0; }
@@ -318,6 +385,16 @@ echo "Ficheros copiados en $BACKUP_DIR"
 # ==========================================================================
 # 6. ACTUALIZAR FICHEROS
 # ==========================================================================
+
+# Migración antes de actualización porque requiere la db actualizada
+if [ "$VERSION" -lt 3 ]; then
+    titulo "Migración de base de datos"
+    command -v mysql > /dev/null 2>&1 && command -v mysqldump > /dev/null 2>&1 \
+        || error "Faltan mysql o mysqldump: no se puede migrar la base de datos."
+    preparar_cnf_mysql "$BACK_DIR/.env"
+    ejecutar_migracion_sql "$SQL_SCRIPT" || error "Ha fallado la migración de la base de datos."
+    echo "Base de datos migrada."
+fi
 
 titulo "Actualizando ficheros"
 

@@ -12,20 +12,13 @@ abstract class appServiceBase{
 	public $valores;
 
 	function __construct(){
-		$this->modificacion_atributos();
 
 		if (method_exists($this, 'inicializarRest')) {
 			$this->inicializarRest();
 		}
 	}
 
-	/**
-	 * Ok no se usa
-	 * @return void
-	 */
-	function modificacion_atributos(){}
-
- 	function verificarPermisos() {
+	function verificarPermisos(){
 		$accion = $_POST['action'] ?? '';
 		$controlador = $_POST['controlador'] ?? '';
 
@@ -34,101 +27,122 @@ abstract class appServiceBase{
 			return true;
 		}
 
-		$token = $_POST['token'] ?? '';
-		if (empty($token)) {
-			return array(
-				'ok' => false,
-				'code' => 'TOKEN_KO',
-				'message' => 'No se ha proporcionado un token de autenticación.'
-			);
+		$datos = $this->obtenerDatosToken();
+		if (!$datos["ok"]) {
+			return $datos;
 		}
 
-    try {
-		include_once './base/JWT/token.php';
-		$datosToken = MiToken::devuelveToken($token); 
-		
-      $payload = MiToken::devuelveToken($token);
-  
-        // Extraer el id_grupo almacenado dentro del objeto 'data' del payload
-        if (!isset($payload->data->id_grupo)) {
-            return array(
-                'ok' => false,
-                'code' => 'TOKEN_INVALIDO_KO',
-                'message' => 'El token no contiene información del grupo de usuario.'
-            );
-        }
+		$idGrupoUsuario = intval($datos["data"]->id_grupo);
+		$idUsuarioToken = isset($datos["data"]->id_usuario) ? intval($datos["data"]->id_usuario) : null;
 
-        $idGrupoUsuario = intval($payload->data->id_grupo);
-		$idUsuarioToken = isset($payload->data->id_usuario) ? intval($payload->data->id_usuario) : null;
-		} catch (Exception $e) {
-        // Captura excepciones lanzadas por JWT o MiToken (tokens caducados, firmas rotas, etc.)
-        return array(
-            'ok' => false,
-            'code' => 'TOKEN_INVALIDO_KO',
-            'message' => $e->getMessage()
-        );
-    }
+		$nombreFuncionalidad = strtoupper($controlador);
+		$accionNombre = strtoupper($accion);
 
-    $nombreFuncionalidad = strtoupper($controlador);
-    if ($nombreFuncionalidad === 'USUARIO') { //lo pusimos distinto en la de permisos
-        $nombreFuncionalidad = 'USER';
-    }
-    $accionNombre = strtoupper($accion);
-	if ($accionNombre === 'REACTIVAR') { //Cuenta como permiso de edit
-        $accionNombre = 'EDIT';
-    }
-
-	if ($nombreFuncionalidad === 'QA_CLEANUP' && $accionNombre === 'LIMPIAR') {
-	return true;
-	}
-	
-	if ($nombreFuncionalidad === 'USER' && $accionNombre === 'EDIT') {
-        $idUsuarioPost = isset($_POST['id_usuario']) ? intval($_POST['id_usuario']) : null;
-        
-        // Si el usuario edita un ID que coincide exactamente con el suyo propio, se le concede acceso
-        if ($idUsuarioPost !== null && $idUsuarioToken !== null && $idUsuarioPost === $idUsuarioToken) {
-            return true;
-        }
-    }
-
-	// Permisos específicos para la gestión de edificios
-	if ($nombreFuncionalidad === 'EDIFICIO'
-		&& $idGrupoUsuario === 2
-		&& in_array($accionNombre, ['EDIT', 'DELETE'])) {
-
-		$idEdificioSolicitado = isset($_POST['id_edificio'])
-			? intval($_POST['id_edificio'])
-			: 0;
-
-		$idEdificioUsuario = isset($payload->data->id_edificio)
-			? intval($payload->data->id_edificio)
-			: null;
-
-		// Comprobar que el gestor tiene un edificio asignado
-		if ($idEdificioUsuario === null || $idEdificioUsuario <= 0) {
-			return array(
-				'ok' => false,
-				'code' => 'ACCESO_DENEGADO_KO',
-				'message' => 'No tienes ningún edificio asignado.'
-			);
+		// Permisos específicos para la busqueda global
+		if ($nombreFuncionalidad === 'BUSQUEDA' && $accionNombre === 'GLOBAL_SEARCH') {
+			return true;
 		}
 
-		// Comprobar que intenta gestionar su propio edificio
-		if ($idEdificioSolicitado !== $idEdificioUsuario) {
-			return array(
-				'ok' => false,
-				'code' => 'ACCESO_DENEGADO_KO',
-				'message' => 'Solo puedes gestionar el edificio que tienes asignado.'
-			);
+		// Permisos específicos para la limpieza  de testing
+		if ($nombreFuncionalidad === 'QA_CLEANUP' && $accionNombre === 'LIMPIAR') {
+			return true;
 		}
 
-		$accionNombre="MANAGE";
-	}
-	
-    include_once './base/mapping.php';
-    $mapPermiso = new mapping('tiene_permiso');
+		// Permisos específicos para la gestión de usuarios
+		if ($nombreFuncionalidad === 'USUARIO') {//lo pusimos distinto en la de permisos
+			$nombreFuncionalidad = 'USER';
 
-    $sql = "SELECT 1 
+			if ($accionNombre === 'EDIT') {
+				$idUsuarioPost = isset($_POST['id_usuario']) ? intval($_POST['id_usuario']) : null;
+				// Si el usuario edita un ID que coincide exactamente con el suyo propio, se le concede acceso
+				if ($idUsuarioPost !== null && $idUsuarioToken !== null && $idUsuarioPost === $idUsuarioToken) {
+					return true;
+				}
+			} else if ($accionNombre === 'REACTIVAR') { //Cuenta como permiso de edit
+				$accionNombre = 'EDIT';
+			} else if ($accionNombre === 'GESTORES_DISPONIBLES') { //Cuenta como permiso de showall
+				$accionNombre = 'SHOW ALL';
+			}
+		}
+
+		// Permisos específicos para la gestión de facultades
+		if ($nombreFuncionalidad === 'FACULTAD') {
+			if ($accionNombre === 'DUPLICAR') { //Cuenta como permiso de ADD
+				$accionNombre = "ADD";
+			}
+		}
+
+		// Permisos específicos para la gestión de edificios.
+		if ($nombreFuncionalidad === 'EDIFICIO') {
+			if (
+				$idGrupoUsuario === 2 &&
+				in_array($accionNombre, ['EDIT', 'DELETE'])
+			) {
+
+				$idEdificioSolicitado = isset($_POST['id_edificio'])
+					? intval($_POST['id_edificio'])
+					: 0;
+
+				if ($idEdificioSolicitado <= 0 || $idUsuarioToken === null) {
+					return array(
+						'ok' => false,
+						'code' => 'ACCESO_DENEGADO_KO',
+						'message' => 'No tienes permiso para gestionar este edificio.'
+					);
+				}
+
+				// Comprobar que el gestor está asignado al edificio
+				// en el año académico correspondiente.
+				include_once './base/mapping.php';
+
+				$mapGestor = new mapping('gestor_edificio');
+
+				$sqlAsignacion = "
+				SELECT 1
+				FROM edificio e
+				INNER JOIN gestor_edificio ge
+					ON ge.id_edificio = e.id_edificio
+					AND ge.anho_acad_edificio = e.anho_acad_edificio
+				WHERE e.id_edificio = $idEdificioSolicitado
+					AND ge.id_usuario = $idUsuarioToken
+				LIMIT 1
+			";
+
+				$resultadoAsignacion = $mapGestor->lanzarqueryconresults(
+					$sqlAsignacion
+				);
+
+				if (!$resultadoAsignacion['ok']) {
+					return array(
+						'ok' => false,
+						'code' => 'ERROR_VERIFICAR_ASIGNACION_KO',
+						'message' => 'No se pudo comprobar la asignación del gestor.'
+					);
+				}
+
+				if (empty($resultadoAsignacion['resource'])) {
+					return array(
+						'ok' => false,
+						'code' => 'ACCESO_DENEGADO_KO',
+						'message' => 'No tienes asignado este edificio.'
+					);
+				}
+
+				$accionNombre = 'MANAGE';
+
+			} else if ($accionNombre === 'DUPLICAR') {
+				// DUPLICAR cuenta como ADD.
+				$accionNombre = 'ADD';
+			}
+		}
+
+		//todo Permisos específicos para la gestión de espacios.
+
+
+		include_once './base/mapping.php';
+		$mapPermiso = new mapping('tiene_permiso');
+
+		$sql = "SELECT 1 
             FROM tiene_permiso tp
             JOIN accion a ON tp.id_accion = a.id_accion
             JOIN funcionalidad f ON tp.id_func = f.id_func
@@ -137,20 +151,20 @@ abstract class appServiceBase{
               AND f.nom_func = '".addslashes($nombreFuncionalidad)."'
             LIMIT 1";
 
-    $resultadoPermiso = $mapPermiso->lanzarqueryconresults($sql);
+		$resultadoPermiso = $mapPermiso->lanzarqueryconresults($sql);
 
-    // 6. Si la consulta devuelve resultados, el grupo tiene permiso para la acción
-    if ($resultadoPermiso['ok'] && !empty($resultadoPermiso['resource'])) {
-        return true;
-    }
+		//Si la consulta devuelve resultados, el grupo tiene permiso para la acción
+		if ($resultadoPermiso['ok'] && !empty($resultadoPermiso['resource'])) {
+			return true;
+		}
 
-    // Si no existe la relación en la base de datos, se deniega el acceso
-    return array(
-        'ok' => false,
-        'code' => 'ACCESO_DENEGADO_KO',
-        'message' => 'No tienes permisos suficientes para realizar esta acción.'
-    );	
-	
+		//Si no existe la relación en la base de datos, se deniega el acceso
+		return array(
+			'ok' => false,
+			'code' => 'ACCESO_DENEGADO_KO',
+			'message' => 'No tienes permisos suficientes para realizar esta acción.'
+		);
+
 	}
 
 	function ejecutar($skip = false){
@@ -163,51 +177,26 @@ abstract class appServiceBase{
 
 		if ($res === true) { // no hay nulos
 
-			$validacionesresultado = $this->incluirValidaciones($this->modelo->tabla);
+			$accionejecutar = $_POST['action'];
 
-			if ($validacionesresultado === true) { //no hay errores de validacion
+			$res = comprobar_si_existe_metodo(get_class($this), $accionejecutar);
 
-				$accionejecutar = $_POST['action'];
-
-				$res = comprobar_si_existe_metodo(get_class($this), $accionejecutar);
-
-				if (($accionejecutar == 'ADD' || $accionejecutar == 'EDIT')) {
-					if (isset($this->files)) {
-						if ($this->files == '') {
-
-						} else {
-							$procesarfiles = $this->procesarfiles($this->files);
-							if ($procesarfiles['ok'] == false) {
-								return $procesarfiles;
-							}
-						}
-					}
+			if ($res['ok']) {
+				$mires = $this->$accionejecutar();
+			} else {
+				if ($this->modelo !== '') {
+					$mires = $this->modelo->$accionejecutar();
 				}
-
-				//gestion de tokens TODO
-
-
-
-				if ($res['ok']) {
-					$mires = $this->$accionejecutar();
-				} else {
-					if ($this->modelo !== '') {
-						$mires = $this->modelo->$accionejecutar();
-					}
-				}
-
-				if (isset($mires)) {
-					return $mires;
-				}
-
-			} else { //hay errores de validacion
-				return $validacionesresultado;
 			}
+
+			if (isset($mires)) {
+				return $mires;
+			}
+
 		} else { // hay nulos
 			return $res;
 		}
 	}
-
 
 	/**
 	 * Carga el model y lo rellena
@@ -224,7 +213,6 @@ abstract class appServiceBase{
 		}
 		return $this->entidad;
 	}
-
 
 	function rellenaModel(&$obj_entidad, $listaAtributos, $listaAtributosSelect){
 
@@ -269,13 +257,12 @@ abstract class appServiceBase{
 
 	}
 
-
 	/**
 	 * Para ADD EDIT o DELETE, comprueba los valores que no sean nulos
 	 */
 	function comprobarnulos(){
 
-		if (($_POST['action'] == 'SEARCH') || ($_POST['action'] == 'SEARCH_BY')) {
+		if (($_POST['action'] == 'SEARCH') || ($_POST['action'] == 'SEARCH_BY')|| ($_POST['action'] == 'GLOBAL_SEARCH')) {
 		} else {
 			if (isset($this->notnull)) {
 				foreach ($this->notnull[$_POST['action']] as $atributo) {
@@ -291,56 +278,6 @@ abstract class appServiceBase{
 		return true;
 
 	}
-
-	/**
-	 * Busca archivos de validaciones especiales y los incluye
-	 * @param mixed $entidad
-	 */
-	function incluirValidaciones($entidad){
-
-
-		$ficherovalidaciones = './app/'.$entidad.'/'.$entidad.'_VALIDACIONESACCIONES.php';
-		if (file_exists($ficherovalidaciones)) {
-			include_once $ficherovalidaciones;
-		}
-
-		$ficherovalidaciones = './app/'.$entidad.'/'.$entidad.'_VALIDACIONESATRIBUTOS.php';
-		if (file_exists($ficherovalidaciones)) {
-			include_once $ficherovalidaciones;
-		}
-
-		$ficherovalidaciones = './app/'.$this->modelo->tabla.'/'.$this->modelo->tabla.'_VALIDACIONESACCIONES.php';
-
-		if (file_exists($ficherovalidaciones)) {
-			$metodo = 'VALIDACION_ACCION_'.$_POST['action'].'_'.$this->modelo->tabla;
-			if (function_exists($metodo)) {
-				//$res = $metodo($this->modelo->valores);
-				$res = $metodo($_POST);
-				if ($res === true) {
-				} else {
-					return $res;
-				}
-			}
-		}
-
-		$ficherovalidaciones = './app/'.$this->modelo->tabla.'/'.$this->modelo->tabla.'_VALIDACIONESATRIBUTOS.php';
-
-		if (file_exists($ficherovalidaciones)) {
-			$metodo = 'VALIDACION_ATRIBUTOS_'.$_POST['action'].'_'.$this->modelo->tabla;
-			if (function_exists($metodo)) {
-				//$res = $metodo($this->modelo->valores);
-				$res = $metodo($_POST);
-				if ($res === true) {
-				} else {
-					return $res;
-				}
-			}
-		}
-
-		return true;
-
-	}
-
 
 	function reactivarRegistro($campoActivo){
 		$this->modelo->foraneas = [];
@@ -371,154 +308,46 @@ abstract class appServiceBase{
 		return $res;
 	}
 
-	function softDelete($campoActivo){
-		$tabla = $this->modelo->tabla;
-		$condiciones = array();
-		foreach ($this->modelo->clave as $pk) {
-			$condiciones[] = "`{$pk}` = ".intval($this->modelo->valores[$pk]);
-		}
-		$where = implode(' AND ', $condiciones);
-		$set = "`{$campoActivo}` = 0";
-		$map = new mapping($tabla);
-		$res = $map->lanzarquery("UPDATE `{$tabla}` SET {$set} WHERE {$where}");
-		if ($res['ok']) {
-			$res['code'] = 'BAJA_LOGICA_OK';
-		}
-		return $res;
-	}
+	function obtenerDatosToken() {
+		include_once './base/JWT/token.php';
+		$token = isset($_POST['token']) ? $_POST['token'] : '';
 
-	/**
-	 * Procesa ficheros
-	 */
-	function procesarfiles($ficheros){
+        if (empty($token)) {
+            return array(
+                'ok' => false,
+                'code' => 'TOKEN_KO',
+                'message' => 'No se ha proporcionado un token de autenticación.'
+            );
+        }
 
-		$errors = array();
+		try {
+			$payload = MiToken::devuelveToken($token);
 
-
-		foreach ($ficheros as $files) {
-
-			$nuevofichero = $files[0];
-			$fichero = $files[1];
-			$ruta = $files[2];
-			$extensiones = $files[3];
-			$size = $files[4];
-
-			//si trae un string trae el valor anterior y ningun nuevo fichero
-			if ($_FILES[$nuevofichero]['name'] == '') {
-				$this->modelo->$fichero = $_POST[$fichero];
-				$this->modelo->valores[$fichero] = $_POST[$fichero];
-			} else {
-				$file_name = $_FILES[$nuevofichero]['name'];
-				$file_size = $_FILES[$nuevofichero]['size'];
-				$file_tmp = $_FILES[$nuevofichero]['tmp_name'];
-				$file_type = $_FILES[$nuevofichero]['type'];
-				$file_ext = explode('.', $file_name);
-				$file_ext = end($file_ext);
-				$file_ext = strtolower($file_ext);
-
-				$extensions = $extensiones;
-
-				if (in_array($file_ext, $extensions) === false) {
-					$textoextension = '';
-					$primero = true;
-					foreach ($extensions as $extension) {
-						if ($primero) {
-							$textoextension .= $extension;
-							$primero = false;
-						} else {
-							$textoextension .= ','.$extension;
-						}
-					}
-					$errors[] = "extension not allowed, please choose a ".$textoextension." file.";
-				}
-
-				if ($file_size > $size) {
-					$errors[] = 'File size must be exactely '.$size.' bytes';
-				}
-
-				if (empty($errors) == true) {
-					$this->modelo->$fichero = $file_name;
-					$this->modelo->valores[$fichero] = $file_name;
-
-					if (move_uploaded_file($file_tmp, $ruta.$file_name)) {
-						$respuesta['ok'] = true;
-					} //dar permisos
-					else {
-						$respuesta['ok'] = false;
-						return $respuesta;
-					}
-				} else {
-					$respuesta['ok'] = false;
-					$respuesta['code'] = 'ERROR_UPLOAD_'.$fichero.'_KO';
-					$respuesta['resource'] = $errors;
-					return $respuesta;
-				}
-
+			if (
+				!isset($payload->data->id_grupo) ||
+				!isset($payload->data->id_usuario)
+			) {
+                return array(
+                    'ok' => false,
+                    'code' => 'TOKEN_INVALIDO_KO',
+                    'message' => 'El token no contiene los datos necesarios.'
+                );
 			}
-		}
 
-		$respuesta['ok'] = true;
-		$respuesta['code'] = 'UPLOAD_'.$fichero.'_OK';
-		return $respuesta;
+			return array(
+                'ok' => true,
+                'data' => $payload->data
+            );
+
+		} catch (Throwable $e) {
+            return array(
+                'ok' => false,
+                'code' => 'TOKEN_INVALIDO_KO',
+                'message' => 'El token no es válido o ha caducado.'
+            );
+		}
 	}
 
 }
-
-
-// solo para validaciones
-function devolver($funcionalidad, $valores){
-
-	include_once './app/'.$funcionalidad.'/'.$funcionalidad.'_SERVICE.php';
-
-	$clase = $funcionalidad.'_SERVICE';
-
-	$almacenPOST = $_POST;
-
-	unset($_POST);
-	$_POST = $valores;
-	$_POST['action'] = 'SEARCH_BY';
-	$_POST['controlador'] = $funcionalidad;
-
-	$prueba = new $clase;
-
-	$res = $prueba->ejecutar();
-
-	unset($_POST);
-	$_POST = $almacenPOST; //recupero el contenido de POST	
-
-	return $res;
-
-
-}
-
-// solo para validaciones
-function devuelvoFalseSicomprobar($existe, $tabla, $atributo, $valores, $codigo){
-
-	if ($atributo == '') {
-		$res = devolver($tabla, $valores);
-	} else {
-		$res = devolver($tabla, array($atributo => $valores[$atributo]));
-	}
-
-	if ($existe == 'existe') {
-		if ($res['code'] == 'RECORDSET_DATOS') {
-			$respuesta['ok'] = false;
-			$respuesta['code'] = $codigo;
-		} else {
-			$respuesta['ok'] = true;
-		}
-	} else {
-		if ($res['code'] == 'RECORDSET_VACIO') {
-			$respuesta['ok'] = false;
-			$respuesta['code'] = $codigo;
-		} else {
-			$respuesta['ok'] = true;
-		}
-	}
-	return $respuesta;
-
-}
-
-
 
 ?>

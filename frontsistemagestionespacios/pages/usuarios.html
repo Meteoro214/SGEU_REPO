@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Gestión de usuarios y permisos del Sistema de Gestión de Espacios Universitarios">
 
-    <title>Usuarios y permisos | SGEU</title>
+    <title data-i18n="usuarios.pageTitle"></title>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="../css/variables.css">
@@ -41,30 +41,39 @@
             <main class="app-content users-page">
 
                 <!-- CABECERA -->
+                
                 <section class="users-header">
 
-                    <!-- INFORMACIÓN DE LA PÁGINA -->
                     <div class="page-header-info">
 
                         <nav class="breadcrumb" aria-label="Ruta de navegación">
-
                             <ol>
                                 <li>
                                     <a href="bienvenida.html">SGEU</a>
                                 </li>
-
                                 <li>
                                     <span data-icon="chevron" aria-hidden="true"></span>
                                     <span aria-current="page" data-i18n="usuarios.title">
-                                        Usuarios y permisos
                                     </span>
                                 </li>
                             </ol>
-
                         </nav>
 
+                        <div class="users-title-wrapper">
+                            <div class="users-title-icon">
+                                <span data-icon="users" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="users-title-text">
+                                <h1 data-i18n="usuarios.title"></h1>
+                                <p data-i18n="usuarios.pageDescription"></p>
+                            </div>
+                        </div>
+
                     </div>
+
                 </section>
+
 
                 <section class="users-content">
 
@@ -80,8 +89,8 @@
                             aria-controls="users-tab-panel"
                             data-users-tab="active"
                         >
-                            <span data-i18n="usuarios.table.users">Usuarios</span>
-                            <span id="users-active-count" class="users-tab-count">0</span>
+                            <span data-i18n="usuarios.table.users"></span>
+                            <span id="users-active-count" class="users-tab-count"></span>
                         </button>
 
                         <button
@@ -93,8 +102,8 @@
                             aria-controls="users-tab-panel"
                             data-users-tab="requests"
                         >
-                            <span data-i18n="usuarios.table.requests">Solicitudes</span>
-                            <span id="users-requests-count" class="users-tab-count">0</span>
+                            <span data-i18n="usuarios.table.requests"></span>
+                            <span id="users-requests-count" class="users-tab-count"></span>
                         </button>
 
                     </div>
@@ -106,7 +115,6 @@
 
                             <div class="users-search">
                                 <label for="users-search" data-i18n="usuarios.searchLabel">
-                                    Buscar usuarios
                                 </label>
 
                                 <div class="input-wrap">
@@ -133,10 +141,10 @@
                                     aria-controls="users-filter-panel"
                                 >
                                     <span data-icon="filter" aria-hidden="true"></span>
-                                    <span data-i18n="common.filter">Filtrar</span>
+                                    <span data-i18n="common.filter"></span>
                                 </button>
 
-                                <p id="users-count" aria-live="polite">0 usuarios</p>
+                                <p id="users-count" aria-live="polite"></p>
 
                             </div>
                         </div>
@@ -146,14 +154,13 @@
 
                             <div class="users-filter-field">
                                 <label for="users-filter-role" data-i18n="usuarios.roleLabel">
-                                    Perfil o rol
                                 </label>
 
                                 <select id="users-filter-role" class="field-input">
-                                    <option value="" data-i18n="usuarios.allRoles">Todos los perfiles</option>
-                                    <option value="1" data-i18n="usuarios.roles.administration">Administración</option>
-                                    <option value="2" data-i18n="usuarios.roles.manager">Gestor</option>
-                                    <option value="3" data-i18n="usuarios.roles.consultation">Lector</option>
+                                    <option value="" data-i18n="usuarios.allRoles"></option>
+                                    <option value="1" data-i18n="usuarios.roles.administration"></option>
+                                    <option value="2" data-i18n="usuarios.roles.manager"></option>
+                                    <option value="3" data-i18n="usuarios.roles.consultation"></option>
                                 </select>
                             </div>
 
@@ -164,7 +171,6 @@
                                     class="btn"
                                     data-i18n="usuarios.clearFilters"
                                 >
-                                    Limpiar filtros
                                 </button>
 
                                 <button
@@ -173,7 +179,6 @@
                                     class="btn btn-primary"
                                     data-i18n="usuarios.applyFilters"
                                 >
-                                    Aplicar filtros
                                 </button>
                             </div>
 
@@ -194,7 +199,7 @@
                                 class="btn btn-danger"
                             >
                                 <span data-icon="trash" aria-hidden="true"></span>
-                                <span data-i18n="usuarios.deleteSelected">Eliminar seleccionadas</span>
+                                <span data-i18n="usuarios.deleteSelected"></span>
                             </button>
                         </div>
 
@@ -211,16 +216,31 @@
                                                 aria-label="Seleccionar todas las solicitudes de esta página"
                                             >
                                         </th>
-                                        <th scope="col" data-i18n="usuarios.table.user">Usuario</th>
-                                        <th scope="col" data-i18n="usuarios.table.role">Perfil o rol</th>
-                                        <th scope="col" data-i18n="usuarios.table.status">Estado de acceso</th>
-                                        <th scope="col" data-i18n="usuarios.table.actions">Acciones</th>
+                                        <th scope="col" data-i18n="usuarios.table.user"></th>
+                                        <th scope="col" data-i18n="usuarios.table.role"></th>
+                                        <th scope="col" data-i18n="usuarios.table.status"></th>
+                                        <th scope="col" data-i18n="usuarios.table.actions"></th>
                                     </tr>
                                 </thead>
 
                                 <tbody id="users-table-body"></tbody>
                             </table>
 
+                        </div>
+
+                        <!-- ESTADO VACÍO -->
+                        <div
+                            id="users-empty"
+                            class="users-empty"
+                            hidden
+                        >
+                            <span data-icon="users" aria-hidden="true"></span>
+
+                            <h2 data-i18n="usuarios.emptyTitle">
+                            </h2>
+
+                            <p data-i18n="usuarios.empty">
+                            </p>
                         </div>
 
                         <nav
@@ -253,9 +273,8 @@
             <div class="users-modal-header">
 
                 <div>
-                    <h2 id="users-modal-title">Datos del usuario</h2>
+                    <h2 id="users-modal-title"></h2>
                     <p id="users-modal-description">
-                        Información del usuario registrado.
                     </p>
                 </div>
 
@@ -270,7 +289,7 @@
 
             </div>
 
-            <form id="users-form">
+            <form id="users-form" novalidate>
 
                 <input type="hidden" id="user-id" name="id_usuario">
 
@@ -361,16 +380,11 @@
                             </select>
                         </div>
 
-                        <div class="users-form-group">
-                            <label for="user-building" data-i18n="edificios.idBuilding">ID del edificio asignado</label>
-                            <input
-                                type="number"
-                                id="user-building"
-                                name="id_edificio"
-                                class="field-input"
-                                min="1"
-                                disabled
-                            >
+                        <div class="users-form-group users-buildings-group" id="user-buildings-group" hidden>
+                            <label data-i18n="edificios.form.assignedBuildings">Edificios asignados</label>
+                            <div id="user-buildings" class="users-buildings-list">
+                                <p class="users-buildings-empty" data-i18n="edificios.form.noAssignedBuildings">No tiene edificios asignados.</p>
+                            </div>
                         </div>
 
                         <div class="users-form-group">

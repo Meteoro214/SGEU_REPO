@@ -1,8 +1,8 @@
 
 -- ================================================================================================
--- Script SQL para la Base de Datos de Tests MySQL del Sistema de Gestión de Espacios Universitarios
+-- Script SQL para la Base de Datos MySQL del Sistema de Gestión de Espacios Universitarios
 -- ================================================================================================
-USE `4800965_sgeu_tests`;
+USE `4800965_sgeu`;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -18,10 +18,10 @@ DROP TABLE IF EXISTS planta;
 DROP TABLE IF EXISTS tiene_permiso;
 DROP TABLE IF EXISTS funcionalidad;
 DROP TABLE IF EXISTS accion;
+DROP TABLE IF EXISTS gestor_edificio;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS grupo_usuarios;
 DROP TABLE IF EXISTS edificio;
-
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -40,7 +40,8 @@ CREATE TABLE edificio (
     tel_edificio        VARCHAR(15),
     anho_acad_edificio  CHAR(9)      NOT NULL,
 
-    CONSTRAINT pk_edificio         PRIMARY KEY (id_edificio)
+    CONSTRAINT pk_edificio         PRIMARY KEY (id_edificio),
+    CONSTRAINT uq_edificio_id_anho UNIQUE (id_edificio, anho_acad_edificio)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -93,14 +94,26 @@ CREATE TABLE usuario (
     fech_nacimiento DATE,
     activo_usuario  TINYINT(1)    NOT NULL DEFAULT 1,
     id_grupo        INT UNSIGNED  NOT NULL,
-    id_edificio     INT UNSIGNED,
-    
+
     CONSTRAINT pk_usuario       PRIMARY KEY (id_usuario),
     
     CONSTRAINT uq_usuario_email     UNIQUE (email),
     CONSTRAINT uq_usuario_dni       UNIQUE (dni),
-    CONSTRAINT fk_usuario_grupo     FOREIGN KEY (id_grupo) REFERENCES grupo_usuarios (id_grupo) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_usuario_edificio  FOREIGN KEY (id_edificio) REFERENCES edificio (id_edificio) ON DELETE SET NULL
+    CONSTRAINT fk_usuario_grupo     FOREIGN KEY (id_grupo) REFERENCES grupo_usuarios (id_grupo) ON DELETE CASCADE ON UPDATE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE gestor_edificio (
+    id_edificio        INT UNSIGNED NOT NULL,
+    id_usuario         INT UNSIGNED NOT NULL,
+    anho_acad_edificio CHAR(9) NOT NULL,
+
+    CONSTRAINT pk_gestor_edificio PRIMARY KEY (id_edificio, id_usuario, anho_acad_edificio),
+
+    -- Un gestor no puede gestionar dos edificios del mismo año.
+    CONSTRAINT uq_gestor_anho               UNIQUE (id_usuario, anho_acad_edificio),
+    CONSTRAINT fk_gestor_edificio_edificio  FOREIGN KEY (id_edificio, anho_acad_edificio) REFERENCES edificio (id_edificio, anho_acad_edificio) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_gestor_edificio_usuario   FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -153,13 +166,14 @@ CREATE TABLE espacio (
     anho_acad_espacio   CHAR(9)       NOT NULL,
     id_edificio         INT UNSIGNED  NOT NULL,
     id_planta           INT UNSIGNED  NOT NULL,
-    id_facultad         INT UNSIGNED  NOT NULL,
+    id_facultad         INT UNSIGNED  NULL,
+    id_gestor           INT UNSIGNED  NULL,
 
-    CONSTRAINT pk_espacio        PRIMARY KEY (id_espacio),
+    CONSTRAINT pk_espacio          PRIMARY KEY (id_espacio),
 
-    CONSTRAINT uq_espacio_invent UNIQUE (num_invent_espacio),
-    CONSTRAINT fk_espacio_planta FOREIGN KEY (id_edificio, id_planta) REFERENCES planta (id_edificio, id_planta) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_espacio_facultad FOREIGN KEY (id_facultad) REFERENCES facultad (id_facultad) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT fk_espacio_planta   FOREIGN KEY (id_edificio, id_planta) REFERENCES planta (id_edificio, id_planta) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_espacio_facultad FOREIGN KEY (id_facultad) REFERENCES facultad (id_facultad) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_espacio_gestor   FOREIGN KEY (id_gestor)   REFERENCES usuario (id_usuario)   ON DELETE SET NULL ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -177,8 +191,9 @@ CREATE TABLE ocupa (
     id_espacio      INT UNSIGNED NOT NULL,
 
     CONSTRAINT pk_ocupa PRIMARY KEY (tipo_ocupante, id_espacio),
+
     CONSTRAINT fk_ocupa_ocupante FOREIGN KEY (tipo_ocupante) REFERENCES ocupante (tipo_ocupante) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_ocupa_espacio FOREIGN KEY (id_espacio) REFERENCES espacio (id_espacio) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_ocupa_espacio  FOREIGN KEY (id_espacio)    REFERENCES espacio (id_espacio)     ON DELETE CASCADE ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -194,8 +209,8 @@ INSERT INTO grupo_usuarios (id_grupo, nom_grupo, desc_grupo) VALUES
     (2, 'GESTOR', 'Usuario responsable de un edificio'),
     (3, 'LECTOR', 'Usuario común con permisos de lectura');
 
-INSERT INTO usuario (id_usuario, nom_usuario, apell_usuario, email, pass, telefono, dni, fech_nacimiento, activo_usuario, id_grupo, id_edificio) VALUES
-    (1, 'admin', 'admin admin', 'admin@uvigo.es', MD5('admin'), '988752698', '11111111H', '1995-04-30', 1, 1, NULL);
+INSERT INTO usuario (id_usuario, nom_usuario, apell_usuario, email, pass, telefono, dni, fech_nacimiento, activo_usuario, id_grupo) VALUES
+    (1, 'admin', 'admin admin', 'admin@uvigo.es', MD5('admin'), '988752698', '11111111H', '1995-04-30', 1, 1);
 
 INSERT INTO accion (id_accion, nom_accion, desc_accion) VALUES
     (1, 'SHOW ALL', 'Acción para mostrar todo el contenido de una entidad'),
@@ -215,63 +230,20 @@ INSERT INTO funcionalidad (id_func, nom_func, desc_func) VALUES
     (6, 'TEST', 'Acciones especificas para unas pruebas');
 
 INSERT INTO tiene_permiso (id_grupo, id_accion, id_func) VALUES
-    (1, 1, 1),
-    (1, 1, 2),
-    (1, 1, 3),
-    (1, 1, 4),
-    (1, 1, 5),
-    (1, 1, 6),
-    (1, 2, 1),
-    (1, 2, 2),
-    (1, 2, 3),
-    (1, 2, 4),
-    (1, 2, 5),
-    (1, 3, 1),
-    (1, 3, 2),
-    (1, 3, 3),
-    (1, 3, 4),
-    (1, 3, 5),
-    (1, 4, 1),
-    (1, 4, 2),
-    (1, 4, 3),
-    (1, 4, 4),
-    (1, 4, 5),
-    (1, 5, 1),
-    (1, 5, 2),
-    (1, 5, 3),
-    (1, 5, 4),
-    (1, 5, 5),
-    (1, 6, 1),
-    (1, 6, 2),
-    (1, 6, 3),
-    (1, 6, 4),
-    (1, 6, 5),
-    (2, 1, 2),
-    (2, 1, 3),
-    (2, 1, 4),
-    (2, 1, 5),
-    (2, 5, 2),
-    (2, 5, 3),
-    (2, 5, 4),
-    (2, 5, 5),
-    (2, 6, 2),
-    (2, 6, 3),
-    (2, 6, 4),
-    (2, 6, 5),
-    (2, 7, 1),
-    (2, 7, 3),
-    (2, 7, 4),
-    (2, 7, 5),
-    (3, 1, 2),
-    (3, 1, 3),
-    (3, 1, 4),
-    (3, 1, 5),
-    (3, 5, 2),
-    (3, 5, 3),
-    (3, 5, 4),
-    (3, 5, 5),
-    (3, 6, 2),
-    (3, 6, 3),
-    (3, 6, 4),
-    (3, 6, 5),
+    -- ADMIN
+    (1, 1, 1), (1, 1, 2), (1, 1, 3), (1, 1, 4), (1, 1, 5), (1, 1, 6),
+    (1, 2, 1), (1, 2, 2), (1, 2, 3), (1, 2, 4), (1, 2, 5),
+    (1, 3, 1), (1, 3, 2), (1, 3, 3), (1, 3, 4), (1, 3, 5),
+    (1, 4, 1), (1, 4, 2), (1, 4, 3), (1, 4, 4), (1, 4, 5),
+    (1, 5, 1), (1, 5, 2), (1, 5, 3), (1, 5, 4), (1, 5, 5),
+    (1, 6, 1), (1, 6, 2), (1, 6, 3), (1, 6, 4), (1, 6, 5),
+    -- GESTOR
+    (2, 1, 2), (2, 1, 3), (2, 1, 4), (2, 1, 5),
+    (2, 5, 2), (2, 5, 3), (2, 5, 4), (2, 5, 5),
+    (2, 6, 2), (2, 6, 3), (2, 6, 4), (2, 6, 5),
+    (2, 7, 1), (2, 7, 3), (2, 7, 4), (2, 7, 5),
+    -- LECTOR
+    (3, 1, 2), (3, 1, 3), (3, 1, 4), (3, 1, 5),
+    (3, 5, 2), (3, 5, 3), (3, 5, 4), (3, 5, 5),
+    (3, 6, 2), (3, 6, 3), (3, 6, 4), (3, 6, 5),
     (3, 7, 1);

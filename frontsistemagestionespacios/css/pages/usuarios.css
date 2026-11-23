@@ -765,6 +765,102 @@ body.modal-open {
 }
 
 
+/* =========================================
+   CABECERA AZUL DE USUARIOS
+========================================= */
+
+.users-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+    padding: 26px 30px;
+    border-radius: 12px;
+    background: #194878;
+    box-shadow: 0 5px 18px rgba(25, 72, 120, 0.16);
+}
+
+.users-header .page-header-info {
+    min-width: 0;
+}
+
+.users-header .breadcrumb {
+    margin-bottom: 20px;
+}
+
+.users-header .breadcrumb a,
+.users-header .breadcrumb span {
+    color: #DCEAF8;
+}
+
+.users-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.users-title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+}
+
+.users-title-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.users-title-text h1 {
+    margin: 0 0 5px;
+    color: #FFFFFF;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.users-title-text p {
+    margin: 0;
+    color: #DCEAF8;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 640px) {
+    .users-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 20px;
+        padding: 22px 18px;
+    }
+
+    .users-header .breadcrumb {
+        margin-bottom: 16px;
+    }
+
+    .users-title-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .users-title-text h1 {
+        font-size: 22px;
+    }
+
+    .users-title-text p {
+        font-size: 13px;
+    }
+}
+
+
 /* ==========================================================
    MODAL DE CONFIRMACIÓN Y MENSAJES
    ========================================================== */
@@ -1028,6 +1124,36 @@ body.modal-open {
     cursor: not-allowed;
 }
 
+/* =========================================================
+   ESTADO VACÍO
+   ========================================================= */
+
+.users-empty {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.users-empty[hidden] {
+    display: none !important;
+}
+
+.users-empty [data-icon] {
+    display: inline-flex;
+    margin-bottom: 12px;
+}
+
+.users-empty h2 {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 16px;
+}
+
+.users-empty p {
+    margin: 0;
+    font-size: 13px;
+}
+
 
 @media (max-width: 640px) {
     .users-form-grid {
@@ -1121,6 +1247,87 @@ body.modal-open {
     }
 
     .users-bulk-actions button {
+        width: 100%;
+    }
+}
+
+/* PIE DEL MODAL DE USUARIOS */
+.users-modal-footer {
+    margin-top: 7px;
+    padding-top: 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid var(--line);
+}
+
+.users-modal-footer .btn:not(.btn-primary) {
+    border-color: var(--line-strong);
+    background: var(--surface);
+    color: var(--ink);
+}
+
+.users-modal-footer .btn:not(.btn-primary):hover {
+    background: var(--surface-alt);
+}
+
+.users-modal-overlay {
+    position: absolute;
+    inset: 0;
+}
+
+.users-modal-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* EDIFICIOS ASIGNADOS AL GESTOR */
+.users-buildings-group {
+    grid-column: 1 / -1;
+}
+
+.users-buildings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.users-building-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--surface-alt);
+}
+
+.users-building-name {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.users-building-year {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.users-buildings-empty {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+@media (max-width: 640px) {
+    .users-modal-footer {
+        flex-direction: column-reverse;
+    }
+
+    .users-modal-footer .btn {
         width: 100%;
     }
 }

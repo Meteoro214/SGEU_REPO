@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', iniciarUsuarios);
 function iniciarUsuarios() {
 
     const tabla = document.getElementById('users-table-body');
+    const tablaContainer = document.querySelector('.users-table-container');
+    const estadoVacio = document.getElementById('users-empty');
     const buscador = document.getElementById('users-search');
     const filtroRol = document.getElementById('users-filter-role');
     const contador = document.getElementById('users-count');
@@ -51,6 +53,9 @@ function iniciarUsuarios() {
     const formulario = document.getElementById('users-form');
     const botonGuardar = document.getElementById('users-save-button');
     const mensajeModal = document.getElementById('users-modal-message');
+
+    const edificiosGroup = document.getElementById('user-buildings-group');
+    const edificiosLista = document.getElementById('user-buildings');
 
 
     // -----------------------------------------------------
@@ -251,7 +256,7 @@ function iniciarUsuarios() {
             '3': traducir('usuarios.roles.consultation')
         };
 
-        return roles[String(idGrupo)] || 'Sin perfil';
+        return roles[String(idGrupo)] || traducir("usuarios.messages.noRole");
     }
 
 
@@ -411,6 +416,47 @@ function iniciarUsuarios() {
         }
     }
 
+    function mostrarEdificiosAsignados(usuario) {
+
+        if (!edificiosGroup || !edificiosLista) return;
+
+        const esGestor = String(usuario.id_grupo) === '2';
+
+        edificiosGroup.hidden = !esGestor;
+        edificiosLista.innerHTML = '';
+
+        if (!esGestor) return;
+
+        const edificios = Array.isArray(usuario.edificios_asignados)
+            ? usuario.edificios_asignados
+            : [];
+
+        if (edificios.length === 0) {
+            const vacio = document.createElement('p');
+            vacio.className = 'users-buildings-empty';
+            vacio.textContent = traducir('edificios.form.noAssignedBuildings');
+            edificiosLista.appendChild(vacio);
+            return;
+        }
+
+        edificios.forEach(edificio => {
+
+            const elemento = document.createElement('div');
+            elemento.className = 'users-building-item';
+
+            const nombre = document.createElement('span');
+            nombre.className = 'users-building-name';
+            nombre.textContent = edificio.nom_edificio || 'Edificio sin nombre';
+
+            const anho = document.createElement('span');
+            anho.className = 'users-building-year';
+            anho.textContent = edificio.anho_acad_edificio || '';
+
+            elemento.append(nombre, anho);
+            edificiosLista.appendChild(elemento);
+        });
+    }
+
 
     // -----------------------------------------------------
     // MODAL DE VISUALIZACIÓN Y EDICIÓN
@@ -468,8 +514,7 @@ function iniciarUsuarios() {
         formulario.querySelector('#user-role').value =
             String(usuario.id_grupo || '3');
 
-        document.getElementById('user-building').value =
-            usuario.id_edificio ?? '';
+        mostrarEdificiosAsignados(usuario);
 
         document.getElementById('user-status').value =
             String(usuario.activo_usuario) === '1'
@@ -491,7 +536,6 @@ function iniciarUsuarios() {
                 'user-status',
                 'user-dni',
                 'user-email',
-                'user-building'
             ];
 
             if (camposNoEditables.includes(campo.id)) {
@@ -564,7 +608,6 @@ function iniciarUsuarios() {
             dni: document.getElementById('user-dni').value.trim(),
             fech_nacimiento: fechaInput.value,
             id_grupo: formulario.querySelector('#user-role').value,
-            id_edificio: document.getElementById('user-building').value,
             activo_usuario: 1
         };
 
@@ -594,7 +637,7 @@ function iniciarUsuarios() {
 
             if (mensajeModal) {
                 mensajeModal.textContent =
-                traducir('usuarios.modal.editError')
+                traducir('usuarios.messages.editError')
                 .replace('{error}', error.message),
 
 
@@ -859,19 +902,23 @@ function iniciarUsuarios() {
 
         if (usuariosPagina.length === 0) {
 
-            const fila = document.createElement('tr');
+            if (tablaContainer) {
+                tablaContainer.hidden = true;
+            }
 
-            fila.innerHTML = `
-                <td colspan="5" class="users-empty">
-                    ${pestanaActual === 'active'
-                        ? 'No hay usuarios activos que coincidan con la búsqueda.'
-                        : 'No hay solicitudes que coincidan con la búsqueda.'}
-                </td>
-            `;
-
-            tabla.appendChild(fila);
+            if (estadoVacio) {
+                estadoVacio.hidden = false;
+            }
 
         } else {
+
+            if (tablaContainer) {
+                tablaContainer.hidden = false;
+            }
+
+            if (estadoVacio) {
+                estadoVacio.hidden = true;
+            }
 
             usuariosPagina.forEach(usuario => {
 
@@ -1421,7 +1468,42 @@ function iniciarUsuarios() {
     // INICIALIZACIÓN
     // -----------------------------------------------------
 
-    cargarUsuarios();
+    cargarUsuarios().then(() => {
+
+        // Comprobar si llegamos desde el buscador global.
+        const parametrosURL = new URLSearchParams(window.location.search);
+        const idUsuarioURL = parametrosURL.get('verUsuario');
+
+        if (!idUsuarioURL) return;
+
+        // Buscar el usuario entre los datos completos cargados.
+        const usuarioEncontrado = usuarios.find(
+            usuario => usuario.id === Number(idUsuarioURL)
+        );
+
+        if (!usuarioEncontrado) {
+            console.warn(
+                'No se ha encontrado el usuario solicitado:',
+                idUsuarioURL
+            );
+            return;
+        }
+
+        // Abrir el modal existente en modo observación.
+        abrirModal(usuarioEncontrado, 'view');
+
+        // Limpiar el parámetro para evitar que vuelva a abrirse
+        // al actualizar la página.
+        const nuevaURL = new URL(window.location.href);
+        nuevaURL.searchParams.delete('verUsuario');
+
+        window.history.replaceState(
+            {},
+            '',
+            nuevaURL.pathname + nuevaURL.search + nuevaURL.hash
+        );
+
+    });
 }
 
 

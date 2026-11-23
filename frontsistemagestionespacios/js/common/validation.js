@@ -25,11 +25,11 @@ export const REGLAS_CAMPOS = {
         anho_academico_facultad: { min: 9, max: 9, regex: "^(\\d{4})-(\\d{4})$", regexBusqueda: "^\\d{0,4}(-\\d{0,4})?$" }
     },
     edificio: {
-        nombre_edificio: { min: 2, max: 100, regex: "^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .'-]+$", regexBusqueda: null },
-        direccion_edificio: { min: 2, max: 255, regex: "^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'ºª/#-]+$", regexBusqueda: null },
-        telefono_edificio: { min: 9, max: 15, regex: "^[0-9+() -]{9,15}$", regexBusqueda: "^[0-9+() -]{0,15}$" },
+        nombre_edificio: { min: 3, max: 100, regex: "^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 ]+$", regexBusqueda: null },
+        direccion_edificio: { min: 3, max: 255, regex: "^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'ºª/-]+$", regexBusqueda: null },
+        telefono_edificio: { min: 9, max: 9, regex: "^[0-9]{9}$", regexBusqueda: "^[0-9]{0,9}$" },
         anho_academico_edificio: { min: 9, max: 9, regex: "^(\\d{4})-(\\d{4})$", regexBusqueda: "^\\d{0,4}(-\\d{0,4})?$" }
-    }
+    },
     //TODO COMPLETAR A FUTURO
 };
 

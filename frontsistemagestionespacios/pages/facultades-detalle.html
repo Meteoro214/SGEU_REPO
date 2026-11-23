@@ -41,6 +41,7 @@
             <main class="app-content faculty-detail-page">
 
                 <!-- CABECERA -->
+                
                 <section class="faculty-detail-header">
 
                     <div class="faculty-detail-header-info">
@@ -53,8 +54,7 @@
 
                                 <li>
                                     <span data-icon="chevron" aria-hidden="true"></span>
-                                    <a href="facultades.html"
-                                       data-i18n="facultades.title">
+                                    <a href="facultades.html" data-i18n="facultades.title">
                                         Facultades
                                     </a>
                                 </li>
@@ -63,20 +63,31 @@
                                     <span data-icon="chevron" aria-hidden="true"></span>
                                     <span
                                         id="faculty-detail-breadcrumb"
-                                        aria-current="page">
+                                        aria-current="page"
+                                    >
                                         Cargando...
                                     </span>
                                 </li>
                             </ol>
                         </nav>
 
-                        <h1 id="faculty-detail-name">
-                            Cargando facultad...
-                        </h1>
+                        <div class="faculty-detail-title-wrapper">
 
-                        <p data-i18n="facultades.detail.description">
-                            Información y espacios asociados a esta facultad.
-                        </p>
+                            <div class="faculty-detail-title-icon">
+                                <span data-icon="faculty" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="faculty-detail-title-text">
+                                <h1 id="faculty-detail-name">
+                                    Cargando facultad...
+                                </h1>
+
+                                <p data-i18n="facultades.detail.description">
+                                    Información y espacios asociados a esta facultad.
+                                </p>
+                            </div>
+
+                        </div>
 
                     </div>
 
@@ -129,7 +140,7 @@
                             </div>
                         </div>
 
-                        <form id="faculty-detail-edit-form" class="faculty-detail-form">
+                        <form id="faculty-detail-edit-form" class="faculty-detail-form" novalidate>
 
                             <input type="hidden" id="faculty-detail-edit-id">
 
@@ -196,7 +207,6 @@
                                     id="faculty-detail-edit-save"
                                     data-i18n="common.saveChanges"
                                     data-require="ADMIN"
-                                    data-i18n="common.saveChanges"
                                 >
                                     Guardar cambios
                                 </button>

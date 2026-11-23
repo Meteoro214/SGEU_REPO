@@ -93,6 +93,10 @@ const icons = {
         <path d="M5 12h14M13 6l6 6-6 6"/>
     `,
 
+    arrowDown: `
+        <path d="M12 5v14M6 13l6 6 6-6"/>
+    `,
+
     check: `
         <path d="m5 12 4 4L19 6"/>
     `,

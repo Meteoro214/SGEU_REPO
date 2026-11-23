@@ -1,111 +1,38 @@
-# Instalación de SGEU
+## Actualización desde la versión anterior
 
-Scripts para instalar y desinstalar **SGEU (Sistema de Gestión de Espacios Universitarios)** en un servidor
-Debian 11 con Apache, PHP y MariaDB.
-
-| Archivo | Descripción |
-|---|---|
-| `install.sh` | Instala el frontend y el backend, crea la base de datos y genera la configuración |
-| `uninstall.sh` | Deshace todo lo que hizo `install.sh` |
-| `sgeu_install.env` | Lo crea `install.sh`. Guarda lo instalado para que `uninstall.sh` sepa qué borrar. **No lo borres** |
-
----
-
-## Requisitos
-
-- **Debian 11**
-- **Apache 2** con el módulo de PHP (`libapache2-mod-php`)
-- **PHP 7.2 o superior** con la extensión `mysqli` (`php-mysql`)
-- **MariaDB**
-- Acceso como **root** (o `sudo`)
-- `curl` (opcional, para la comprobación final)
-
-El instalador **no instala paquetes ni modifica la configuración del sistema**. Si falta algo, lo indica y se detiene.
-Para instalar lo necesario en un Debian 11 limpio:
+Si SGEU ya está instalado con el `install.sh` de un entregable anterior, **no hace falta desinstalar**. En caso de que no esté instalado SGEU, **debe instalarlo** mediante el script de instalación `install.sh` (disponible en el entregable 1).
 
 ```bash
-apt install apache2 libapache2-mod-php php php-mysql mariadb-server curl
+sudo bash install.sh
 ```
 
----
-
-## Instalación
-
-En el directorio donde deposito el script, ejecute el siguiente comando (no debe estar en la misma carpeta, esto es solo un ejemplo de uso):
+Si ya está instalado, desde la carpeta donde está `sgeu_install.env` (la misma desde la que se ejecutó `install.sh`):
 
 ```bash
-sudo bash setupsistemagestionespacios/install.sh
+sudo bash update.sh
 ```
 
-El script comprueba los requisitos y hace estas preguntas. **Pulsando Enter se usa el valor entre corchetes.**
+Igual que `uninstall.sh`, no pregunta las carpetas: las lee de `sgeu_install.env`. Si no encuentra ese fichero junto
+al script, se detiene.
 
-| Pregunta | Por defecto | Notas |
-|---|---|---|
-| DocumentRoot de Apache | `/var/www/html` | Se lee de la configuración de Apache |
-| Carpeta del frontend | `sgeu` | Ruta dentro del DocumentRoot, a cualquier nivel (p. ej. `asignaturas/pdp/sgeu`) |
-| Carpeta del backend | `sgeu-api` | Distinta de la del frontend y no dentro de ella |
-| Nombre o IP del servidor | `localhost` | El que se escribirá en el navegador. Si se accede desde otro equipo, la IP del servidor |
-| Usuario administrador de MariaDB | `root` | |
-| Contraseña del administrador | *(vacía)* | En Debian, root entra sin contraseña al ejecutar como root |
-| Base de datos | `sgeu` | |
-| Base de datos de pruebas | `sgeu_tests` | |
-| Usuario de la base de datos | `sgeu_user` | Su contraseña se genera automáticamente |
+El actualizador:
 
-Antes de instalar muestra un resumen y pide confirmación. Si las carpetas o las bases de datos ya existen, avisa de
-que se sustituirán.
+1. **Localiza la instalación** con `sgeu_install.env`.
+2. **Descarga la versión nueva** (rama `entregable_3`) y muestra qué ficheros son nuevos (`+`), cuáles cambian (`~`) y
+   cuáles se borran (`-`) porque ya no existen en la versión nueva. También indica el script SQL de migración que se
+   va a ejecutar. Pide confirmación.
+3. **Hace una copia de seguridad** de las dos carpetas en `/var/backups/sgeu/`.
+4. **Copia solo lo que cambia.** Nunca toca `<backend>/.env` ni `<frontend>/js/config.js`.
+5. **Migra la base de datos** con `backsistemagestionespacios/db/migraciones/migracion_19N.sql`, antes de copiar los
+   ficheros:
+   - Lee las credenciales de `<backend>/.env`.
+   - Hace antes una copia de `sgeu` y `sgeu_tests` en `/var/backups/sgeu/<copia>/`.
+   - Aplica la migración a las dos bases de datos, conservando los datos existentes.
 
-Al terminar comprueba que la API responde y muestra la dirección de acceso:
+   Si se responde que no, la migración se omite.
+6. **Comprueba que la API responde.** Si algo falla, restaura automáticamente la versión anterior de los ficheros y
+   de las bases de datos.
+7. Guarda la versión instalada en `sgeu_install.env`, para que `uninstall.sh` y las próximas actualizaciones sigan
+   funcionando.
 
-```
-==========================================
- ¡Instalación completada!
-==========================================
-Abre en el navegador:  http://localhost/sgeu/
-Usuario inicial:       admin@uvigo.es / admin
-```
-
----
-
-## Acceso
-
-Abrir en el navegador la dirección que muestra el instalador: `http://<servidor>/<carpeta del frontend>/`
-
-| Usuario | Contraseña | Perfil |
-|---|---|---|
-| `admin@uvigo.es` | `admin` | Administración |
-
-> La raíz del servidor (`http://<servidor>/`) sigue mostrando la página por defecto de Apache: el instalador no la
-> modifica. SGEU está en la carpeta indicada durante la instalación.
-
----
-
-## Qué hace el instalador
-
-1. **Comprueba** Apache, PHP (versión y `mysqli`), el módulo de PHP en Apache y MariaDB.
-2. **Crea en MariaDB** las bases de datos `sgeu` y `sgeu_tests` y el usuario `sgeu_user`, con permisos solo sobre ellas,
-   y carga las tablas y los datos iniciales desde `backsistemagestionespacios/db/`.
-3. **Copia** el frontend y el backend en las carpetas indicadas del DocumentRoot.
-4. **Genera solo ficheros de configuración**:
-
-| Fichero | Contenido |
-|---|---|
-| `<backend>/.env` | Conexión a la base de datos. Solo lo pueden leer root y Apache (`640 root:www-data`) |
-| `<frontend>/js/config.js` | Dirección de la API (`API_URL`) |
-
-No modifica ningún otro fichero del código ni de la configuración del sistema.
-
----
-
-## Desinstalación
-
-```bash
-sudo bash setupsistemagestionespacios/uninstall.sh
-```
-
-Pide confirmación y los datos del administrador de MariaDB, y elimina:
-
-- las carpetas del frontend y del backend (y las carpetas vacías que creó el instalador),
-- las bases de datos `sgeu` y `sgeu_tests` con todos sus datos,
-- el usuario `sgeu_user`.
-
-Para reinstalar desde cero basta con volver a ejecutar `install.sh`, con o sin desinstalar antes.
+Al terminar, recarga el navegador con **Ctrl+F5** para que no use ficheros antiguos de la caché.

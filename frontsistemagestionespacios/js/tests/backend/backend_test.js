@@ -88,7 +88,6 @@ class Backend_Test {
             } : {};
             const facultades = this.fixtures ? this.fixtures.facultades : null;
             const facultad = this.fixtures ? this.fixtures.facultad : null;
-
             const facultadesFixture = {
                 '__FIXTURE_ID_FACULTAD_1__': facultades ? facultades.primera.id : null,
                 '__FIXTURE_ID_FACULTAD_2__': facultades ? facultades.segunda.id : null,
@@ -99,12 +98,32 @@ class Backend_Test {
                 '__FIXTURE_NOM_FACULTAD__': facultad ? facultad.nombre : null,
                 '__FIXTURE_ANHO_FACULTAD__': facultad ? facultad.anho : null
             };
+            const edificios = this.fixtures ? this.fixtures.edificios : null;
+            const edificio = this.fixtures ? this.fixtures.edificio : null;
+
+            const edificiosFixture = {
+                '__FIXTURE_ID_EDIFICIO_1__': edificios ? edificios.primera.id : null,
+                '__FIXTURE_ID_EDIFICIO_2__': edificios ? edificios.segunda.id : null,
+                '__FIXTURE_ID_EDIFICIO_3__': edificios && edificios.tercera ? edificios.tercera.id : null
+            };
+
+            const edificioFixture = {
+                '__FIXTURE_NOM_EDIFICIO__': edificio ? edificio.nombre : null,
+                '__FIXTURE_ANHO_EDIFICIO__': edificio ? edificio.anho : null,
+                '__FIXTURE_NOM_EDIFICIO_1__': edificios ? edificios.primera.nombre : null,
+                '__FIXTURE_NOM_EDIFICIO_2__': edificios ? edificios.segunda.nombre : null,
+                '__FIXTURE_ANHO_EDIFICIO_1__': edificios ? edificios.primera.anho : null,
+                '__FIXTURE_ANHO_EDIFICIO_2__': edificios ? edificios.segunda.anho : null
+            };
+            
             const marcadoresFixture = {
                 ...gruposFixture,
                 ...usuariosReactivarFixture,
                 ...rechazar,
                 ...facultadFixture,
-                ...facultadesFixture
+                ...facultadesFixture,
+                ...edificioFixture,
+                ...edificiosFixture
             };
             
             // Sustituye los marcadores individuales.
@@ -128,6 +147,15 @@ class Backend_Test {
                         : id;
                 });
             }
+
+            if (Array.isArray(overridesVisibles.edificios)) {
+                overridesVisibles.edificios = overridesVisibles.edificios.map((id) => {
+                    return Object.prototype.hasOwnProperty.call(marcadoresFixture, id)
+                        ? marcadoresFixture[id]
+                        : id;
+                });
+            }
+
             const valorprueba = Object.keys(overridesVisibles)
                 .map((clave) => clave + '=' + JSON.stringify(overridesVisibles[clave]))
                 .join(' ');
@@ -144,7 +172,7 @@ class Backend_Test {
                 this.filasCreadas.push(resultado.filaCreada);
             }
 
-            // Almacena todas las facultades creadas mediante DUPLICAR.
+            // Almacena todas las filas creadas mediante DUPLICAR.
             if (resultado.filasCreadas && resultado.filasCreadas.length > 0) {
                 this.filasCreadas.push(...resultado.filasCreadas);
             }
@@ -200,7 +228,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function obtenerNombreEntidadTraducido(entidad) {
         if (!entidad) return '';
         // Si se pasa facultad como entidad la transforma plurar por la clave del json d eidioma
-        const claveEntidad = entidad.toLowerCase() === 'facultad' ? 'facultades' : entidad.toLowerCase();
+        const entidadNormalizada = entidad.toLowerCase();
+        const claveEntidad = ['facultad', 'edificio'].includes(entidadNormalizada)
+            ? entidadNormalizada + 's'
+            : entidadNormalizada;
         const clave = 'tests.entities.' + claveEntidad;
         if (typeof window.traducir === 'function') {
             const trad = window.traducir(clave);

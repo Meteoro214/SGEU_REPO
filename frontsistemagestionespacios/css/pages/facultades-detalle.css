@@ -85,6 +85,135 @@
     margin-top: 3%;
 }
 
+
+/* =========================================
+   CABECERA AZUL DEL DETALLE DE FACULTAD
+========================================= */
+
+.faculty-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    background: #194878;
+    padding: 26px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(15, 40, 70, 0.12);
+}
+
+.faculty-detail-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+}
+
+.faculty-detail-header .breadcrumb {
+    margin: 0;
+}
+
+.faculty-detail-header .breadcrumb a,
+.faculty-detail-header .breadcrumb span {
+    color: #DCEAF8;
+}
+
+.faculty-detail-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.faculty-detail-title-icon {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    color: #FFFFFF;
+}
+
+.faculties-title-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.faculty-detail-title-text h1 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 28px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.faculty-detail-title-text p {
+    margin: 6px 0 0;
+    color: #DCEAF8;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.faculty-detail-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.faculty-detail-header-actions .btn {
+    min-height: 44px;
+    height: 44px;
+    box-sizing: border-box;
+    margin: 0;
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #FFFFFF;
+    color: #194878;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.faculty-detail-header-actions .btn:hover {
+    background: #EAF2FA;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 640px) {
+    .faculty-detail-header {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 22px 18px;
+    }
+
+    .faculty-detail-title-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .faculty-detail-title-text h1 {
+        font-size: 22px;
+    }
+
+    .faculty-detail-header-actions {
+        display: flex;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .faculty-detail-header-actions .btn {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        white-space: nowrap;
+    }
+}
+
+
 /* ------------------------------------------------------------
    CABECERA DE LAS TARJETAS
    ------------------------------------------------------------ */
@@ -388,5 +517,163 @@
 
     .faculty-detail-form-actions .btn {
         width: 100%;
+    }
+}
+
+
+/* =========================================================
+   CABECERA AZUL - MISMO DISEÑO QUE EL LISTADO DE FACULTADES
+   ========================================================= */
+
+.faculty-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+    padding: 26px 30px;
+    border-radius: 12px;
+    background: #194878;
+    box-shadow: 0 5px 18px rgba(25, 72, 120, 0.16);
+}
+
+.faculty-detail-header-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0;
+    min-width: 250px;
+}
+
+.faculty-detail-header .breadcrumb {
+    margin: 0 0 20px;
+}
+
+.faculty-detail-header .breadcrumb a,
+.faculty-detail-header .breadcrumb span {
+    color: #DCEAF8;
+}
+
+.faculty-detail-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.faculty-detail-title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+}
+
+.faculty-detail-title-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.faculty-detail-title-text h1 {
+    margin: 0 0 5px;
+    color: #FFFFFF;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.faculty-detail-title-text p {
+    margin: 0;
+    color: #DCEAF8;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* BOTONES */
+
+.faculty-detail-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 0;
+}
+
+.faculty-detail-header-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 16px;
+    border: 1px solid #FFFFFF;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #194878;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.faculty-detail-header-actions .btn:hover {
+    background: #EAF2FA;
+    border-color: #EAF2FA;
+    color: #12385F;
+}
+
+.faculty-detail-header-actions .btn svg {
+    width: 17px;
+    height: 17px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 640px) {
+
+    .faculty-detail-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 20px;
+        padding: 22px 18px;
+    }
+
+    .faculty-detail-header .breadcrumb {
+        margin-bottom: 16px;
+    }
+
+    .faculty-detail-title-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .faculty-detail-title-text h1 {
+        font-size: 22px;
+    }
+
+    .faculty-detail-title-text p {
+        font-size: 13px;
+    }
+
+    .faculty-detail-header-actions {
+        display: flex;
+        width: 100%;
+        padding-top: 0;
+        gap: 10px;
+    }
+
+    .faculty-detail-header-actions .btn {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        padding: 0 8px;
+        white-space: nowrap;
     }
 }

@@ -2,5 +2,808 @@
   Archivo: edificios.html
   Descripción: Página de gestión de edificios.
   Permite consultar y gestionar los edificios y su asociación
-  con las facultades correspondientes.
+  con las edificios correspondientes.
 -->
+  
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Consulta y gestión de edificios del Sistema de Gestión de Espacios Universitarios">
+
+    <title data-i18n="edificios.pageTitle"></title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components/app-layout.css">
+    <link rel="stylesheet" href="../css/components/tables.css">
+    <link rel="stylesheet" href="../css/pages/edificios.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- Scripts comunes -->
+    <script type="module" src="../js/common/navigation.js" defer></script>
+    <script src="../js/common/icons.js" defer></script>
+    <script src="../js/common/modal.js" defer></script>
+
+    <!-- Internacionalización -->
+    <script type="module" src="../js/i18n/i18n.js"></script>
+
+    <!-- Lógica de edificios -->
+    <script type="module" src="../js/modules/edificios.js" defer></script>
+</head>
+
+<body data-page="edificios">
+
+    <div class="app-layout">
+
+        <aside class="app-sidebar" id="app-sidebar"></aside>
+
+        <div class="app-main">
+
+            <header class="app-topbar"></header>
+
+            <main class="app-content buildings-page">
+
+                <!-- CABECERA -->
+                
+                <section class="buildings-header">
+
+                    <div class="page-header-info">
+
+                        <nav class="breadcrumb" aria-label="Ruta de navegación">
+                            <ol>
+                                <li>
+                                    <a href="bienvenida.html">SGEU</a>
+                                </li>
+
+                                <li>
+                                    <span data-icon="chevron" aria-hidden="true"></span>
+                                    <span aria-current="page" data-i18n="edificios.title">
+                                    </span>
+                                </li>
+                            </ol>
+                        </nav>
+
+                        <div class="buildings-title-wrapper">
+
+                            <div class="buildings-title-icon">
+                                <span data-icon="building" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="buildings-title-text">
+                                <h1 data-i18n="edificios.title">
+                                </h1>
+
+                                <p data-i18n="edificios.description">
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Solo ADMIN puede crear edificios -->
+                    <div class="page-header-actions">
+
+                        <button
+                            type="button"
+                            id="buildings-duplicate-button"
+                            class="btn"
+                            data-require="ADMIN"
+                        >
+                            <span data-icon="copy" aria-hidden="true"></span>
+                            <span data-i18n="edificios.duplicate.title"></span>
+                        </button>
+
+                        <button
+                            type="button"
+                            id="buildings-new-button"
+                            class="btn btn-primary"
+                            data-require="ADMIN"
+                        >
+                            <span data-icon="plus" aria-hidden="true"></span>
+                            <span data-i18n="edificios.newButton">
+                            </span>
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- CONTENIDO -->
+                <section class="buildings-content">
+
+                    <!-- BÚSQUEDA Y FILTROS -->
+                    <div class="buildings-toolbar">
+
+                        <!-- Búsqueda por nombre -->
+                        <div class="buildings-search">
+                            <label for="buildings-search" data-i18n="edificios.search">
+                            </label>
+
+                            <div class="input-wrap">
+                                <span data-icon="search" aria-hidden="true"></span>
+                                <input
+                                    type="search"
+                                    id="buildings-search"
+                                    class="field-input"
+                                    placeholder="Buscar por nombre..."
+                                    data-i18n-ph="edificios.searchPlaceholder"
+                                    autocomplete="off"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Acciones de la barra -->
+                        <div class="buildings-toolbar-actions">
+                            <button
+                                type="button"
+                                id="buildings-filter-toggle"
+                                class="buildings-filter-button"
+                                aria-expanded="false"
+                                aria-controls="buildings-filter-panel"
+                            >
+                                <span data-icon="filter" aria-hidden="true"></span>
+                                <span data-i18n="common.filter"></span>
+                            </button>
+
+                            <p id="buildings-count" aria-live="polite">
+                            </p>
+                        </div>
+
+                        <!-- Panel desplegable -->
+                        <div id="buildings-filter-panel" class="buildings-filter-panel" hidden>
+                            <div class="buildings-filter">
+                                <label for="buildings-year-filter" data-i18n="edificios.filter.academicYear">
+                                </label>
+
+                                <select id="buildings-year-filter" class="field-input">
+                                    <option value="" data-i18n="edificios.filter.allYears">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="buildings-filter-actions">
+                                <button type="button" id="buildings-filter-reset" class="btn" data-i18n="edificios.filter.clearFilters">
+                                    Limpiar filtros
+                                </button>
+
+                                <button type="button" id="buildings-filter-apply" class="btn btn-primary" data-i18n="edificios.filter.applyFilters">
+                                    Aplicar filtros
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- MENSAJES -->
+                    <p
+                        id="buildings-message"
+                        class="buildings-message"
+                        role="status"
+                        aria-live="polite"
+                        hidden
+                    ></p>
+
+
+                    <!-- TABLA -->
+                    <div class="buildings-table-container table-container">
+
+                        <table class="buildings-table data-table align-custom">
+
+                            <thead>
+                                <tr>
+
+                                    <th scope="col" data-i18n="edificios.table.id">
+                                        ID
+                                    </th>
+
+                                    <th scope="col" data-i18n="edificios.table.name">
+                                        Edificio
+                                    </th>
+
+                                    <th scope="col" data-i18n="edificios.table.managers">
+                                        Gestores
+                                    </th>
+
+                                    <th scope="col" data-i18n="edificios.table.address">
+                                        Dirección
+                                    </th>
+
+                                    <th scope="col" data-i18n="edificios.table.academicYear">
+                                        Año académico
+                                    </th>
+
+                                    <th scope="col" data-i18n="edificios.table.actions">
+                                        Acciones
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="buildings-table-body">
+                                <!-- Las edificios se generan desde edificios.js -->
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- ESTADO VACÍO -->
+                    <div
+                        id="buildings-empty"
+                        class="buildings-empty"
+                        hidden
+                    >
+
+                        <span data-icon="building" aria-hidden="true"></span>
+
+                        <h2 data-i18n="edificios.emptyTitle">
+                            No hay edificios
+                        </h2>
+
+                        <p data-i18n="edificios.empty">
+                            No se han encontrado edificios.
+                        </p>
+
+                    </div>
+
+
+                    <!-- PAGINACIÓN -->
+                    <nav
+                        id="buildings-pagination"
+                        class="buildings-pagination"
+                        aria-label="Paginación de edificios"
+                        data-i18n-aria-label="common.pagination"
+                    ></nav>
+
+                </section>
+
+            </main>
+
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         MODAL DE CREACIÓN Y EDICIÓN
+         ===================================================== -->
+
+    <div
+        id="buildings-modal"
+        class="buildings-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="buildings-modal-title"
+        aria-describedby="buildings-modal-description"
+        hidden
+    >
+
+        <div class="buildings-modal-overlay" data-modal-close></div>
+
+        <div class="buildings-modal-content">
+
+            <!-- CABECERA -->
+            <div class="buildings-modal-header">
+
+                <div>
+
+                    <h2
+                        id="buildings-modal-title"
+                        data-i18n="edificios.modal.newTitle"
+                    >
+                        Nueva edificio
+                    </h2>
+
+                    <p
+                        id="buildings-modal-description"
+                        data-i18n="edificios.modal.newDescription"
+                    >
+                        Introduce los datos de el edificio.
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="buildings-modal-close"
+                    data-modal-close
+                    aria-label="Cerrar"
+                    data-i18n-aria-label="common.close"
+                >
+                    <span data-icon="close" aria-hidden="true"></span>
+                </button>
+
+            </div>
+
+
+            <!-- FORMULARIO -->
+            <form id="buildings-form" novalidate>
+
+                <input
+                    type="hidden"
+                    id="buildings-id"
+                    name="id_edificio"
+                >
+
+                <div class="buildings-modal-body">
+
+                    <div class="buildings-form-grid">
+
+                        <!-- ID -->
+                        <div
+                            class="buildings-form-group"
+                            id="buildings-id-group"
+                            hidden
+                        >
+
+                            <label
+                                for="buildings-id-display"
+                                data-i18n="edificios.form.id"
+                            >
+                                ID de edificio
+                            </label>
+
+                            <input
+                                type="text"
+                                id="buildings-id-display"
+                                class="field-input"
+                                disabled
+                            >
+
+                        </div>
+
+
+                        <!-- NOMBRE -->
+                        <div class="buildings-form-group">
+
+                            <label
+                                for="buildings-name"
+                                data-i18n="edificios.form.name"
+                            >
+                                Nombre de el edificio
+                            </label>
+
+                            <input
+                                type="text"
+                                id="buildings-name"
+                                name="nom_edificio"
+                                class="field-input"
+                                maxlength="100"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <!-- AÑO ACADÉMICO -->
+                        <div class="buildings-form-group">
+
+                            <label
+                                for="buildings-academic-year"
+                                data-i18n="edificios.form.academicYear"
+                            >
+                                Año académico
+                            </label>
+
+                            <input
+                                type="text"
+                                id="buildings-academic-year"
+                                name="anho_acad_edificio"
+                                class="field-input"
+                                maxlength="9"
+                                data-i18n-ph="edificios.form.academicYearPlaceholder"
+                                pattern="[0-9]{4}-[0-9]{4}"
+                            >
+
+                            <p
+                                class="buildings-field-help"
+                                id="buildings-academic-year-help"
+                                data-i18n="edificios.form.academicYearHelp"
+                            >
+                                Introduce el año académico de el edificio en formato AAAA-AAAA.
+                            </p>
+
+                        </div>
+
+                        <!-- DIRECCIÓN -->
+                        <div class="buildings-form-group">
+
+                            <label for="buildings-address"
+                                  data-i18n="edificios.form.address">
+                                Dirección
+                            </label>
+
+                            <input
+                                type="text"
+                                id="buildings-address"
+                                name="dir_edificio"
+                                class="field-input"
+                                maxlength="255"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                        <!-- TELÉFONO -->
+                        <div class="buildings-form-group">
+
+                            <label for="buildings-phone"
+                                  data-i18n="edificios.form.phone">
+                                Teléfono
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="buildings-phone"
+                                name="tel_edificio"
+                                class="field-input"
+                                maxlength="15"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                        <!-- GESTORES DEL EDIFICIO: SOLO ADMIN -->
+                        <div
+                            class="buildings-form-group"
+                            id="buildings-managers-group"
+                            data-require="ADMIN"
+                        >
+                            <label
+                                for="buildings-managers"
+                                data-i18n="edificios.form.managers"
+                            >
+                                Gestores del edificio
+                            </label>
+
+                            <select
+                                id="buildings-managers"
+                                name="gestores[]"
+                                class="field-input"
+                                multiple
+                                size="8"
+                            ></select>
+
+                            <p
+                                class="buildings-field-help"
+                                data-i18n="edificios.form.managersHelp"
+                            >
+                                Puedes seleccionar varios gestores. Mantén pulsada la tecla Ctrl o Cmd para seleccionar varios.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- MENSAJE DEL FORMULARIO -->
+                    <p
+                        id="buildings-modal-message"
+                        class="buildings-message"
+                        role="alert"
+                        aria-live="assertive"
+                        hidden
+                    ></p>
+
+                </div>
+
+
+                <!-- PIE -->
+                <div class="buildings-modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn"
+                        data-modal-close
+                    >
+                        <span data-i18n="common.cancel">
+                            Cancelar
+                        </span>
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="buildings-save-button"
+                    >
+                        <span data-i18n="common.save">
+                            Guardar
+                        </span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    
+    
+    <!-- =====================================================
+        MODAL DE DUPLICACIÓN DE EDIFICIOS
+        ===================================================== -->
+
+    <div
+        id="buildings-duplicate-modal"
+        class="buildings-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="buildings-duplicate-title"
+        aria-describedby="buildings-duplicate-description"
+        hidden
+    >
+        <div class="buildings-modal-overlay" data-modal-close></div>
+
+        <div class="buildings-modal-content">
+
+            <div class="buildings-modal-header">
+                <div>
+                    <h2
+                        id="buildings-duplicate-title"
+                        data-i18n="edificios.duplicate.title"
+                    >
+                        Duplicar edificios
+                    </h2>
+
+                    <p
+                        id="buildings-duplicate-description"
+                        data-i18n="edificios.duplicate.description"
+                    >
+                        Crea edificios para un nuevo año académico a partir de los existentes.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="buildings-modal-close"
+                    data-modal-close
+                    aria-label="Cerrar"
+                    data-i18n-aria-label="common.close"
+                >
+                    <span data-icon="close" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div class="buildings-modal-body">
+
+                <!-- MODO DE DUPLICACIÓN -->
+                <div class="buildings-form-group">
+                    <label
+                        for="buildings-duplicate-mode"
+                        data-i18n="edificios.duplicate.mode"
+                    >
+                        ¿Cómo quieres seleccionar los edificios?
+                    </label>
+
+                    <select
+                        id="buildings-duplicate-mode"
+                        class="field-input"
+                    >
+                        <option
+                            value="edificio"
+                            data-i18n="edificios.duplicate.byFaculty"
+                        >
+                            Seleccionar edificios
+                        </option>
+
+                        <option
+                            value="anho"
+                            data-i18n="edificios.duplicate.byYear"
+                        >
+                            Seleccionar año académico
+                        </option>
+                    </select>
+                </div>
+
+                <!-- SELECCIÓN DE EDIFICIOS -->
+                <div
+                    class="buildings-form-group"
+                    id="buildings-duplicate-building-group"
+                >
+                    <label
+                        for="buildings-duplicate-buildings"
+                        data-i18n="edificios.duplicate.faculties"
+                    >
+                        Edificios que quieres duplicar
+                    </label>
+
+                    <select
+                        id="buildings-duplicate-buildings"
+                        class="field-input"
+                        multiple
+                        size="7"
+                    ></select>
+
+                    <p
+                        class="buildings-field-help"
+                        data-i18n="edificios.duplicate.facultiesHelp"
+                    >
+                        Puedes seleccionar varios edificios de distintos años.
+                        Mantén pulsada Ctrl o Cmd para seleccionar varios.
+                    </p>
+                </div>
+
+                <!-- SELECCIÓN POR AÑO -->
+                <div
+                    class="buildings-form-group"
+                    id="buildings-duplicate-year-group"
+                    hidden
+                >
+                    <label
+                        for="buildings-duplicate-year"
+                        data-i18n="edificios.duplicate.year"
+                    >
+                        Año académico de origen
+                    </label>
+
+                    <select
+                        id="buildings-duplicate-year"
+                        class="field-input"
+                    >
+                        <option
+                            value=""
+                            data-i18n="edificios.duplicate.selectYear"
+                        >
+                            Selecciona un año académico
+                        </option>
+                    </select>
+                </div>
+
+                <!-- RESUMEN -->
+                <div
+                    class="buildings-form-group"
+                    id="buildings-duplicate-summary"
+                    aria-live="polite"
+                >
+                    <p>
+                        <span data-i18n="edificios.duplicate.summary">
+                            Edificios que se crearán: {count}
+                        </span>
+                    </p>
+
+                    <ul id="buildings-duplicate-summary-list"></ul>
+                </div>
+
+                <!-- AÑO DESTINO -->
+                <div class="buildings-form-group">
+                    <label
+                        for="buildings-duplicate-target-year"
+                        data-i18n="edificios.duplicate.targetYear"
+                    >
+                        Nuevo año académico
+                    </label>
+
+                    <input
+                        type="text"
+                        id="buildings-duplicate-target-year"
+                        class="field-input"
+                        maxlength="9"
+                        data-i18n-ph="edificios.form.academicYearPlaceholder"
+                        pattern="[0-9]{4}-[0-9]{4}"
+                    >
+
+                    <p
+                        class="buildings-field-help"
+                        data-i18n="edificios.duplicate.targetYearHelp"
+                    >
+                        Debe ser posterior a los años académicos de los edificios seleccionados.
+                    </p>
+                </div>
+
+                <!-- MENSAJE -->
+                <p
+                    id="buildings-duplicate-message"
+                    class="buildings-message"
+                    role="alert"
+                    aria-live="assertive"
+                    hidden
+                ></p>
+            </div>
+
+            <div class="buildings-modal-footer">
+                <button
+                    type="button"
+                    class="btn"
+                    data-modal-close
+                    data-i18n="common.cancel"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="buildings-duplicate-confirm"
+                    data-require="ADMIN"
+                    data-i18n="edificios.duplicate.confirm"
+                >
+                    Duplicar
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- =====================================================
+         MODAL DE CONFIRMACIÓN Y MENSAJES
+         ===================================================== -->
+
+    <div
+        id="buildings-feedback-modal"
+        class="buildings-feedback-modal"
+        hidden
+    >
+
+        <div class="buildings-feedback-overlay"></div>
+
+        <section
+            class="buildings-feedback-content"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="buildings-feedback-title"
+            aria-describedby="buildings-feedback-text"
+        >
+
+            <div
+                class="buildings-feedback-icon"
+                id="buildings-feedback-icon"
+            >
+                <span data-icon="warning" aria-hidden="true"></span>
+            </div>
+
+            <div class="buildings-feedback-header">
+
+                <h2 id="buildings-feedback-title">
+                    <span data-i18n="edificios.confirmations.title">
+                        Confirmar acción
+                    </span>
+                </h2>
+
+                <p id="buildings-feedback-text">
+                    <span data-i18n="edificios.confirmations.deleteMessage">
+                        ¿Estás seguro de que deseas eliminar esta edificio?
+                    </span>
+                </p>
+
+            </div>
+
+            <div class="buildings-feedback-actions">
+
+                <button
+                    type="button"
+                    class="btn"
+                    id="buildings-feedback-cancel"
+                >
+                    <span data-i18n="common.cancel">
+                        Cancelar
+                    </span>
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="buildings-feedback-confirm"
+                >
+                    <span data-i18n="common.confirm">
+                        Confirmar
+                    </span>
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+</html>

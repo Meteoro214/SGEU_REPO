@@ -17,9 +17,9 @@ class usuario_SERVICE extends appServiceBase{
 
 	function inicializarRest(){
 
-		$this->listaAtributos = array('id_usuario', 'nom_usuario', 'apell_usuario', 'email', 'pass', 'telefono', 'dni', 'fech_nacimiento', 'id_grupo', 'id_edificio', "activo_usuario");
+		$this->listaAtributos = array('id_usuario', 'nom_usuario', 'apell_usuario', 'email', 'pass', 'telefono', 'dni', 'fech_nacimiento', 'id_grupo', "activo_usuario");
 
-		$this->listaAtributosSelect = array('id_usuario', 'nom_usuario', 'apell_usuario', 'email', 'pass', 'telefono', 'dni', 'fech_nacimiento', 'id_grupo', 'id_edificio', "activo_usuario");
+		$this->listaAtributosSelect = array('id_usuario', 'nom_usuario', 'apell_usuario', 'email', 'pass', 'telefono', 'dni', 'fech_nacimiento', 'id_grupo', "activo_usuario");
 
 		$this->notnull = array(
 			'ADD' => array('nom_usuario', 'apell_usuario', 'email', 'pass', 'dni', 'id_grupo', "activo_usuario"),
@@ -84,7 +84,7 @@ class usuario_SERVICE extends appServiceBase{
 			unset($this->modelo->valores['pass']);
 		}
 
-		// Gestionar la asignación de edificio cuando cambia el rol.
+		// Gestionar las asignaciones cuando cambia el rol.
 		if (isset($this->modelo->valores['id_grupo'])) {
 
 			$idUsuario = intval(
@@ -98,42 +98,79 @@ class usuario_SERVICE extends appServiceBase{
 				$map = new mapping('usuario');
 
 				$resultado = $map->lanzarqueryconresults(
-					"SELECT id_grupo FROM usuario WHERE id_usuario = {$idUsuario} LIMIT 1"
+					"SELECT id_grupo
+					FROM usuario
+					WHERE id_usuario = {$idUsuario}
+					LIMIT 1"
 				);
 
-				if ($resultado['ok'] && !empty($resultado['resource'])) {
-
-					$grupoAnterior = intval(
-						$resultado['resource'][0]['id_grupo']
+				if (!$resultado['ok'] || empty($resultado['resource'])) {
+					return array(
+						'ok' => false,
+						'code' => 'USUARIO_EDIT_KO'
 					);
+				}
 
-					$grupoNuevo = intval(
-						$this->modelo->valores['id_grupo']
-					);
+				$grupoAnterior = intval($resultado['resource'][0]['id_grupo']);
+				$grupoNuevo = intval($this->modelo->valores['id_grupo']);
 
-					if ($grupoAnterior !== $grupoNuevo) {
+				// Si deja de ser gestor, eliminar sus asignaciones.
+				if ($grupoAnterior === 2 && $grupoNuevo !== 2) {
 
-						$consulta = "
-							UPDATE usuario
-							SET id_edificio = NULL
-							WHERE id_usuario = {$idUsuario}
-						";
+					$inicio = $map->lanzarquery("START TRANSACTION");
 
-						$resultadoLimpieza = $map->lanzarquery($consulta);
-
-						if (!$resultadoLimpieza['ok']) {
-							return $resultadoLimpieza;
-						}
-
-						unset($this->modelo->valores['id_edificio']);
+					if (!$inicio['ok']) {
+						return $inicio;
 					}
+
+					// Primero quitar el responsable de los espacios.
+					$limpieza = $map->lanzarquery(
+						"UPDATE espacio
+						SET id_gestor = NULL
+						WHERE id_gestor = {$idUsuario}"
+					);
+
+					if (!$limpieza['ok']) {
+						$map->lanzarquery("ROLLBACK");
+						return $limpieza;
+					}
+
+					// Después eliminar todas sus asignaciones.
+					$eliminacion = $map->lanzarquery(
+						"DELETE FROM gestor_edificio
+						WHERE id_usuario = {$idUsuario}"
+					);
+
+					if (!$eliminacion['ok']) {
+						$map->lanzarquery("ROLLBACK");
+						return $eliminacion;
+					}
+
+					// Actualizar los datos del usuario.
+					$actualizacion = $this->modelo->EDIT();
+
+					if (
+						empty($actualizacion['ok']) ||
+						($actualizacion['code'] ?? '') !== 'QUERY_OK'
+					) {
+						$map->lanzarquery("ROLLBACK");
+						return $actualizacion;
+					}
+
+					$confirmacion = $map->lanzarquery("COMMIT");
+
+					if (!$confirmacion['ok']) {
+						$map->lanzarquery("ROLLBACK");
+						return $confirmacion;
+					}
+
+					return $actualizacion;
 				}
 			}
 		}
 
 		return $this->modelo->EDIT();
 	}
-
 
 	function REACTIVAR(){
 		return $this->reactivarRegistro('activo_usuario');
@@ -207,8 +244,7 @@ class usuario_SERVICE extends appServiceBase{
 			'email' => $fila['email'],
 			'nom_usuario' => $fila['nom_usuario'],
 			'apell_usuario' => $fila['apell_usuario'],
-			'id_grupo' => $fila['id_grupo'],
-			'id_edificio' => $fila['id_edificio'],
+			'id_grupo' => $fila['id_grupo']
 		);
 		$token = MiToken::creaToken($fila['email'], '', $datosUsuario);
 
@@ -227,7 +263,6 @@ class usuario_SERVICE extends appServiceBase{
 					'telefono' => $fila['telefono'],
 					'fech_nacimiento' => $fila['fech_nacimiento'],
 					'id_grupo' => $fila['id_grupo'],
-					'id_edificio' => $fila['id_edificio'],
 					'nom_grupo' => $nombreRol
 				)
 			)
@@ -270,52 +305,10 @@ class usuario_SERVICE extends appServiceBase{
 
 		return $res;
 	}
-
-	function ejecutar($skip = false) {
-
-		if (
-			isset($_POST['action']) &&
-			$_POST['action'] === 'GESTORES_DISPONIBLES'
-		) {
-			return $this->GESTORES_DISPONIBLES();
-		}
-
-		return parent::ejecutar($skip);
-	}
-
+	
+	// Recupera gestores activos disponibles para el año académico del edificio.
+	// Al editar, incluye también los gestores ya asignados a ese edificio.
 	function GESTORES_DISPONIBLES() {
-
-		// Comprobar que el usuario autenticado es ADMIN.
-		try {
-			include_once './base/JWT/token.php';
-
-			$token = isset($_POST['token']) ? $_POST['token'] : '';
-			if (empty($token)) {
-				return array(
-					'ok' => false,
-					'code' => 'TOKEN_KO'
-				);
-			}
-
-			$payload = MiToken::devuelveToken($token);
-
-			if (
-				!isset($payload->data->id_grupo) ||
-				intval($payload->data->id_grupo) !== 1
-			) {
-				return array(
-					'ok' => false,
-					'code' => 'ACCESO_DENEGADO_KO',
-					'message' => 'Solo ADMIN puede consultar los gestores disponibles.'
-				);
-			}
-
-		} catch (Exception $e) {
-			return array(
-				'ok' => false,
-				'code' => 'TOKEN_INVALIDO_KO'
-			);
-		}
 
 		include_once './base/mapping.php';
 
@@ -325,31 +318,161 @@ class usuario_SERVICE extends appServiceBase{
 			? intval($_POST['id_edificio'])
 			: 0;
 
-		$consulta = "
-			SELECT
-				id_usuario,
-				nom_usuario,
-				apell_usuario
-			FROM usuario
-			WHERE id_grupo = 2
-			AND activo_usuario = 1
-		";
-
 		if ($idEdificio > 0) {
-			$consulta .= "
-				AND (
-					id_edificio IS NULL
-					OR id_edificio = ".$idEdificio."
-				)
-			";
-		} else {
-			$consulta .= " AND id_edificio IS NULL ";
-		}
 
-		$consulta .= " ORDER BY apell_usuario, nom_usuario";
+			$consulta = "
+				SELECT
+					u.id_usuario,
+					u.nom_usuario,
+					u.apell_usuario
+				FROM usuario u
+				WHERE u.id_grupo = 2
+				AND u.activo_usuario = 1
+				AND (
+					NOT EXISTS (
+						SELECT 1
+						FROM gestor_edificio ge
+						INNER JOIN edificio e
+							ON e.id_edificio = ge.id_edificio
+							AND e.anho_acad_edificio = ge.anho_acad_edificio
+						WHERE ge.id_usuario = u.id_usuario
+						AND ge.anho_acad_edificio = (
+							SELECT anho_acad_edificio
+							FROM edificio
+							WHERE id_edificio = {$idEdificio}
+							LIMIT 1
+						)
+					)
+					OR EXISTS (
+						SELECT 1
+						FROM gestor_edificio ge
+						WHERE ge.id_usuario = u.id_usuario
+						AND ge.id_edificio = {$idEdificio}
+					)
+				)
+				ORDER BY u.apell_usuario, u.nom_usuario
+			";
+
+		} else {
+
+			// Sin edificio concreto no se puede determinar
+			// la disponibilidad de un gestor para un año.
+			// Se devuelven los gestores activos.
+			$consulta = "
+				SELECT
+					id_usuario,
+					nom_usuario,
+					apell_usuario
+				FROM usuario
+				WHERE id_grupo = 2
+				AND activo_usuario = 1
+				ORDER BY apell_usuario, nom_usuario
+			";
+		}
 
 		return $map->lanzarqueryconresults($consulta);
 	}
+
+
+	function SEARCH() {
+
+		// Ejecutar la búsqueda original, conservando filtros y paginación.
+		$resultado = $this->modelo->SEARCH();
+
+		if (
+			!$resultado['ok'] ||
+			empty($resultado['resource']) ||
+			!is_array($resultado['resource'])
+		) {
+			return $resultado;
+		}
+
+		// Recoger los IDs de los usuarios que son gestores.
+		$idsGestores = array();
+
+		foreach ($resultado['resource'] as $usuario) {
+			if (
+				isset($usuario['id_grupo']) &&
+				intval($usuario['id_grupo']) === 2
+			) {
+				$idsGestores[] = intval($usuario['id_usuario']);
+			}
+		}
+
+		// Si no hay gestores en esta página, no necesitamos otra consulta.
+		if (empty($idsGestores)) {
+			return $resultado;
+		}
+
+		$idsSQL = implode(',', $idsGestores);
+
+		include_once './base/mapping.php';
+		$map = new mapping('gestor_edificio');
+
+		$sql = "
+			SELECT
+				ge.id_usuario,
+				e.id_edificio,
+				e.nom_edificio,
+				ge.anho_acad_edificio
+			FROM gestor_edificio ge
+			INNER JOIN edificio e
+				ON e.id_edificio = ge.id_edificio
+				AND e.anho_acad_edificio = ge.anho_acad_edificio
+			WHERE ge.id_usuario IN ($idsSQL)
+			ORDER BY e.nom_edificio ASC, ge.anho_acad_edificio DESC
+		";
+
+		$resultadoEdificios = $map->lanzarqueryconresults($sql);
+
+		if (!$resultadoEdificios['ok']) {
+			return array(
+				'ok' => false,
+				'code' => 'ERROR_EDIFICIOS_ASIGNADOS_KO',
+				'message' => 'No se pudieron consultar los edificios asignados a los gestores.'
+			);
+		}
+
+		// Agrupar edificios por usuario.
+		$edificiosPorUsuario = array();
+
+		foreach ($idsGestores as $idUsuario) {
+			$edificiosPorUsuario[$idUsuario] = array();
+		}
+
+		if (!empty($resultadoEdificios['resource'])) {
+			foreach ($resultadoEdificios['resource'] as $edificio) {
+
+				$idUsuario = intval($edificio['id_usuario']);
+
+				$edificiosPorUsuario[$idUsuario][] = array(
+					'id_edificio' => intval($edificio['id_edificio']),
+					'nom_edificio' => $edificio['nom_edificio'],
+					'anho_acad_edificio' => $edificio['anho_acad_edificio']
+				);
+			}
+		}
+
+		// Añadir edificios_asignados a cada gestor.
+		foreach ($resultado['resource'] as &$usuario) {
+
+			if (
+				isset($usuario['id_grupo']) &&
+				intval($usuario['id_grupo']) === 2
+			) {
+				$idUsuario = intval($usuario['id_usuario']);
+
+				$usuario['edificios_asignados'] =
+					$edificiosPorUsuario[$idUsuario] ?? array();
+			}
+		}
+
+		unset($usuario);
+
+		return $resultado;
+	}
+
+
 
 
 }

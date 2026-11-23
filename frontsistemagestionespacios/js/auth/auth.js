@@ -137,7 +137,6 @@ if (loginForm && loginMessage) {
     const passwordInput = document.getElementById('login-password');
     const submitButton = loginForm.querySelector('[type="submit"]');
 
-    //todo aqui no traduce esto
     const obtenerMensajesEmail = () => ({
         min_size: traducir('login.emailMinSize'),
         max_size: traducir('login.emailMaxSize'),

@@ -221,5 +221,3 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error al inicializar el sistema de idiomas:', error);
     }
 });
-
-console.log('i18n.js se ha cargado correctamente');

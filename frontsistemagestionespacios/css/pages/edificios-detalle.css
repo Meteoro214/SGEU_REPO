@@ -1,0 +1,743 @@
+
+/* ============================================================
+   DETALLE DE EDIFICIO
+   Archivo: edificios-detalle.css
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   CONTENEDOR PRINCIPAL
+   ------------------------------------------------------------ */
+
+.building-detail-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ------------------------------------------------------------
+   CABECERA
+   ------------------------------------------------------------ */
+
+.building-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.building-detail-header-info {
+    flex: 1;
+    min-width: 250px;
+}
+
+.building-detail-header-info h1 {
+    margin: 18px 0 8px;
+    color: var(--text-primary);
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.building-detail-header-info > p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.building-detail-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 28px;
+}
+
+.building-detail-header-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.building-detail-header-actions .icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* ------------------------------------------------------------
+   TARJETAS
+   ------------------------------------------------------------ */
+
+.building-detail-information,
+.building-detail-floors,
+.building-detail-edit-section {
+    width: 100%;
+}
+
+.building-detail-card {
+    width: 100%;
+    overflow: hidden;
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.035);
+    margin-top: 3%;
+}
+
+/* ------------------------------------------------------------
+   CABECERA DE LAS TARJETAS
+   ------------------------------------------------------------ */
+
+.building-detail-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.building-detail-card-header h2 {
+    margin: 0 0 6px;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 650;
+}
+
+.building-detail-card-header p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ------------------------------------------------------------
+   INFORMACIÓN GENERAL
+   ------------------------------------------------------------ */
+
+.building-detail-card-body {
+    padding: 6px 24px;
+}
+
+.building-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    min-height: 64px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.building-detail-row:last-child {
+    border-bottom: none;
+}
+
+.building-detail-row span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.building-detail-row strong {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------
+   PLANTAS ASOCIADAS - ESTADO VACÍO
+   ------------------------------------------------------------ */
+
+.building-detail-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 190px;
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.building-detail-empty > .icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 4px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.building-detail-empty h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.building-detail-empty p {
+    max-width: 420px;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* ------------------------------------------------------------
+   FORMULARIO DE EDICIÓN
+   ------------------------------------------------------------ */
+
+.building-detail-form {
+    padding: 24px;
+}
+
+.building-detail-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.building-detail-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.building-detail-form-group label {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.building-detail-form-group input {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    color: var(--text-primary);
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    font: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.building-detail-form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+.building-detail-form-group input:disabled {
+    background: var(--surface-secondary, #f3f4f6);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.building-detail-form-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* ------------------------------------------------------------
+   SELECTOR DE GESTORES
+   ------------------------------------------------------------ */
+
+#building-detail-managers-group {
+    grid-column: 1 / -1;
+    max-width: 600px;
+}
+
+#building-detail-edit-managers {
+    width: 100%;
+    height: auto;
+    max-height: 168px;
+    overflow-y: auto;
+    padding: 6px;
+    color: var(--text-primary);
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 10px;
+    font: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color, #cbd5e1) transparent;
+}
+
+#building-detail-edit-managers:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+#building-detail-edit-managers option {
+    color: #1f2937;
+    background: #ffffff;
+    padding: 10px;
+    margin-bottom: 4px;
+    min-height: 38px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#building-detail-edit-managers option:checked {
+    color: #1f2937;
+    background: #e3ebf8;
+}
+
+#building-detail-managers-group small {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+
+/* =========================================
+   CABECERA AZUL DEL DETALLE DE EDIFICIO
+========================================= */
+
+.building-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 0;
+    padding: 26px 30px;
+    border-radius: 12px;
+    background: #194878;
+    box-shadow: 0 5px 18px rgba(25, 72, 120, 0.16);
+}
+
+.building-detail-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+    flex: 1;
+}
+
+.building-detail-header .breadcrumb {
+    margin-bottom: 20px;
+}
+
+.building-detail-header .breadcrumb a,
+.building-detail-header .breadcrumb span {
+    color: #DCEAF8;
+}
+
+.building-detail-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.building-detail-title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+}
+
+.building-detail-title-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.building-detail-title-text h1 {
+    margin: 0 0 5px;
+    color: #FFFFFF;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.building-detail-title-text p {
+    margin: 0;
+    color: #DCEAF8;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.building-detail-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    gap: 10px;
+}
+
+.building-detail-header-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 16px;
+    border: 1px solid #FFFFFF;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #194878;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.building-detail-header-actions .btn:hover {
+    border-color: #EAF2FA;
+    background: #EAF2FA;
+    color: #12385F;
+}
+
+.building-detail-header-actions .btn svg {
+    width: 17px;
+    height: 17px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 640px) {
+    .building-detail-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 20px;
+        padding: 22px 18px;
+    }
+
+    .building-detail-header .breadcrumb {
+        margin-bottom: 16px;
+    }
+
+    .building-detail-title-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .building-detail-title-text h1 {
+        font-size: 22px;
+    }
+
+    .building-detail-title-text p {
+        font-size: 13px;
+    }
+
+    .building-detail-header-actions {
+        width: 100%;
+    }
+
+    .building-detail-header-actions .btn {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        padding: 0 8px;
+        font-size: 12px;
+    }
+}
+
+
+/* ------------------------------------------------------------
+   BOTONES DEL FORMULARIO
+   ------------------------------------------------------------ */
+
+.building-detail-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+.building-detail-form-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.building-detail-form-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------
+   MENSAJES
+   ------------------------------------------------------------ */
+
+.building-detail-message {
+    padding: 14px 18px;
+    color: var(--text-primary);
+    background: var(--surface-secondary, #f3f4f6);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.building-detail-message.is-error {
+    color: var(--danger-color, #b42318);
+    background: #fef3f2;
+    border-color: #fecdca;
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE - TABLETS
+   ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+    .building-detail-page {
+        gap: 20px;
+    }
+
+    .building-detail-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .building-detail-header-info {
+        width: 100%;
+    }
+
+    .building-detail-header-info h1 {
+        font-size: 1.5rem;
+    }
+
+    .building-detail-header-actions {
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .building-detail-header-actions .btn {
+        flex: 1;
+    }
+
+    .building-detail-card-header {
+        padding: 18px 20px;
+    }
+
+    .building-detail-card-body {
+        padding: 4px 20px;
+    }
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE - MÓVILES
+   ------------------------------------------------------------ */
+
+@media (max-width: 480px) {
+    .building-detail-header-info h1 {
+        font-size: 1.3rem;
+    }
+
+    .building-detail-header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .building-detail-header-actions .btn {
+        width: 100%;
+    }
+
+    .building-detail-card-header {
+        padding: 16px;
+    }
+
+    .building-detail-card-body {
+        padding: 4px 16px;
+    }
+
+    .building-detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+        padding: 15px 0;
+    }
+
+    .building-detail-row strong {
+        text-align: left;
+    }
+
+    .building-detail-empty {
+        padding: 28px 16px;
+    }
+
+    .building-detail-form {
+        padding: 18px;
+    }
+
+    .building-detail-form-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .building-detail-form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .building-detail-form-actions .btn {
+        width: 100%;
+    }
+}
+
+
+/* ============================================================
+   PLANTAS ASOCIADAS - TARJETAS CLICABLES
+============================================================ */
+
+.building-detail-floors-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 20px;
+    padding: 24px;
+}
+
+/* Tarjeta completa clicable */
+.building-detail-floor-card {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    min-width: 0;
+    padding: 22px;
+
+    color: var(--text-primary);
+    text-decoration: none;
+
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 12px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.building-detail-floor-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-color, #194878);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
+}
+
+.building-detail-floor-card:focus-visible {
+    outline: 3px solid var(--primary-color, #194878);
+    outline-offset: 3px;
+}
+
+/* Cabecera de tarjeta */
+.building-detail-floor-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.building-detail-floor-card-header [data-icon] {
+    display: flex;
+    align-items: center;
+    color: var(--primary-color, #194878);
+}
+
+.building-detail-floor-card-header svg {
+    width: 23px;
+    height: 23px;
+}
+
+.building-detail-floor-card-id {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Nombre y año */
+.building-detail-floor-card h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+
+.building-detail-floor-card-year {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Superficies */
+.building-detail-floor-card-surfaces {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+.building-detail-floor-card-surface {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+    padding: 12px;
+    background: var(--surface-secondary, #f5f7fa);
+    border-radius: 8px;
+}
+
+.building-detail-floor-card-surface span {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.building-detail-floor-card-surface strong {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+
+/* Pie de tarjeta */
+.building-detail-floor-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+
+    color: var(--primary-color, #194878);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.building-detail-floor-card-footer svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .building-detail-floors-list {
+        grid-template-columns: 1fr;
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .building-detail-floor-card {
+        padding: 18px;
+    }
+}

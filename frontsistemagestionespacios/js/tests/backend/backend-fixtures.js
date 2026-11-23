@@ -145,6 +145,70 @@ async function prepararFixtures(nombreEntidad) {
         };
     }
 
+    let edificio = null;
+    let edificios = null;
+
+    if (nombreEntidad === 'edificio') {
+        
+        const sufijoEdificio = sufijo(6);
+
+        const edificio1 = {
+            nombre: `QA Edificio 1 ${sufijoEdificio}`,
+            direccion: `Dirección QA 1`,
+            telefono: '986123451',
+            anho: '2026-2027'
+        };
+
+        edificio1.id = await crear('edificio', {
+            nom_edificio: edificio1.nombre,
+            dir_edificio: edificio1.direccion,
+            tel_edificio: edificio1.telefono,
+            anho_acad_edificio: edificio1.anho
+        });
+
+        const edificio2 = {
+            nombre: `QA Edificio 2 ${sufijoEdificio}`,
+            direccion: `Dirección QA 2`,
+            telefono: '986123452',
+            anho: '2027-2028'
+        };
+
+        edificio2.id = await crear('edificio', {
+            nom_edificio: edificio2.nombre,
+            dir_edificio: edificio2.direccion,
+            tel_edificio: edificio2.telefono,
+            anho_acad_edificio: edificio2.anho
+        });
+
+        const edificio3 = {
+            nombre: `QA Edificio 3 ${sufijoEdificio}`,
+            direccion: `Dirección QA 3`,
+            telefono: '986123453',
+            anho: '2025-2026'
+        };
+
+        edificio3.id = await crear('edificio', {
+            nom_edificio: edificio3.nombre,
+            dir_edificio: edificio3.direccion,
+            tel_edificio: edificio3.telefono,
+            anho_acad_edificio: edificio3.anho
+        });
+
+        if (!edificio1.id || !edificio2.id || !edificio3.id) {
+            throw new Error('No se pudieron crear todos los edificios QA');
+        }
+        
+        // Se conserva la primera para las pruebas CRUD existentes.
+        edificio = edificio1;
+
+        // Se guardan las tres para las pruebas de DUPLICAR.
+        edificios = {
+            primera: edificio1,
+            segunda: edificio2,
+            tercera: edificio3
+        };
+
+    }
 
     return {
         idGrupo: grupos.gestor,
@@ -155,6 +219,8 @@ async function prepararFixtures(nombreEntidad) {
         idUsuarioRechazar,
         facultad,
         facultades,
+        edificio,
+        edificios,
         emailUsuarioRechazar,
         idAccion,
         idFuncionalidad,
@@ -196,6 +262,13 @@ function payloadValido(entidad, fx, accion) {
                 nom_facultad: 'QA Facultad ' + sufijo(6),
                 anho_acad_facultad: '2026-2027'
             };
+        case 'edificio':
+            return {
+                nom_edificio: 'QA Edificio ' + sufijo(6),
+                dir_edificio: 'Dirección de prueba',
+                tel_edificio: '986123456',
+                anho_acad_edificio: '2026-2027'
+            };
         default:
             return {};
     }
@@ -205,9 +278,10 @@ function payloadValido(entidad, fx, accion) {
  * Devuelve la clave primaria de la fixture que se modificará o eliminará.
  * @param {string} entidad Entidad que se está probando.
  * @param {object} fx Identificadores de las fixtures compartidas.
+ * @param {string} accion Acción que se está realizando.
  * @returns {object} Campos que identifican la fila.
  */
-function idPrincipalPayload(entidad, fx) {
+function idPrincipalPayload(entidad, fx, accion) {
     switch (entidad) {
         case 'grupo_usuarios': return { id_grupo: fx.idGrupo };
         case 'usuario': return { id_usuario: fx.idUsuario };
@@ -215,6 +289,7 @@ function idPrincipalPayload(entidad, fx) {
         case 'funcionalidad': return { id_func: fx.idFuncionalidad };
         case 'tiene_permiso': return { ...fx.idPermiso };
         case 'facultad': return { id_facultad: fx.facultad.id };
+        case 'edificio': return { id_edificio: fx.edificio.id };
         default: return {};
     }
 }
@@ -245,6 +320,11 @@ function claveFilaCreada(entidad, payload, idBackend) {
                 tabla: entidad,
                 valores: { id_facultad: idBackend }
             };
+        case 'edificio':
+            return {
+                tabla: entidad,
+                valores: { id_edificio: idBackend }
+            };
         default: return null;
     }
 }
@@ -268,7 +348,7 @@ async function compararConBackend(nombreEntidad, accion, fixtures, overrides, re
         if (accion === 'SEARCH' || accion === 'DUPLICAR') {
             payload = { ...overrides };
         } else if (accion === 'DELETE') {
-            payload = idPrincipalPayload(nombreEntidad, fixtures);
+            payload = idPrincipalPayload(nombreEntidad, fixtures, accion);
         } else if (accion === 'REACTIVAR') {
             payload = {};
         } else if (accion === 'LOGIN') {
@@ -276,7 +356,7 @@ async function compararConBackend(nombreEntidad, accion, fixtures, overrides, re
         } else {
             payload = payloadValido(nombreEntidad, fixtures, accion);
             if (accion === 'EDIT') {
-                Object.assign(payload, idPrincipalPayload(nombreEntidad, fixtures));
+                Object.assign(payload, idPrincipalPayload(nombreEntidad, fixtures, accion));
                 payload.oldPass = 'Test1234!';
             }
         }
@@ -306,6 +386,29 @@ async function compararConBackend(nombreEntidad, accion, fixtures, overrides, re
         if (overridesResueltos.anho_acad_facultad === '__FIXTURE_ANHO_FACULTAD__') {
             overridesResueltos.anho_acad_facultad = fixtures.facultad.anho;
         }
+        if (overridesResueltos.nom_edificio === '__FIXTURE_NOM_EDIFICIO__') {
+            overridesResueltos.nom_edificio = fixtures.edificio.nombre;
+        }
+        if (overridesResueltos.anho_acad_edificio === '__FIXTURE_ANHO_EDIFICIO__') {
+            overridesResueltos.anho_acad_edificio = fixtures.edificio.anho;
+        }
+        // Resolver identificadores de edificios QA utilizados directamente.
+        if (overridesResueltos.id_edificio === '__FIXTURE_ID_EDIFICIO_1__') {
+            overridesResueltos.id_edificio = fixtures.edificios.primera.id;
+        } else if (overridesResueltos.id_edificio === '__FIXTURE_ID_EDIFICIO_2__') {
+            overridesResueltos.id_edificio = fixtures.edificios.segunda.id;
+        }
+        // Resolver nombre y curso de los edificios QA.
+        if (overridesResueltos.nom_edificio === '__FIXTURE_NOM_EDIFICIO_1__') {
+            overridesResueltos.nom_edificio = fixtures.edificios.primera.nombre;
+        } else if (overridesResueltos.nom_edificio === '__FIXTURE_NOM_EDIFICIO_2__') {
+            overridesResueltos.nom_edificio = fixtures.edificios.segunda.nombre;
+        }
+        if (overridesResueltos.anho_acad_edificio === '__FIXTURE_ANHO_EDIFICIO_1__') {
+            overridesResueltos.anho_acad_edificio = fixtures.edificios.primera.anho;
+        } else if (overridesResueltos.anho_acad_edificio === '__FIXTURE_ANHO_EDIFICIO_2__') {
+            overridesResueltos.anho_acad_edificio = fixtures.edificios.segunda.anho;
+        }
         // Resolver los identificadores de las facultades QA.
         if (Array.isArray(overridesResueltos.facultades)) {
             overridesResueltos.facultades = overridesResueltos.facultades.map((id) => {
@@ -321,6 +424,23 @@ async function compararConBackend(nombreEntidad, accion, fixtures, overrides, re
                 return id;
             });
         }
+
+        // Resolver los identificadores de los edificios QA.
+        if (Array.isArray(overridesResueltos.edificios)) {
+            overridesResueltos.edificios = overridesResueltos.edificios.map((id) => {
+                if (id === '__FIXTURE_ID_EDIFICIO_1__') {
+                    return fixtures.edificios.primera.id;
+                }
+                if (id === '__FIXTURE_ID_EDIFICIO_2__') {
+                    return fixtures.edificios.segunda.id;
+                }
+                if (id === '__FIXTURE_ID_EDIFICIO_3__') {
+                    return fixtures.edificios.tercera.id;
+                }
+                return id;
+            });
+        }
+
         Object.assign(payload, overridesResueltos);
 
         const tokenPeticion = payload.token || tokenAdmin;
@@ -350,10 +470,16 @@ async function compararConBackend(nombreEntidad, accion, fixtures, overrides, re
                     ? res.resource.creadas
                     : []);
 
-            filasCreadas = filasDuplicadas.map((fila) =>
-                claveFilaCreada(nombreEntidad, {}, fila.id_facultad)
-            ).filter(Boolean);
-}
+            const campoId = `id_${nombreEntidad}`;
+
+            filasCreadas = filasDuplicadas.map((fila) => {
+                const idCreado = typeof fila === 'object' && fila !== null
+                    ? fila[campoId]
+                    : fila;
+
+                return claveFilaCreada(nombreEntidad, {}, idCreado);
+            }).filter(Boolean);
+        }
 
         return {
             backend_status,
@@ -422,6 +548,22 @@ async function limpiarFixtures(filasExtra, fixtures) {
             filas.push({
                 tabla: 'facultad',
                 valores: { id_facultad: fixtures.facultad.id }
+            });
+        }
+
+        if (fixtures.edificios) {
+            Object.values(fixtures.edificios).forEach((edificio) => {
+                if (edificio && edificio.id) {
+                    filas.push({
+                        tabla: 'edificio',
+                        valores: { id_edificio: edificio.id }
+                    });
+                }
+            });
+        } else if (fixtures.edificio && fixtures.edificio.id) {
+            filas.push({
+                tabla: 'edificio',
+                valores: { id_edificio: fixtures.edificio.id }
             });
         }
     }

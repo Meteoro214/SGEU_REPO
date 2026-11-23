@@ -513,7 +513,6 @@ function validarNombreFacultad() {
     });
 }
 
-
 function validarAnhoAcademico(input = null) {
     input = input || document.getElementById("faculty-academic-year");
 
@@ -553,7 +552,6 @@ function validarAnhoAcademico(input = null) {
 
     return true;
 }
-
 
 function validarDuplicacionFacultades(exigirSeleccion = false) {
     const modo = document.getElementById("faculties-duplicate-mode")?.value;

@@ -20,7 +20,8 @@
     "add": "Añadir",
     "edit": "Editar",
     "back": "Volver",
-    "filter": "Filtrar"
+    "filter": "Filtrar",
+    "viewDetails": "Ver detalles"
   },
   "navigation": {
     "mainMenu": "Menú principal",
@@ -46,6 +47,23 @@
     "closeSes":"Cerrar Sesión",
     "USUARIO_EDIT_DEF_KO":"No se ha podido editar. Inténtalo de nuevo.",
     "USUARIO_EDIT_PASS_KO":"La contraseña actual es incorrecta"
+  },
+  "globalSearch": {
+    "placeholder": "Buscar en SGEU...",
+    "ariaLabel": "Buscar en toda la aplicación",
+    "searching": "Buscando...",
+    "noResults": "No se encontraron resultados.",
+    "error": "No se pudo realizar la búsqueda.",
+    "connectionError": "Error al conectar con el servidor.",
+    "groups": {
+        "users": "Usuarios",
+        "faculties": "Facultades",
+        "buildings": "Edificios"
+    },
+    "types": {
+        "faculty": "Facultad",
+        "building": "Edificio"
+    }
   },
   "publicWelcome": {
     "title": "Bienvenida | SGEU",
@@ -161,6 +179,8 @@
     "USUARIO_REG_DEF_KO": "No se ha podido registrar. Inténtalo de nuevo."
   },
   "usuarios": {
+    "pageTitle": "Usuarios y permisos | SGEU",
+    "pageDescription":"Consulta y gestiona los usuarios, sus perfiles y permisos de acceso.",
     "title": "Usuarios y permisos",
     "description": "Gestiona el acceso y el alcance de los permisos del sistema.",
     "newUser": "Nuevo usuario",
@@ -172,6 +192,8 @@
     "roleLabel": "Perfil o rol",
     "idUser": "ID del usuario",
     "allRoles": "Todos los perfiles",
+    "emptyTitle": "No hay usuarios",
+    "empty": "No se encontraron usuarios.",
     "roles": {
       "administration": "Administración",
       "manager": "Gestor de centro",
@@ -362,16 +384,16 @@
       "error": "No se pudieron duplicar las facultades."
     },
     "validation": {
-      "nameMinSize": "El nombre de la facultad debe tener al menos 2 caracteres.",
+      "nameMinSize": "El nombre de la facultad debe tener al menos 3 caracteres.",
       "nameMaxSize": "El nombre de la facultad no puede superar los 100 caracteres.",
       "nameFormat": "El nombre de la facultad contiene caracteres no permitidos.",
       "academicYearFormat": "Introduce el año académico en formato AAAA-AAAA.",
-      "academicYearMin": "El año académico debe comenzar en 2026 o en un año posterior.",
+      "academicYearMin": "El año académico debe comenzar en el año actual o en un año posterior.",
       "academicYearConsecutive": "El segundo año debe ser consecutivo al primero."
     }
   },
   "edificios": {
-    "title": "Edificios",
+    "title": "Gestión de edificios",
     "pageTitle": "Edificios | SGEU",
     "description": "Consulta y gestiona los edificios de la universidad.",
     "newButton": "Nuevo edificio",
@@ -422,7 +444,10 @@
       "managers": "Gestores del edificio",
       "managersHelp": "Puedes seleccionar varios gestores. Mantén pulsada la tecla Ctrl o Cmd para seleccionar varios.",
       "managersAssigned": "Los gestores asignados a este edificio aparecen seleccionados.",
-      "noManagersAssigned": "No hay gestores asignados a este edificio."
+      "noManagersAssigned": "No hay gestores asignados a este edificio.",
+      "assignedBuildings": "Edificios asignados",
+      "noAssignedBuildings": "No tiene edificios asignados.",
+      "noManagers": "No hay gestores disponibles"
     },
     "confirmations": {
       "title": "Confirmar acción",
@@ -438,7 +463,9 @@
       "load": "No se pudieron cargar los edificios.",
       "save": "No se pudieron guardar los cambios.",
       "invalidData": "Revisa la información introducida.",
-      "deleteRelatedSpaces": "No se puede eliminar este edificio porque tiene espacios asociados."
+      "deleteRelatedSpaces": "No se puede eliminar este edificio porque tiene espacios asociados.",
+      "noPermissionView": "No tienes permiso para ver esta facultad.",
+      "noPermissionEdit": "No tienes permiso para editar esta facultad."
     },
     "detail": {
       "title": "Detalles del edificio | SGEU",
@@ -451,20 +478,43 @@
       "noFloorsTitle": "No hay plantas asociadas",
       "noFloorsDescription": "Este edificio no tiene plantas registradas actualmente.",
       "editTitle": "Editar edificio",
-      "editDescription": "Modifica los datos de este edificio."
+      "editDescription": "Modifica los datos de este edificio.",
+      "floorsLoadError": "No se han podido cargar las plantas de este edificio."
+    },
+    "duplicate": {
+      "title": "Duplicar edificios",
+      "description": "Crea edificios para un nuevo año académico a partir de los existentes.",
+      "mode": "¿Cómo quieres cargar los edificios?",
+      "byFaculty": "Seleccionar edificios",
+      "byYear": "Seleccionar año académico",
+      "faculties": "Edificios que quieres duplicar",
+      "facultiesHelp": "Puedes seleccionar varios edificios de distintos años.",
+      "year": "Año académico de origen",
+      "selectYear": "Selecciona un año académico",
+      "summary": "Edificios que se crearán: {count}",
+      "targetYear": "Nuevo año académico",
+      "targetYearHelp": "Debe ser posterior al año académico de origen.",
+      "confirm": "Duplicar",
+      "selectBuildings": "Selecciona al menos un edificio o un año académico.",
+      "targetYearMustBeLater": "El nuevo año académico debe ser posterior a los años académicos de origen.",
+      "success": "Los edificios se han duplicado correctamente.",
+      "error": "No se pudieron duplicar los edificios.",
+      "yearInvalid": "Uno o varios edificios tienen un año académico de origen no válido.",
+      "noBuildings": "No hay edificios que duplicar",
+      "yearRecent": "El año destino debe ser posterior al año de origen más reciente."
     },
     "validation": {
-      "nameMinSize": "El nombre del edificio debe tener al menos 2 caracteres.",
+      "nameMinSize": "El nombre del edificio debe tener al menos 3 caracteres.",
       "nameMaxSize": "El nombre del edificio no puede superar los 100 caracteres.",
       "nameFormat": "El nombre del edificio contiene caracteres no permitidos.",
-      "addressMinSize": "La dirección debe tener al menos 2 caracteres.",
+      "addressMinSize": "La dirección debe tener al menos 3 caracteres.",
       "addressMaxSize": "La dirección no puede superar los 255 caracteres.",
       "addressFormat": "La dirección contiene caracteres no permitidos.",
       "phoneMinSize": "El teléfono debe tener al menos 9 caracteres.",
       "phoneMaxSize": "El teléfono no puede superar los 15 caracteres.",
       "phoneFormat": "Introduce un teléfono válido.",
       "academicYearFormat": "Introduce el año académico en formato AAAA-AAAA.",
-      "academicYearMin": "El año académico debe comenzar en 2026 o en un año posterior.",
+      "academicYearMin": "El año académico debe comenzar en el año actual o en un año posterior.",
       "academicYearConsecutive": "El segundo año debe ser consecutivo al primero."
     }
   },
@@ -498,7 +548,8 @@
     },
     "entities": {
       "usuario": "Usuario",
-      "facultades": "Facultad"
+      "facultades": "Facultad",
+      "edificios": "Edificio"
     }
   },
   "pages": {

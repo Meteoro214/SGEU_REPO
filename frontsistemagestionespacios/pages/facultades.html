@@ -42,6 +42,7 @@
             <main class="app-content faculties-page">
 
                 <!-- CABECERA -->
+                
                 <section class="faculties-header">
 
                     <div class="page-header-info">
@@ -61,13 +62,23 @@
                             </ol>
                         </nav>
 
-                        <h1 data-i18n="facultades.title">
-                            Facultades
-                        </h1>
+                        <div class="faculties-title-wrapper">
 
-                        <p data-i18n="facultades.description">
-                            Consulta y gestiona las facultades de la universidad.
-                        </p>
+                            <div class="faculties-title-icon">
+                                <span data-icon="faculty" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="faculties-title-text">
+                                <h1 data-i18n="facultades.title">
+                                    Facultades
+                                </h1>
+
+                                <p data-i18n="facultades.description">
+                                    Consulta y gestiona las facultades de la universidad.
+                                </p>
+                            </div>
+
+                        </div>
 
                     </div>
 
@@ -101,6 +112,7 @@
                     </div>
 
                 </section>
+
 
 
                 <!-- CONTENIDO -->
@@ -147,11 +159,10 @@
                                 aria-controls="faculties-filter-panel"
                             >
                                 <span data-icon="filter" aria-hidden="true"></span>
-                                <span data-i18n="common.filter">Filtrar</span>
+                                <span data-i18n="common.filter"></span>
                             </button>
 
                             <p id="faculties-count" aria-live="polite">
-                                0 facultades
                             </p>
 
                         </div>
@@ -346,7 +357,7 @@
 
 
             <!-- FORMULARIO -->
-            <form id="faculties-form">
+            <form id="faculties-form" novalidate>
 
                 <input
                     type="hidden"
@@ -713,11 +724,9 @@
 
         <div class="faculties-feedback-header">
             <h2 id="faculties-feedback-title" data-i18n="facultades.confirmations.title">
-                Confirmar eliminación
             </h2>
 
             <p id="faculties-feedback-text">
-                ¿Estás seguro de que quieres eliminar esta facultad?
             </p>
         </div>
 
@@ -728,7 +737,7 @@
                 class="btn"
                 id="faculties-feedback-cancel"
             >
-                <span data-i18n="common.cancel">Cancelar</span>
+                <span data-i18n="common.cancel"></span>
             </button>
 
             <button
@@ -736,7 +745,7 @@
                 class="btn btn-primary"
                 id="faculties-feedback-confirm"
             >
-                <span data-i18n="facultades.actions.delete">Eliminar</span>
+                <span data-i18n="facultades.actions.delete"></span>
             </button>
 
         </div>
