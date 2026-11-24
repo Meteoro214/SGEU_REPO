@@ -110,3 +110,9 @@ ALTER TABLE ocupante
     MODIFY COLUMN tipo_ocupante VARCHAR(50) NOT NULL;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+INSERT INTO ocupante (tipo_ocupante) VALUES
+    ('Docente'),
+    ('Investigador'),
+    ('Externo'),
+    ('Administración');
