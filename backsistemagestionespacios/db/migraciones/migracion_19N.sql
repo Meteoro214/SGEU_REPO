@@ -68,5 +68,45 @@ ALTER TABLE espacio
         FOREIGN KEY (id_gestor) REFERENCES usuario (id_usuario)
         ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- ---------------------------------------------------------------------------------------------------
+-- OCUPA y OCUPANTE: Mover hrs_ocupacion y num_dias_ocupacion de ocupante a ocupa
+-- y cambiar PK de ocupa a id_ocupa AUTO_INCREMENT
+-- ---------------------------------------------------------------------------------------------------
+ALTER TABLE ocupa
+    DROP FOREIGN KEY fk_ocupa_ocupante;
+
+ALTER TABLE ocupa
+    DROP FOREIGN KEY fk_ocupa_espacio;
+
+ALTER TABLE ocupa
+    DROP PRIMARY KEY;
+
+ALTER TABLE ocupa
+    ADD COLUMN id_ocupa INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+    ADD COLUMN hrs_ocupacion DECIMAL(5,2) NOT NULL AFTER id_espacio,
+    ADD COLUMN num_dias_ocupacion INT UNSIGNED NOT NULL AFTER hrs_ocupacion,
+    ADD PRIMARY KEY (id_ocupa);
+
+UPDATE ocupa o
+INNER JOIN ocupante op
+    ON op.tipo_ocupante = o.tipo_ocupante
+SET
+    o.hrs_ocupacion = op.hrs_ocupacion,
+    o.num_dias_ocupacion = op.num_dias_ocupacion;
+
+ALTER TABLE ocupa
+    MODIFY COLUMN tipo_ocupante VARCHAR(50) NOT NULL,
+    MODIFY COLUMN id_espacio INT UNSIGNED NOT NULL,
+    ADD CONSTRAINT fk_ocupa_ocupante
+        FOREIGN KEY (tipo_ocupante) REFERENCES ocupante (tipo_ocupante)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT fk_ocupa_espacio
+        FOREIGN KEY (id_espacio) REFERENCES espacio (id_espacio)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE ocupante
+    DROP COLUMN hrs_ocupacion,
+    DROP COLUMN num_dias_ocupacion,
+    MODIFY COLUMN tipo_ocupante VARCHAR(50) NOT NULL;
 
 SET FOREIGN_KEY_CHECKS = 1;
