@@ -117,6 +117,36 @@
     color: #DCEAF8;
 }
 
+/* Breadcrumb */
+.breadcrumb ol {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* Elementos del breadcrumb */
+.breadcrumb li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* SGEU y Edificios mantienen su tamaño */
+.breadcrumb li:first-child,
+.breadcrumb li:nth-child(2) {
+    flex-shrink: 0;
+}
+
+/* El nombre del edificio ocupa el espacio restante */
+#faculty-detail-breadcrumb {
+    min-width: 0;
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
 .faculty-detail-title-wrapper {
     display: flex;
     align-items: center;
@@ -424,7 +454,7 @@
    RESPONSIVE - TABLETS
    ------------------------------------------------------------ */
 
-@media (max-width: 768px) {
+@media (max-width: 859px) {
     .faculty-detail-page {
         gap: 20px;
     }
@@ -457,66 +487,6 @@
 
     .faculty-detail-card-body {
         padding: 4px 20px;
-    }
-}
-
-/* ------------------------------------------------------------
-   RESPONSIVE - MÓVILES
-   ------------------------------------------------------------ */
-
-@media (max-width: 480px) {
-    .faculty-detail-header-info h1 {
-        font-size: 1.3rem;
-    }
-
-    .faculty-detail-header-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .faculty-detail-header-actions .btn {
-        width: 100%;
-    }
-
-    .faculty-detail-card-header {
-        padding: 16px;
-    }
-
-    .faculty-detail-card-body {
-        padding: 4px 16px;
-    }
-
-    .faculty-detail-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 7px;
-        padding: 15px 0;
-    }
-
-    .faculty-detail-row strong {
-        text-align: left;
-    }
-
-    .faculty-detail-empty {
-        padding: 28px 16px;
-    }
-
-    .faculty-detail-form {
-        padding: 18px;
-    }
-
-    .faculty-detail-form-grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
-
-    .faculty-detail-form-actions {
-        flex-direction: column-reverse;
-        align-items: stretch;
-    }
-
-    .faculty-detail-form-actions .btn {
-        width: 100%;
     }
 }
 
@@ -675,5 +645,66 @@
         min-width: 0;
         padding: 0 8px;
         white-space: nowrap;
+    }
+}
+
+
+/* ------------------------------------------------------------
+   RESPONSIVE - MÓVILES
+   ------------------------------------------------------------ */
+
+@media (max-width: 480px) {
+    .faculty-detail-header-info h1 {
+        font-size: 1.3rem;
+    }
+
+    .faculty-detail-header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .faculty-detail-header-actions .btn {
+        width: 100%;
+    }
+
+    .faculty-detail-card-header {
+        padding: 16px;
+    }
+
+    .faculty-detail-card-body {
+        padding: 4px 16px;
+    }
+
+    .faculty-detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+        padding: 15px 0;
+    }
+
+    .faculty-detail-row strong {
+        text-align: left;
+    }
+
+    .faculty-detail-empty {
+        padding: 28px 16px;
+    }
+
+    .faculty-detail-form {
+        padding: 18px;
+    }
+
+    .faculty-detail-form-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .faculty-detail-form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .faculty-detail-form-actions .btn {
+        width: 100%;
     }
 }

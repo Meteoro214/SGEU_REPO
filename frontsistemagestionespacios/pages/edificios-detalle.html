@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -40,7 +39,7 @@
             <main class="app-content building-detail-page">
 
                 <!-- CABECERA -->
-                
+
                 <section class="building-detail-header">
 
                     <div class="building-detail-header-info">
@@ -52,16 +51,14 @@
                                 </li>
 
                                 <li>
+                                    <span data-icon="chevron" aria-hidden="true"></span>
                                     <a href="edificios.html" data-i18n="edificios.title">
                                     </a>
                                 </li>
 
                                 <li>
                                     <span data-icon="chevron" aria-hidden="true"></span>
-                                    <span
-                                        id="building-detail-breadcrumb"
-                                        aria-current="page"
-                                    >
+                                    <span id="building-detail-breadcrumb" aria-current="page">
                                         —
                                     </span>
                                 </li>
@@ -88,21 +85,12 @@
 
                     <div class="building-detail-header-actions">
 
-                        <a
-                            href="edificios.html"
-                            id="building-detail-back"
-                            class="btn"
-                        >
+                        <a href="edificios.html" id="building-detail-back" class="btn">
                             <span data-icon="arrow" aria-hidden="true"></span>
                             <span data-i18n="common.back"></span>
                         </a>
 
-                        <button
-                            type="button"
-                            id="building-detail-edit"
-                            class="btn btn-primary"
-                            hidden
-                        >
+                        <button type="button" id="building-detail-edit" class="btn btn-primary" hidden>
                             <span data-icon="edit" aria-hidden="true"></span>
                             <span data-i18n="common.edit"></span>
                         </button>
@@ -114,28 +102,19 @@
 
 
                 <!-- MENSAJES -->
-                <p
-                    id="building-detail-message"
-                    class="building-detail-message"
-                    role="status"
-                    aria-live="polite"
-                    hidden
-                ></p>
+                <p id="building-detail-message" class="building-detail-message" role="status" aria-live="polite" hidden>
+                </p>
 
 
                 <!-- FORMULARIO DE EDICIÓN -->
-                <section
-                    id="building-detail-edit-section"
-                    class="building-detail-edit-section"
-                    hidden
-                >
+                <section id="building-detail-edit-section" class="building-detail-edit-section" hidden>
 
                     <article class="building-detail-card">
 
                         <div class="building-detail-card-header">
                             <div>
                                 <h2 data-i18n="edificios.detail.editTitle">
-                                    
+
                                 </h2>
 
                                 <p data-i18n="edificios.detail.editDescription">
@@ -145,120 +124,68 @@
 
                         <form id="building-detail-edit-form" class="building-detail-form" novalidate>
 
-                            <input
-                                type="hidden"
-                                id="building-detail-edit-id"
-                            >
+                            <input type="hidden" id="building-detail-edit-id">
 
                             <div class="building-detail-form-grid">
 
                                 <!-- ID -->
                                 <div class="building-detail-form-group">
-                                    <label
-                                        for="building-detail-edit-id-display"
-                                        data-i18n="edificios.form.id"
-                                    >
+                                    <label for="building-detail-edit-id-display" data-i18n="edificios.form.id">
                                         ID de edificio
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="building-detail-edit-id-display"
-                                        disabled
-                                    >
+                                    <input type="text" id="building-detail-edit-id-display" disabled>
                                 </div>
 
                                 <!-- NOMBRE -->
                                 <div class="building-detail-form-group">
-                                    <label
-                                        for="building-detail-edit-name"
-                                        data-i18n="edificios.form.name"
-                                    >
+                                    <label for="building-detail-edit-name" data-i18n="edificios.form.name">
                                         Nombre del edificio
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="building-detail-edit-name"
-                                        maxlength="100"
-                                        autocomplete="off"
-                                    >
+                                    <input type="text" id="building-detail-edit-name" maxlength="100"
+                                        autocomplete="off">
                                 </div>
 
                                 <!-- AÑO ACADÉMICO -->
                                 <div class="building-detail-form-group">
-                                    <label
-                                        for="building-detail-edit-year"
-                                        data-i18n="edificios.form.academicYear"
-                                    >
+                                    <label for="building-detail-edit-year" data-i18n="edificios.form.academicYear">
                                         Año académico
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="building-detail-edit-year"
-                                        maxlength="9"
-                                        placeholder="2026-2027"
-                                        data-i18n-ph="edificios.form.academicYearPlaceholder"
-                                        pattern="[0-9]{4}-[0-9]{4}"
-                                        disabled
-                                    >
+                                    <input type="text" id="building-detail-edit-year" maxlength="9"
+                                        placeholder="2026-2027" data-i18n-ph="edificios.form.academicYearPlaceholder"
+                                        pattern="[0-9]{4}-[0-9]{4}" disabled>
                                 </div>
 
                                 <!-- DIRECCIÓN -->
                                 <div class="building-detail-form-group">
-                                    <label
-                                        for="building-detail-edit-address"
-                                        data-i18n="edificios.form.address"
-                                    >
+                                    <label for="building-detail-edit-address" data-i18n="edificios.form.address">
                                         Dirección
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="building-detail-edit-address"
-                                        maxlength="255"
-                                        autocomplete="off"
-                                    >
+                                    <input type="text" id="building-detail-edit-address" maxlength="255"
+                                        autocomplete="off">
                                 </div>
 
                                 <!-- TELÉFONO -->
                                 <div class="building-detail-form-group">
-                                    <label
-                                        for="building-detail-edit-phone"
-                                        data-i18n="edificios.form.phone"
-                                    >
+                                    <label for="building-detail-edit-phone" data-i18n="edificios.form.phone">
                                         Teléfono
                                     </label>
 
-                                    <input
-                                        type="tel"
-                                        id="building-detail-edit-phone"
-                                        maxlength="15"
-                                        autocomplete="off"
-                                    >
+                                    <input type="tel" id="building-detail-edit-phone" maxlength="15" autocomplete="off">
                                 </div>
 
                                 <!-- GESTORES -->
-                                <div
-                                    class="building-detail-form-group"
-                                    id="building-detail-managers-group"
-                                    data-require="ADMIN"
-                                    hidden
-                                >
-                                    <label
-                                        for="building-detail-edit-managers"
-                                        data-i18n="edificios.form.managers"
-                                    >
+                                <div class="building-detail-form-group" id="building-detail-managers-group"
+                                    data-require="ADMIN" hidden>
+                                    <label for="building-detail-edit-managers" data-i18n="edificios.form.managers">
                                         Gestores asignados
                                     </label>
 
-                                    <select
-                                        id="building-detail-edit-managers"
-                                        name="gestores[]"
-                                        multiple
-                                        size="6"
-                                    ></select>
+                                    <select id="building-detail-edit-managers" name="gestores[]" multiple
+                                        size="6"></select>
 
                                     <small data-i18n="edificios.form.managersHelp">
                                         Mantén pulsada la tecla Ctrl para seleccionar varios gestores.
@@ -267,30 +194,17 @@
 
                             </div>
 
-                            <p
-                                id="building-detail-edit-message"
-                                class="building-detail-message"
-                                role="alert"
-                                aria-live="assertive"
-                                hidden
-                            ></p>
+                            <p id="building-detail-edit-message" class="building-detail-message" role="alert"
+                                aria-live="assertive" hidden></p>
 
                             <div class="building-detail-form-actions">
 
-                                <button
-                                    type="button"
-                                    id="building-detail-edit-cancel"
-                                    class="btn"
-                                >
+                                <button type="button" id="building-detail-edit-cancel" class="btn">
                                     <span data-i18n="common.cancel">
                                     </span>
                                 </button>
 
-                                <button
-                                    type="submit"
-                                    id="building-detail-edit-save"
-                                    class="btn btn-primary"
-                                >
+                                <button type="submit" id="building-detail-edit-save" class="btn btn-primary">
                                     <span data-i18n="common.saveChanges">
                                     </span>
                                 </button>
@@ -305,10 +219,7 @@
 
 
                 <!-- CONTENIDO DEL DETALLE -->
-                <section
-                    id="building-detail-content"
-                    hidden
-                >
+                <section id="building-detail-content" hidden>
 
                     <!-- INFORMACIÓN GENERAL -->
                     <section class="building-detail-information">
@@ -374,7 +285,7 @@
                         </article>
 
                     </section>
-
+                    
                 </section>
 
             </main>
@@ -384,4 +295,5 @@
     </div>
 
 </body>
+
 </html>

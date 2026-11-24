@@ -325,6 +325,36 @@
     color: #DCEAF8;
 }
 
+/* Breadcrumb */
+.breadcrumb ol {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* Elementos del breadcrumb */
+.breadcrumb li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* SGEU y Edificios mantienen su tamaño */
+.breadcrumb li:first-child,
+.breadcrumb li:nth-child(2) {
+    flex-shrink: 0;
+}
+
+/* El nombre del edificio ocupa el espacio restante */
+#building-detail-breadcrumb {
+    min-width: 0;
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
 .building-detail-title-wrapper {
     display: flex;
     align-items: center;
